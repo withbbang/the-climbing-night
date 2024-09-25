@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.the_climbing_night.main.mapper.MainMapper">
+  <select id="mainMapper" parameterType="com.admin.the_climbing_night.main.domain.req.MainRequest" resultType="com.admin.the_climbing_night.main.vo.MainVo">
+    SELECT * FROM test WHERE name = #{name};
+  </select>
+
+  <update id="mainUpdate1" parameterType="com.admin.the_climbing_night.main.domain.req.MainRequest">
+    UPDATE test set name = #{name} WHERE id = 1
+  </update>
+
+  <update id="mainUpdate2" parameterType="com.admin.the_climbing_night.main.domain.req.MainRequest">
+    UPDATE test set name = #{name} WHERE id = 2
+  </update>
+
+  <select id="getSingleTest" parameterType="String" resultType="com.admin.the_climbing_night.main.vo.MainVo">
+    SELECT * FROM test WHERE name = #{name};
+  </select>
+</mapper>

@@ -1,0 +1,25 @@
+[Automatic Restart] (Ref: https://blog.hyunsub.kim/Spring/Spring-with-Terminal/)
+$ ./gradlew build -continuous   # Terminal 1
+$ ./gradlew bootRun             # Terminal 2
+
+
+[Regularly Creating Log File]
+- logback-spring.xml의 fileNamePattern 조작
+- yearly: %d{yyyy}-%i.log
+- monthly: %d{yyyy-MM}-%i.log
+- daily: %d{yyyy-MM-dd}-%i.log
+- hourly: %d{yyyy-MM-dd-HH}-%i.log
+- minutely: %d{yyyy-MM-dd-HH-mm}-%i.log
+- secondly: %d{yyyy-MM-dd-HH-mm-ss}-%i.log
+
+
+[설정파일(yml, properties)에서 classpath 의미]
+- classpath: resources를 rootPath로 지정한다는 뜻
+
+
+[AOP 설정 가이드] (Ref: https://adjh54.tistory.com/133)
+
+
+[yml, properties의 민감 환경변수 암호화해서 git에 올리는 방법] (Ref: https://katastrophe.tistory.com/162)
+
+[JWT] (Ref: https://velog.io/@m1naworld/SpringBoot-Filter%ED%99%9C%EC%9A%A9-JWT-%EA%B5%AC%ED%98%84)

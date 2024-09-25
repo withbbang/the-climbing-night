@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    import:
+      - classpath:/configs/application-prod.yml
+      - classpath:/configs/application-dev.yml
+      - classpath:/configs/application-local.yml
+  profiles:
+    # group:
+    #   logging: dev, log
+    active: local
+
+logging:
+  config: classpath:/logback-spring.xml
+  level:
+    root: info
+    jdbc:
+      audit: OFF
+      resultset: OFF
+      resultsettable: OFF #SQL 결과 데이터 Table 표기.
+      sqlonly: OFF #SQL 로그 표기
+      sqltiming: INFO #SQL과 소요시간을 표기
+      connection: OFF # 커넥션 확인가능

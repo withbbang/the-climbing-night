@@ -1,0 +1,57 @@
+plugins {
+	id 'java'
+	id 'war'
+	id 'org.springframework.boot' version '3.3.2'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.admin'
+version = '0.0.1-SNAPSHOT'
+
+// Default local profile setting
+ext.profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	
+	developmentOnly 'org.springframework.boot:spring-boot-devtools' // 자동 재실행 의존성 [devtools]
+
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // view 컨트롤러에서 templates 하위의 페이지를 불러오기 위한 thymeleaf 의존성
+
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3' // mybatis
+	runtimeOnly 'mysql:mysql-connector-java:8.0.32' // mysql
+
+	compileOnly 'org.projectlombok:lombok:1.18.34' // lombok
+	annotationProcessor 'org.projectlombok:lombok:1.18.34' // lombok
+	testCompileOnly 'org.projectlombok:lombok:1.18.34' // lombok
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34' // lombok
+
+	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16' // log4jdbc - SQL Log
+
+	implementation 'org.springframework.boot:spring-boot-starter-aop' // AOP
+
+	implementation 'org.springframework.boot:spring-boot-starter-security' // spring security
+
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5' // jwt
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5' // jwt
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5' // jwt
+
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.2' // model mapper
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
