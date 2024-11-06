@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.the_climbing_night.auth.mapper.JoinMapper">
+  <select id="isMember" parameterType="com.admin.the_climbing_night.auth.domain.req.JoinRequest" resultType="com.admin.the_climbing_night.auth.res.JoinResponse">
+    SELECT
+        id
+    FROM
+        MEMBER
+    WHERE
+        1 = 1
+        AND name = #{name}
+        AND birthDt = #{birtDt}
+        AND phoneNo = #{phoneNo}
+  </select>
+</mapper>
