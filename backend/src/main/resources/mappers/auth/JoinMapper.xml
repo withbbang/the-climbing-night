@@ -6,11 +6,11 @@
     SELECT
         id
     FROM
-        MEMBER
+        member
     WHERE
         1 = 1
         AND name = #{name}
-        AND birthDt = #{birtDt}
+        AND birthDt = #{birthDt}
         AND phoneNo = #{phoneNo}
   </select>
 
@@ -18,14 +18,14 @@
     SELECT
         memberFk
     FROM
-        ADMIN
+        admin
     WHERE
         1 = 1
         AND memberId = #{memberId}
   </select>
 
-  <insert id="join" parameterType="com.admin.the_climbing_night.auth.domain.vo.InsertAdmin">
-    INSERT INTO ADMIN
+  <insert id="join" parameterType="com.admin.the_climbing_night.auth.vo.JoinVo">
+    INSERT INTO admin
       (id, memberFk, memberId, password, grade)
     VALUES
       (#{id}, #{memberFk}, #{memberId}, #{password}, #{grade})

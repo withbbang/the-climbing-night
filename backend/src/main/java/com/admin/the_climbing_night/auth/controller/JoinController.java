@@ -36,11 +36,15 @@ public class JoinController {
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
         }
 
         if (CommonUtil.isEmpty(isMemberVo.getId())) {
             log.error("No Member");
             response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
         }
 
         IsAdminVo isAdminVo = null;
@@ -50,22 +54,26 @@ public class JoinController {
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
         }
 
-        if (!CommonUtil.isEmpty(isAdminVo.getId())) {
+        if (!CommonUtil.isEmpty(isAdminVo)) {
             log.error("Already Admin");
             response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
         }
 
         int join = 0;
 
-        JoinVo joinVo = null;
+        JoinVo joinVo = new JoinVo();
 
         // TODO: insert 값 설정 필요
-        joinVo.setId(null);
-        joinVo.setMemberFk(null);
-        joinVo.setMemberId(null);
-        joinVo.setPassword(null);
+        joinVo.setId("0");
+        joinVo.setMemberFk(isMemberVo.getId());
+        joinVo.setMemberId(req.getMemberId());
+        joinVo.setPassword(req.getPassword());
         joinVo.setGrade(0);
 
         try {
@@ -73,6 +81,8 @@ public class JoinController {
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
         }
 
         if (join < 1) {
