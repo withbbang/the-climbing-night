@@ -10,8 +10,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class JoinRequest {
+    private String id;
+
     @RequiredAnnotation
-    private String email;
+    private String memberId;
 
     @RequiredAnnotation
     private String password;

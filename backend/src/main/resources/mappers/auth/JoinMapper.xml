@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.admin.the_climbing_night.auth.mapper.JoinMapper">
-  <select id="isMember" parameterType="com.admin.the_climbing_night.auth.domain.req.JoinRequest" resultType="com.admin.the_climbing_night.auth.res.JoinResponse">
+  <select id="isMember" parameterType="com.admin.the_climbing_night.auth.domain.req.JoinRequest" resultType="com.admin.the_climbing_night.auth.vo.IsMemberVo">
     SELECT
         id
     FROM
@@ -13,4 +13,21 @@
         AND birthDt = #{birtDt}
         AND phoneNo = #{phoneNo}
   </select>
+
+  <select id="isAdmin" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.auth.vo.IsAdminVo">
+    SELECT
+        memberFk
+    FROM
+        ADMIN
+    WHERE
+        1 = 1
+        AND memberId = #{memberId}
+  </select>
+
+  <insert id="join" parameterType="com.admin.the_climbing_night.auth.domain.vo.InsertAdmin">
+    INSERT INTO ADMIN
+      (id, memberFk, memberId, password, grade)
+    VALUES
+      (#{id}, #{memberFk}, #{memberId}, #{password}, #{grade})
+  </insert>
 </mapper>
