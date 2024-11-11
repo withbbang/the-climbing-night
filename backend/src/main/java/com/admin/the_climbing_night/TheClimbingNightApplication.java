@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Primary;
 import javax.sql.DataSource;
 
 @SpringBootApplication
-public class SpringBootTutorialApplication {
+public class TheClimbingNightApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootTutorialApplication.class, args);
+		SpringApplication.run(TheClimbingNightApplication.class, args);
 	}
 
 	@Bean
