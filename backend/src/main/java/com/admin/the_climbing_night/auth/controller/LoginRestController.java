@@ -41,6 +41,8 @@ public class LoginRestController {
         } catch (Exception e) {
             log.error(e.getMessage());
             responseBody.setResult(new Result(CodeMessage.ER0001));
+
+            return responseBody;
         }
 
         if (CommonUtil.isEmpty(loginVo)) {

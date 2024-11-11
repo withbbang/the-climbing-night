@@ -24,4 +24,46 @@
         1 = 1
         AND memberId = #{memberId}
   </update>
+
+  <select id="isMember" parameterType="com.admin.the_climbing_night.admin.domain.req.EditMemberRequest" resultType="java.lang.String">
+    SELECT
+        id
+    FROM
+        member
+    WHERE
+        1 = 1
+        AND id = #{id}
+        AND name = #{name}
+        AND birthDt = #{birthDt}
+  </select>
+
+  <update id="editMember" parameterType="com.admin.the_climbing_night.admin.domain.req.EditMemberRequest">
+    UPDATE
+        member
+    <set>
+        <if test="name != null and name != ''">name = #{name}</if>
+        <if test="birthDt != null and birthDt != ''">, birthDt = #{birthDt}</if>
+        <if test="level != null and level != ''">, levelFk = #{level}</if>
+        <if test="degree != null and degree != ''">, degreeFk = #{degree}</if>
+        <if test="phoneNo != null and phoneNo != ''">, phoneNo = #{phoneNo}</if>
+        <if test="winwinYn != null and winwinYn != ''">, winwinYn = #{winwinYn}</if>
+        <if test="sex != null and sex != ''">, sex = #{sex}</if>
+        <if test="blackCnt != null and blackCnt != ''">, blackCnt = #{blackCnt}</if>
+        <if test="dormancyYn != null and dormancyYn != ''">, dormancyYn = #{dormancyYn}</if>
+        <if test="leaveYn != null and leaveYn != ''">, leaveYn = #{leaveYn}</if>
+        <if test="banYn != null and banYn != ''">, banYn = #{banYn}</if>
+        <if test="joinDt != null and joinDt != ''">, joinDt = #{joinDt}</if>
+        <if test="updateDt != null and updateDt != ''">, updateDt = #{updateDt}</if>
+        <if test="leaveDt != null and leaveDt != ''">, leaveDt = #{leaveDt}</if>
+        <if test="banDt != null and banDt != ''">, banDt = #{banDt}</if>
+        <if test="image != null and image != ''">, image = #{image}</if>
+        <if test="updateReason != null and updateReason != ''">, updateReason = #{updateReason}</if>
+        <if test="dormancyReason != null and dormancyReason != ''">, dormancyReason = #{dormancyReason}</if>
+        <if test="leaveReason != null and leaveReason != ''">, leaveReason = #{leaveReason}</if>
+        <if test="banReason != null and banReason != ''">, banReason = #{banReason}</if>
+    </set>
+    WHERE
+        1 = 1
+        AND id = #{id}
+  </update>
 </mapper>

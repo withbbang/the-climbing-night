@@ -3,6 +3,7 @@ package com.admin.the_climbing_night.admin.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import com.admin.the_climbing_night.admin.domain.req.EditMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
 import com.admin.the_climbing_night.annotations.DatabaseCryptoAdviceAnnotation;
 
@@ -14,4 +15,10 @@ public interface AdminMapper {
 
     @DatabaseCryptoAdviceAnnotation
     int editAuthority(IsAdminMemberRequest req);
+
+    @DatabaseCryptoAdviceAnnotation
+    String isMember(EditMemberRequest req);
+
+    @DatabaseCryptoAdviceAnnotation
+    int editMember(EditMemberRequest req);
 }
