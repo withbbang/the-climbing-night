@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-public class JoinController {
+public class JoinRestController {
     @Autowired
     private JoinService joinService;
 

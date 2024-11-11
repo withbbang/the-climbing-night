@@ -25,7 +25,7 @@ public class DatabaseCryptAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* com.tutorial.spring_boot_tutorial..mapper.*.*(..))")
+    @Around("execution(* com.admin.the_climbing_night..mapper.*.*(..))")
     public Object databaseCryptoAspect(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
 

@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-public class LogoutController {
+public class LogoutRestController {
     @PostMapping(value = "logout")
     public SingleResponse logout(HttpServletResponse response) {
         SingleResponse responseBody = new SingleResponse();

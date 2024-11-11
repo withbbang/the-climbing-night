@@ -20,7 +20,7 @@ public class LoggingAspect {
     // *
     // * @param joinPoint
     // */
-    // @Before("execution(* com.tutorial.spring_boot_tutorial..controller.*.*(..))")
+    // @Before("execution(* com.admin.the_climbing_night..controller.*.*(..))")
     // public void loggingBeforeController(JoinPoint joinPoint) {
     // Object[] args = joinPoint.getArgs();
 
@@ -39,9 +39,10 @@ public class LoggingAspect {
     // *
     // * @param joinPoint
     // */
-    // @After("execution(* com.tutorial.spring_boot_tutorial..controller.*.*(..))")
+    // @After("execution(* com.admin.the_climbing_night..controller.*.*(..))")
     // public void loggingAfterController(JoinPoint joinPoint, Object result) {
-    // log.info("After: " + joinPoint.getSignature().getName() + " result: " + result);
+    // log.info("After: " + joinPoint.getSignature().getName() + " result: " +
+    // result);
     // }
 
     // /**
@@ -51,10 +52,12 @@ public class LoggingAspect {
     // * @param result
     // */
     // @AfterReturning(pointcut = "execution(*
-    // com.tutorial.spring_boot_tutorial..controller.*.*(..))",
+    // com.admin.the_climbing_night..controller.*.*(..))",
     // returning = "result")
-    // public void loggingAfterReturningController(JoinPoint joinPoint, Object result) {
-    // log.info("AfterReturning: " + joinPoint.getSignature().getName() + " result: " + result);
+    // public void loggingAfterReturningController(JoinPoint joinPoint, Object
+    // result) {
+    // log.info("AfterReturning: " + joinPoint.getSignature().getName() + " result:
+    // " + result);
     // }
 
     /**
@@ -63,9 +66,7 @@ public class LoggingAspect {
      * @param joinPoint
      * @param e
      */
-    @AfterThrowing(
-            pointcut = "execution(* com.tutorial.spring_boot_tutorial..controller.*RestController.*(..))",
-            throwing = "e")
+    @AfterThrowing(pointcut = "execution(* com.admin.the_climbing_night..controller.*RestController.*(..))", throwing = "e")
     public void loggingAfterThrowingController(JoinPoint joinPoint, Throwable e) {
         log.error("Exception: " + e.getMessage());
     }
@@ -77,7 +78,7 @@ public class LoggingAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* com.tutorial.spring_boot_tutorial..controller.*RestController.*(..))")
+    @Around("execution(* com.admin.the_climbing_night..controller.*RestController.*(..))")
     public Object loggingAroundController(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Object[] args = joinPoint.getArgs();

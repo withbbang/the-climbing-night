@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class RequiredAspect {
-    @Before("execution(* com.tutorial.spring_boot_tutorial..controller.*.*(..))")
+    @Before("execution(* com.admin.the_climbing_night..controller.*.*(..))")
     public void checkRequired(JoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
 
