@@ -1,5 +1,7 @@
 package com.admin.the_climbing_night.utils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Map;
 
@@ -12,7 +14,7 @@ public class CommonUtil {
      * Empty 확인 메서드
      * 
      * @param values
-     * @return
+     * @return boolean
      */
     public static boolean isEmpty(Object... values) {
         for (Object value : values) {
@@ -38,5 +40,16 @@ public class CommonUtil {
         }
 
         return true;
+    }
+
+    /**
+     * 현재 날짜 yyyyMMddHHmmss로 변환
+     * 
+     * @return String
+     */
+    public static String getCurrentTimestamp() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime now = LocalDateTime.now();
+        return now.format(formatter);
     }
 }

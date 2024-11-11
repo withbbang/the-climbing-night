@@ -12,11 +12,12 @@
         AND name = #{name}
         AND birthDt = #{birthDt}
         AND phoneNo = #{phoneNo}
+        AND degreeFk = #{degreeFk}
   </select>
 
   <select id="isAdmin" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.auth.vo.IsAdminVo">
     SELECT
-        memberFk
+        id
     FROM
         admin
     WHERE

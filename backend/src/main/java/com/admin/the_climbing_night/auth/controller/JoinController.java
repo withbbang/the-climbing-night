@@ -40,7 +40,7 @@ public class JoinController {
             return response;
         }
 
-        if (CommonUtil.isEmpty(isMemberVo.getId())) {
+        if (CommonUtil.isEmpty(isMemberVo)) {
             log.error("No Member");
             response.setResult(new Result(CodeMessage.ER0001));
 
@@ -69,12 +69,11 @@ public class JoinController {
 
         JoinVo joinVo = new JoinVo();
 
-        // TODO: insert 값 설정 필요
-        joinVo.setId("0");
+        joinVo.setId("TCN" + req.getDegreeFk() + "_" + CommonUtil.getCurrentTimestamp());
         joinVo.setMemberFk(isMemberVo.getId());
         joinVo.setMemberId(req.getMemberId());
-        joinVo.setPassword(req.getPassword());
-        joinVo.setGrade(0);
+        joinVo.setPassword(req.getPassword()); // TODO: 암호화 필요
+        joinVo.setGrade(50);
 
         try {
             join = joinService.join(joinVo);

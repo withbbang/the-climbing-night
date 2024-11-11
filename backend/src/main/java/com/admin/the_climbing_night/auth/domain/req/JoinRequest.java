@@ -26,4 +26,7 @@ public class JoinRequest {
 
     @RequiredAnnotation
     private String phoneNo;
+
+    @RequiredAnnotation
+    private String degreeFk;
 }
