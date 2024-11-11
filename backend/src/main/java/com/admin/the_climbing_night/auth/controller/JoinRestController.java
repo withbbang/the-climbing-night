@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.admin.the_climbing_night.auth.domain.req.JoinRequest;
 import com.admin.the_climbing_night.auth.service.JoinService;
 import com.admin.the_climbing_night.auth.vo.IsAdminVo;
-import com.admin.the_climbing_night.auth.vo.IsMemberVo;
+import com.admin.the_climbing_night.auth.vo.IsMemberForAuthVo;
 import com.admin.the_climbing_night.auth.vo.JoinVo;
 import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.Result;
@@ -29,7 +29,7 @@ public class JoinRestController {
     public SingleResponse join(@RequestBody JoinRequest req) {
         SingleResponse response = new SingleResponse();
 
-        IsMemberVo isMemberVo = null;
+        IsMemberForAuthVo isMemberVo = null;
 
         try {
             isMemberVo = joinService.isMember(req); // 회원 여부 확인
@@ -69,7 +69,7 @@ public class JoinRestController {
 
         JoinVo joinVo = new JoinVo();
 
-        joinVo.setId("TCN" + req.getDegreeFk() + "_" + CommonUtil.getCurrentTimestamp());
+        joinVo.setId("TCN" + req.getDegreeFk() + "_" + CommonUtil.getCurrentTimestamp("yyyyMMddHHmmss"));
         joinVo.setMemberFk(isMemberVo.getId());
         joinVo.setMemberId(req.getMemberId());
         joinVo.setPassword(req.getPassword()); // TODO: 암호화 필요

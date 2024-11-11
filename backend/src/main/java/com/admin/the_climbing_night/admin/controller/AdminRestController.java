@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.admin.the_climbing_night.admin.domain.req.EditMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.UpdateMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
 import com.admin.the_climbing_night.admin.service.AdminService;
+import com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo;
 import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
@@ -29,8 +31,8 @@ public class AdminRestController {
      * @param req
      * @return
      */
-    @PostMapping(value = "edit-authority")
-    public SingleResponse editAuthority(@RequestBody IsAdminMemberRequest req) {
+    @PostMapping(value = "update-authority")
+    public SingleResponse updateAuthority(@RequestBody IsAdminMemberRequest req) {
         SingleResponse response = new SingleResponse();
 
         String isAdminMember = null;
@@ -51,10 +53,10 @@ public class AdminRestController {
             return response;
         }
 
-        int editAuthority = 0;
+        int updateAuthority = 0;
 
         try {
-            editAuthority = adminService.editAuthority(req);
+            updateAuthority = adminService.updateAuthority(req);
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));
@@ -62,8 +64,63 @@ public class AdminRestController {
             return response;
         }
 
-        if (editAuthority < 1) {
-            log.error("Edit Authority Failed");
+        if (updateAuthority < 1) {
+            log.error("Update Authority Failed");
+            response.setResult(new Result(CodeMessage.ER0001));
+        }
+
+        return response;
+    }
+
+    /**
+     * 회원 추가
+     * 
+     * @param req
+     * @return
+     */
+    @PostMapping(value = "insert-member")
+    public SingleResponse insertMember(@RequestBody InsertMemberRequest req) {
+        SingleResponse response = new SingleResponse();
+
+        String isMember = null;
+
+        IsMemberForAdminVo isMemberVo = new IsMemberForAdminVo();
+
+        isMemberVo.setId(req.getId());
+        isMemberVo.setName(req.getName());
+        isMemberVo.setBirthDt(req.getBirthDt());
+
+        try {
+            isMember = adminService.isMember(isMemberVo);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        if (!CommonUtil.isEmpty(isMember)) {
+            log.error("Already Member");
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        int insertMember = 0;
+
+        req.setCreateDt(CommonUtil.getCurrentTimestamp("yyyy-MM-dd HH:mm:ss"));
+
+        try {
+            insertMember = adminService.insertMember(req);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        if (insertMember < 1) {
+            log.error("Insert Member Failed");
             response.setResult(new Result(CodeMessage.ER0001));
         }
 
@@ -76,14 +133,20 @@ public class AdminRestController {
      * @param req
      * @return
      */
-    @PostMapping(value = "edit-member")
-    public SingleResponse editMember(@RequestBody EditMemberRequest req) {
+    @PostMapping(value = "update-member")
+    public SingleResponse updateMember(@RequestBody UpdateMemberRequest req) {
         SingleResponse response = new SingleResponse();
 
         String isMember = null;
 
+        IsMemberForAdminVo isMemberVo = new IsMemberForAdminVo();
+
+        isMemberVo.setId(req.getId());
+        isMemberVo.setName(req.getName());
+        isMemberVo.setBirthDt(req.getBirthDt());
+
         try {
-            isMember = adminService.isMember(req);
+            isMember = adminService.isMember(isMemberVo);
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));
@@ -98,10 +161,10 @@ public class AdminRestController {
             return response;
         }
 
-        int editMember = 0;
+        int updateMember = 0;
 
         try {
-            editMember = adminService.editMember(req);
+            updateMember = adminService.updateMember(req);
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));
@@ -109,8 +172,8 @@ public class AdminRestController {
             return response;
         }
 
-        if (editMember < 1) {
-            log.error("Edit Member Failed");
+        if (updateMember < 1) {
+            log.error("Update Member Failed");
             response.setResult(new Result(CodeMessage.ER0001));
         }
 

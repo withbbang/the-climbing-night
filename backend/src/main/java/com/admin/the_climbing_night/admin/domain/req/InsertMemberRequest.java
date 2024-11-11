@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class EditMemberRequest {
+public class InsertMemberRequest {
     @RequiredAnnotation
     private String id;
 
@@ -19,25 +19,36 @@ public class EditMemberRequest {
     @RequiredAnnotation
     private String birthDt;
 
+    @RequiredAnnotation
     private String level;
 
+    @RequiredAnnotation
     private String degree;
 
     private String phoneNo;
 
+    @RequiredAnnotation
     private String winwinYn;
 
+    @RequiredAnnotation
     private String sex;
 
+    @RequiredAnnotation
     private String blackCnt;
 
+    @RequiredAnnotation
     private String dormancyYn;
 
+    @RequiredAnnotation
     private String leaveYn;
 
+    @RequiredAnnotation
     private String banYn;
 
+    @RequiredAnnotation
     private String joinDt;
+
+    private String createDt;
 
     private String updateDt;
 
@@ -47,7 +58,6 @@ public class EditMemberRequest {
 
     private String image;
 
-    @RequiredAnnotation
     private String updateReason;
 
     private String dormancyReason;

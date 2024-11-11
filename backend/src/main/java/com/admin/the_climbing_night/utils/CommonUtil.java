@@ -43,13 +43,15 @@ public class CommonUtil {
     }
 
     /**
-     * 현재 날짜 yyyyMMddHHmmss로 변환
+     * 현재 날짜를 원하는 포맷으로 변환
+     * ex) yyyyMMddHHmmss, yyyy-MM-dd HH:mm:ss ...
      * 
      * @return String
      */
-    public static String getCurrentTimestamp() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    public static String getCurrentTimestamp(String format) {
         LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+
         return now.format(formatter);
     }
 }

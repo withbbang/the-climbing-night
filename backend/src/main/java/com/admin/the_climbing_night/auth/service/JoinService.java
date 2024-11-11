@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.admin.the_climbing_night.auth.domain.req.JoinRequest;
 import com.admin.the_climbing_night.auth.mapper.JoinMapper;
 import com.admin.the_climbing_night.auth.vo.IsAdminVo;
-import com.admin.the_climbing_night.auth.vo.IsMemberVo;
+import com.admin.the_climbing_night.auth.vo.IsMemberForAuthVo;
 import com.admin.the_climbing_night.auth.vo.JoinVo;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class JoinService {
 
     private final ModelMapper modelMapper;
 
-    public IsMemberVo isMember(JoinRequest req) {
+    public IsMemberForAuthVo isMember(JoinRequest req) {
         return joinMapper.isMember(req);
     }
 

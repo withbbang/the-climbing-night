@@ -7,6 +7,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class IsMemberVo {
+public class IsMemberForAuthVo {
     private String id;
 }

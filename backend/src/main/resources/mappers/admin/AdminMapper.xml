@@ -15,7 +15,7 @@
         AND m.birthDt = #{birthDt}
   </select>
 
-  <update id="editAuthority" parameterType="com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest">
+  <update id="updateAuthority" parameterType="com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest">
     UPDATE
         admin 
     SET
@@ -25,7 +25,7 @@
         AND memberId = #{memberId}
   </update>
 
-  <select id="isMember" parameterType="com.admin.the_climbing_night.admin.domain.req.EditMemberRequest" resultType="java.lang.String">
+  <select id="isMember" parameterType="com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo" resultType="java.lang.String">
     SELECT
         id
     FROM
@@ -36,8 +36,41 @@
         AND name = #{name}
         AND birthDt = #{birthDt}
   </select>
+  
+  <insert id="insertMember" parameterType="com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest">
+    INSERT INTO member (
+        id
+        , name
+        , birthDt
+        , levelFk
+        , degreeFk
+        , winwinYn
+        , sex
+        , blackCnt
+        , dormancyYn
+        , leaveYn
+        , banYn
+        , joinDt
+        , createDt
+    ) VALUES (
+        #{id}
+        , #{name}
+        , #{birthDt}
+        , #{level}
+        , #{degree}
+        , #{winwinYn}
+        , #{sex}
+        , #{blackCnt}
+        , #{dormancyYn}
+        , #{leaveYn}
+        , #{banYn}
+        , #{joinDt}
+        , #{createDt}
+    )
+  </insert>
 
-  <update id="editMember" parameterType="com.admin.the_climbing_night.admin.domain.req.EditMemberRequest">
+
+  <update id="updateMember" parameterType="com.admin.the_climbing_night.admin.domain.req.UpdateMemberRequest">
     UPDATE
         member
     <set>

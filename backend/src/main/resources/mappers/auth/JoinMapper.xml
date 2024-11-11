@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.admin.the_climbing_night.auth.mapper.JoinMapper">
-  <select id="isMember" parameterType="com.admin.the_climbing_night.auth.domain.req.JoinRequest" resultType="com.admin.the_climbing_night.auth.vo.IsMemberVo">
+  <select id="isMember" parameterType="com.admin.the_climbing_night.auth.domain.req.JoinRequest" resultType="com.admin.the_climbing_night.auth.vo.IsMemberForAuthVo">
     SELECT
         id
     FROM
