@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import com.admin.the_climbing_night.main.vo.MainVo;
+
+import com.admin.the_climbing_night.auth.vo.LoginVo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -40,7 +41,7 @@ public class JwtTokenProvider {
      * @param vo
      * @return Map<String, String>
      */
-    public Map<String, String> createToken(MainVo vo) {
+    public Map<String, String> createToken(LoginVo vo) {
         String accessToken = createAccessToken(vo, ACCESS_TOKEN_EXP_TIME);
         String refreshToken = createRefreshToken(vo, REFRESH_TOKEN_EXP_TIME);
 
@@ -52,7 +53,6 @@ public class JwtTokenProvider {
         return token;
     }
 
-
     /**
      * Access Token 생성
      * 
@@ -60,10 +60,12 @@ public class JwtTokenProvider {
      * @param expireTime
      * @return String
      */
-    private String createAccessToken(MainVo member, long expireTime) {
+    private String createAccessToken(LoginVo member, long expireTime) {
         Claims claims = Jwts.claims();
-        claims.put("name", member.getName());
+
+        claims.put("memberId", member.getMemberId());
         claims.put("grade", member.getGrade());
+        claims.put("name", member.getName());
 
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tokenValidity = now.plusSeconds(expireTime);
@@ -80,8 +82,10 @@ public class JwtTokenProvider {
      * @param expireTime
      * @return String
      */
-    private String createRefreshToken(MainVo member, long expireTime) {
+    private String createRefreshToken(LoginVo member, long expireTime) {
         Claims claims = Jwts.claims();
+
+        claims.put("memberId", member.getMemberId());
         claims.put("name", member.getName());
 
         ZonedDateTime now = ZonedDateTime.now();
@@ -92,7 +96,6 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256).compact();
     }
 
-
     /**
      * Token에서 User ID 추출
      * 
@@ -100,9 +103,8 @@ public class JwtTokenProvider {
      * @return User ID
      */
     public String getUserId(String token) {
-        return parseClaims(token).get("name", String.class);
+        return parseClaims(token).get("memberId", String.class);
     }
-
 
     /**
      * JWT 검증
@@ -125,7 +127,6 @@ public class JwtTokenProvider {
         }
         return false;
     }
-
 
     /**
      * JWT Claims 추출
