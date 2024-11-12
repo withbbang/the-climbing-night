@@ -1,5 +1,7 @@
 package com.admin.the_climbing_night.admin.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -7,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.admin.the_climbing_night.admin.domain.req.UpdateMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
 import com.admin.the_climbing_night.admin.service.AdminService;
+import com.admin.the_climbing_night.admin.vo.GetMemberVo;
 import com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo;
 import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.Result;
@@ -24,6 +28,26 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminRestController {
     @Autowired
     private AdminService adminService;
+
+    @PostMapping(value = "get-members")
+    public SingleResponse<List<GetMemberVo>> getMembers(@RequestBody GetMembersRequest req) {
+        SingleResponse response = new SingleResponse();
+
+        List<GetMemberVo> getMembers = null;
+
+        try {
+            getMembers = adminService.getMembers(req);
+        } catch (Exception e) {
+            log.error("No Admin Member");
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        response.setData(getMembers);
+
+        return response;
+    }
 
     /**
      * admin 권한 변경

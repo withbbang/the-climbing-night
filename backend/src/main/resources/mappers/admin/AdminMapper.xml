@@ -2,6 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.admin.the_climbing_night.admin.mapper.AdminMapper">
+  <select id="getMembers" parameterType="com.admin.the_climbing_night.admin.domain.req.GetMembersRequest" resultType="com.admin.the_climbing_night.admin.vo.GetMemberVo">
+    SELECT
+        m.id
+        , m.name
+        , m.birthDt
+        , l.level
+        , l.color
+        , d.degree
+    FROM
+        member m
+        join level l on m.levelFk = l.id
+        join degree d on m.degreeFk = d.id
+    WHERE
+        1 = 1
+        <if test="name != null and name != ''">AND m.name LIKE CONCAT('%', #{name}, '%')</if>
+        <if test="birthDt != null and birthDt != ''">AND m.birthDt LIKE CONCAT('%', #{birthDt}, '%')</if>
+        <if test="levelFk != null and levelFk != ''">AND m.levelFk = #{levelFk}</if>
+        <if test="degreeFk != null and degreeFk != ''">AND m.degreeFk = #{degreeFk}</if>
+        <if test="phoneNo != null and phoneNo != ''">AND m.phoneNo LIKE CONCAT('%', #{phoneNo}, '%')</if>
+        <if test="winwinYn != null and winwinYn != ''">AND m.winwinYn = #{winwinYn}</if>
+        <if test="sex != null and sex != ''">AND m.sex = #{sex}</if>
+        <if test="blackCnt != null and blackCnt != ''">AND m.blackCnt >= #{blackCnt}</if>
+        <if test="dormancyYn != null and dormancyYn != ''">AND m.dormancyYn = #{dormancyYn}</if>
+        <if test="leaveYn != null and leaveYn != ''">AND m.leaveYn = #{leaveYn}</if>
+        <if test="banYn != null and banYn != ''">AND m.banYn = #{banYn}</if>
+  </select>
+
   <select id="isAdminMember" parameterType="com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest" resultType="java.lang.String">
     SELECT
         a.id
@@ -10,9 +37,10 @@
         join member m on a.memberFk = m.id
     WHERE
         1 = 1
-        AND a.memberId = #{memberId}
-        AND m.name = #{name}
-        AND m.birthDt = #{birthDt}
+        <if test="name != null and name != ''">m.name = #{name}</if>
+        <if test="birthDt != null and birthDt != ''">, m.birthDt = #{birthDt}</if>
+        <if test="levelFk != null and levelFk != ''">, m.levelFk = #{levelFk}</if>
+        <if test="degree != null and degree != ''">, m.degreeFk = #{degree}</if>
   </select>
 
   <update id="updateAuthority" parameterType="com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest">
@@ -56,7 +84,7 @@
         #{id}
         , #{name}
         , #{birthDt}
-        , #{level}
+        , #{levelFk}
         , #{degree}
         , #{winwinYn}
         , #{sex}
@@ -76,7 +104,7 @@
     <set>
         <if test="name != null and name != ''">name = #{name}</if>
         <if test="birthDt != null and birthDt != ''">, birthDt = #{birthDt}</if>
-        <if test="level != null and level != ''">, levelFk = #{level}</if>
+        <if test="levelFk != null and levelFk != ''">, levelFk = #{levelFk}</if>
         <if test="degree != null and degree != ''">, degreeFk = #{degree}</if>
         <if test="phoneNo != null and phoneNo != ''">, phoneNo = #{phoneNo}</if>
         <if test="winwinYn != null and winwinYn != ''">, winwinYn = #{winwinYn}</if>

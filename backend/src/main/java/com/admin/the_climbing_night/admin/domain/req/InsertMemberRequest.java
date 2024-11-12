@@ -20,7 +20,7 @@ public class InsertMemberRequest {
     private String birthDt;
 
     @RequiredAnnotation
-    private String level;
+    private String levelFk;
 
     @RequiredAnnotation
     private String degree;

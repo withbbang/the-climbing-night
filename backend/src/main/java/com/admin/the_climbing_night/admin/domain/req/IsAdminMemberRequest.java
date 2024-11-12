@@ -20,5 +20,8 @@ public class IsAdminMemberRequest {
     private String birthDt;
 
     @RequiredAnnotation
+    private String levelFk;
+
+    @RequiredAnnotation
     private String grade;
 }

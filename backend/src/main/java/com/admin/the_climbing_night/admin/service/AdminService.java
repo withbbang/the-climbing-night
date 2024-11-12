@@ -1,13 +1,17 @@
 package com.admin.the_climbing_night.admin.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.admin.the_climbing_night.admin.domain.req.UpdateMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
 import com.admin.the_climbing_night.admin.mapper.AdminMapper;
+import com.admin.the_climbing_night.admin.vo.GetMemberVo;
 import com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +21,10 @@ import lombok.RequiredArgsConstructor;
 public class AdminService {
     @Autowired
     AdminMapper adminMapper;
+
+    public List<GetMemberVo> getMembers(GetMembersRequest req) {
+        return adminMapper.getMembers(req);
+    }
 
     public String isAdminMember(IsAdminMemberRequest req) {
         return adminMapper.isAdminMember(req);

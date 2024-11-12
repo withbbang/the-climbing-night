@@ -19,7 +19,7 @@ public class UpdateMemberRequest {
     @RequiredAnnotation
     private String birthDt;
 
-    private String level;
+    private String levelFk;
 
     private String degree;
 
