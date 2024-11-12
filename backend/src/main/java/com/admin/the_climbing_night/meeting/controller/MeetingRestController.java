@@ -11,7 +11,6 @@ import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.service.MeetingService;
-import com.admin.the_climbing_night.meeting.vo.HasMeetingVo;
 import com.admin.the_climbing_night.utils.CommonUtil;
 
 import lombok.extern.slf4j.Slf4j;

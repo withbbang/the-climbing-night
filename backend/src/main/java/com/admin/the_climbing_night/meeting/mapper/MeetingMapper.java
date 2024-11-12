@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.admin.the_climbing_night.annotations.DatabaseCryptoAdviceAnnotation;
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
-import com.admin.the_climbing_night.meeting.vo.HasMeetingVo;
 
 @Mapper
 @Repository

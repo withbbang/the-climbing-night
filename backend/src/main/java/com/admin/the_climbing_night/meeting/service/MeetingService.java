@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.mapper.MeetingMapper;
-import com.admin.the_climbing_night.meeting.vo.HasMeetingVo;
 
 import lombok.RequiredArgsConstructor;
 
