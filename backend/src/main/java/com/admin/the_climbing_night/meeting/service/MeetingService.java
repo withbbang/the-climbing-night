@@ -16,7 +16,7 @@ public class MeetingService {
     @Autowired
     MeetingMapper meetingMapper;
 
-    public String hasMeeting(HasMeetingVo req) {
+    public String hasMeeting(InsertMeetingRequest req) {
         return meetingMapper.hasMeeting(req);
     }
 

@@ -10,7 +10,7 @@ import com.admin.the_climbing_night.meeting.vo.HasMeetingVo;
 @Mapper
 @Repository
 public interface MeetingMapper {
-    String hasMeeting(HasMeetingVo req);
+    String hasMeeting(InsertMeetingRequest req);
 
     @DatabaseCryptoAdviceAnnotation
     int insertMeeting(InsertMeetingRequest req);

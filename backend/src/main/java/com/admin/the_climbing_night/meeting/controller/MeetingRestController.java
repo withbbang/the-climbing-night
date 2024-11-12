@@ -23,19 +23,20 @@ public class MeetingRestController {
     @Autowired
     private MeetingService meetingService;
 
+    /**
+     * 벙 만들기
+     * 
+     * @param req
+     * @return
+     */
     @PostMapping(value = "insert-meeting")
     public SingleResponse insertMeeting(@RequestBody InsertMeetingRequest req) {
         SingleResponse response = new SingleResponse();
 
         String hasMeeting = null;
 
-        HasMeetingVo hasMeetingVo = new HasMeetingVo();
-
-        hasMeetingVo.setHostDt(req.getHostDt());
-        hasMeetingVo.setClimbingAreaFk(req.getClimbingAreaFk());
-
         try {
-            hasMeeting = meetingService.hasMeeting(hasMeetingVo);
+            hasMeeting = meetingService.hasMeeting(req);
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));
