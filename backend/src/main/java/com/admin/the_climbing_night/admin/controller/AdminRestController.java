@@ -108,6 +108,7 @@ public class AdminRestController {
 
         int insertMember = 0;
 
+        req.setId("TCN" + "_" + CommonUtil.getCurrentTimestamp("yyyyMMddHHmmss"));
         req.setCreateDt(CommonUtil.getCurrentTimestamp("yyyy-MM-dd HH:mm:ss"));
 
         try {
