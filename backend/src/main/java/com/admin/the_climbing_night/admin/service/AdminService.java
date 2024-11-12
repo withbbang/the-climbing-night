@@ -7,10 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.admin.the_climbing_night.admin.domain.req.UpdateMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.GetClimbingAreasRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
+import com.admin.the_climbing_night.admin.domain.req.InsertClimbingAreaRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.UpdateClimbingAreaRequest;
 import com.admin.the_climbing_night.admin.mapper.AdminMapper;
+import com.admin.the_climbing_night.admin.vo.GetClimbingAreaInfoVo;
+import com.admin.the_climbing_night.admin.vo.GetClimbingAreaVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberInfoVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberVo;
 import com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo;
@@ -27,8 +32,8 @@ public class AdminService {
         return adminMapper.getMembers(req);
     }
 
-    public GetMemberInfoVo getMemberInfo(String req) {
-        return adminMapper.getMemberInfo(req);
+    public GetMemberInfoVo getMemberInfo(String id) {
+        return adminMapper.getMemberInfo(id);
     }
 
     public String isAdminMember(IsAdminMemberRequest req) {
@@ -52,5 +57,23 @@ public class AdminService {
     @Transactional
     public int updateMember(UpdateMemberRequest req) {
         return adminMapper.updateMember(req);
+    }
+
+    public List<GetClimbingAreaVo> getClimbingAreas(GetClimbingAreasRequest req) {
+        return adminMapper.getClimbingAreas(req);
+    }
+
+    public GetClimbingAreaInfoVo getClimbingAreaInfo(String id) {
+        return adminMapper.getClimbingAreaInfo(id);
+    }
+
+    @Transactional
+    public int insertClimbingArea(InsertClimbingAreaRequest req) {
+        return adminMapper.insertClimbingArea(req);
+    }
+
+    @Transactional
+    public int updateClimbingArea(UpdateClimbingAreaRequest req) {
+        return adminMapper.updateClimbingArea(req);
     }
 }

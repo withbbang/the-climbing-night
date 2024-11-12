@@ -131,7 +131,6 @@
     )
   </insert>
 
-
   <update id="updateMember" parameterType="com.admin.the_climbing_night.admin.domain.req.UpdateMemberRequest">
     UPDATE
         member
@@ -156,6 +155,86 @@
         <if test="dormancyReason != null and dormancyReason != ''">, dormancyReason = #{dormancyReason}</if>
         <if test="leaveReason != null and leaveReason != ''">, leaveReason = #{leaveReason}</if>
         <if test="banReason != null and banReason != ''">, banReason = #{banReason}</if>
+    </set>
+    WHERE
+        1 = 1
+        AND id = #{id}
+  </update>
+
+  <select id="getClimbingAreas" parameterType="com.admin.the_climbing_night.admin.domain.req.GetClimbingAreasRequest" resultType="com.admin.the_climbing_night.admin.vo.GetClimbingAreaVo">
+    SELECT
+        id
+        , name
+        , address
+        , winwinYn
+    FROM
+        climbingArea
+    WHERE
+        1 = 1
+        <if test="name != null and name != ''">AND name LIKE CONCAT('%', #{name}, '%')</if>
+        <if test="price != null and price != ''">AND price = #{price}</if>
+        <if test="winPrice != null and winPrice != ''">AND winPrice = #{winPrice}</if>
+        <if test="address != null and address != ''">AND address = #{address}</if>
+        <if test="winwinYn != null and winwinYn != ''">AND winwinYn = #{winwinYn}</if>
+        <if test="closeYn != null and closeYn != ''">AND closeYn = #{closeYn}</if>
+  </select>
+
+  <select id="getClimbingAreaInfo" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.admin.vo.GetClimbingAreaInfoVo">
+    SELECT
+        id
+        , name
+        , price
+        , winPrice
+        , address
+        , winwinYn
+        , closeYn
+        , createDt
+        , updateDt
+        , description
+    FROM
+        climbingArea
+    WHERE
+        1 = 1
+        AND id = #{id}
+  </select>
+
+  <insert id="insertClimbingArea" parameterType="com.admin.the_climbing_night.admin.domain.req.InsertClimbingAreaRequest">
+    INSERT INTO climbingArea (
+        id
+        , name
+        , price
+        , winPrice
+        , address
+        , winwinYn
+        , createDt
+        , updateDt
+        , description
+    ) VALUES (
+        #{id}
+        , #{name}
+        , #{price}
+        , #{winPrice}
+        , #{address}
+        , #{winwinYn}
+        , #{createDt}
+        , #{updateDt}
+        , #{description}
+    )
+  </insert>
+
+  <update id="updateClimbingArea" parameterType="com.admin.the_climbing_night.admin.domain.req.UpdateClimbingAreaRequest">
+    UPDATE
+        climbingArea
+    <set>
+        <if test="name != null and name != ''">name = #{name}</if>
+        <if test="price != null and price != ''">, price = #{price}</if>
+        <if test="winPrice != null and winPrice != ''">, winPrice = #{winPrice}</if>
+        <if test="address != null and address != ''">, address = #{address}</if>
+        <if test="winwinYn != null and winwinYn != ''">, winwinYn = #{winwinYn}</if>
+        <if test="closeYn != null and closeYn != ''">, closeYn = #{closeYn}</if>
+        <if test="createDt != null and createDt != ''">, createDt = #{createDt}</if>
+        <if test="updateDt != null and updateDt != ''">, updateDt = #{updateDt}</if>
+        <if test="description != null and description != ''">, description = #{description}</if>
     </set>
     WHERE
         1 = 1
