@@ -11,10 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.admin.the_climbing_night.admin.domain.req.UpdateMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.GetClimbingAreasRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
+import com.admin.the_climbing_night.admin.domain.req.InsertClimbingAreaRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.UpdateClimbingAreaRequest;
 import com.admin.the_climbing_night.admin.service.AdminService;
+import com.admin.the_climbing_night.admin.vo.GetClimbingAreaInfoVo;
+import com.admin.the_climbing_night.admin.vo.GetClimbingAreaVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberInfoVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberVo;
 import com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo;
@@ -33,7 +38,7 @@ public class AdminRestController {
     private AdminService adminService;
 
     /**
-     * 회원 리스트 찾기
+     * 회원 리스트 가져오기
      * 
      * @param req
      * @return
@@ -58,6 +63,12 @@ public class AdminRestController {
         return response;
     }
 
+    /**
+     * 회원 정보 가져오기
+     * 
+     * @param id
+     * @return
+     */
     @GetMapping(value = "get-member-info/{id}")
     public SingleResponse<GetMemberVo> getMemberInfo(@PathVariable String id) {
         SingleResponse response = new SingleResponse();
@@ -235,6 +246,128 @@ public class AdminRestController {
 
         if (updateMember < 1) {
             log.error("Update Member Failed");
+            response.setResult(new Result(CodeMessage.ER0001));
+        }
+
+        return response;
+    }
+
+    /**
+     * 암장 리스트 가져오기
+     * 
+     * @param req
+     * @return
+     */
+    @PostMapping(value = "get-climbing-areas")
+    public SingleResponse<List<GetClimbingAreaVo>> getClimbingAreas(@RequestBody GetClimbingAreasRequest req) {
+        SingleResponse response = new SingleResponse();
+
+        List<GetClimbingAreaVo> getClimbingAreas = null;
+
+        try {
+            getClimbingAreas = adminService.getClimbingAreas(req);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        response.setData(getClimbingAreas);
+
+        return response;
+    }
+
+    /**
+     * 암장 정보 가져오기
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "get-climbing-area-info/{id}")
+    public SingleResponse<GetClimbingAreaInfoVo> getClimbingAreaInfo(@PathVariable String id) {
+        SingleResponse response = new SingleResponse();
+
+        GetClimbingAreaInfoVo getClimbingAreaInfo = null;
+
+        try {
+            getClimbingAreaInfo = adminService.getClimbingAreaInfo(id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        if (CommonUtil.isEmpty(getClimbingAreaInfo)) {
+            log.error("No Climbing Area Info");
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        response.setData(getClimbingAreaInfo);
+
+        return response;
+    }
+
+    /**
+     * 암장 추가
+     * 
+     * @param req
+     * @return
+     */
+    @PostMapping(value = "insert-climbing-area")
+    public SingleResponse insertClimbingArea(@RequestBody InsertClimbingAreaRequest req) {
+        SingleResponse response = new SingleResponse();
+
+        int insertClimbingArea = 0;
+
+        req.setId("TCNCA" + "_" + CommonUtil.getCurrentTimestamp("yyyyMMddHHmmss"));
+        req.setCreateDt(CommonUtil.getCurrentTimestamp("yyyy-MM-dd HH:mm:ss"));
+
+        try {
+            insertClimbingArea = adminService.insertClimbingArea(req);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        if (insertClimbingArea < 1) {
+            log.error("Insert Climbing Area Failed");
+            response.setResult(new Result(CodeMessage.ER0001));
+        }
+
+        return response;
+    }
+
+    /**
+     * 암장 정보 수정
+     * 
+     * @param req
+     * @return
+     */
+    @PostMapping(value = "update-climbing-area")
+    public SingleResponse updateClimbingArea(@RequestBody UpdateClimbingAreaRequest req) {
+        SingleResponse response = new SingleResponse();
+
+        int updateClimbingArea = 0;
+
+        req.setUpdateDt(CommonUtil.getCurrentTimestamp("yyyy-MM-dd HH:mm:ss"));
+
+        try {
+            updateClimbingArea = adminService.updateClimbingArea(req);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        if (updateClimbingArea < 1) {
+            log.error("Update Climbing Area Failed");
             response.setResult(new Result(CodeMessage.ER0001));
         }
 
