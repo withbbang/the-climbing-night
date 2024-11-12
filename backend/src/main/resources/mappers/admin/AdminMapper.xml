@@ -12,8 +12,8 @@
         , d.degree
     FROM
         member m
-        join level l on m.levelFk = l.id
-        join degree d on m.degreeFk = d.id
+        JOIN level l ON m.levelFk = l.id
+        JOIN degree d ON m.degreeFk = d.id
     WHERE
         1 = 1
         <if test="name != null and name != ''">AND m.name LIKE CONCAT('%', #{name}, '%')</if>
@@ -27,6 +27,40 @@
         <if test="dormancyYn != null and dormancyYn != ''">AND m.dormancyYn = #{dormancyYn}</if>
         <if test="leaveYn != null and leaveYn != ''">AND m.leaveYn = #{leaveYn}</if>
         <if test="banYn != null and banYn != ''">AND m.banYn = #{banYn}</if>
+  </select>
+
+  <select id="getMemberInfo" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.admin.vo.GetMemberInfoVo">
+    SELECT
+        m.id
+        , m.name
+        , m.birthDt
+        , l.level
+        , l.color
+        , d.degree
+        , m.phoneNo
+        , m.winwinYn
+        , m.sex
+        , m.blackCnt
+        , m.dormancyYn
+        , m.leaveYn
+        , m.banYn
+        , m.joinDt
+        , m.leaveDt
+        , m.banDt
+        , m.image
+        , m.updateReason
+        , m.dormancyReason
+        , m.leaveReason
+        , m.banReason
+    FROM
+        member m
+        JOIN level l ON m.levelFk = l.id
+        JOIN degree d ON m.degreeFk = d.id
+        LEFT JOIN winwinSubscribe w ON m.id = w.memberFk
+        LEFT JOIN admin a ON m.id = a.memberFk
+    WHERE
+        1 = 1
+        AND m.id = #{id}
   </select>
 
   <select id="isAdminMember" parameterType="com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest" resultType="java.lang.String">

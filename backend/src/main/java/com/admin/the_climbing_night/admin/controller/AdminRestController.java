@@ -3,6 +3,8 @@ package com.admin.the_climbing_night.admin.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
 import com.admin.the_climbing_night.admin.service.AdminService;
+import com.admin.the_climbing_night.admin.vo.GetMemberInfoVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberVo;
 import com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo;
 import com.admin.the_climbing_night.common.CodeMessage;
@@ -29,6 +32,12 @@ public class AdminRestController {
     @Autowired
     private AdminService adminService;
 
+    /**
+     * 회원 리스트 찾기
+     * 
+     * @param req
+     * @return
+     */
     @PostMapping(value = "get-members")
     public SingleResponse<List<GetMemberVo>> getMembers(@RequestBody GetMembersRequest req) {
         SingleResponse response = new SingleResponse();
@@ -45,6 +54,33 @@ public class AdminRestController {
         }
 
         response.setData(getMembers);
+
+        return response;
+    }
+
+    @GetMapping(value = "get-member-info/{id}")
+    public SingleResponse<GetMemberVo> getMemberInfo(@PathVariable String id) {
+        SingleResponse response = new SingleResponse();
+
+        GetMemberInfoVo getMemberInfo = null;
+
+        try {
+            getMemberInfo = adminService.getMemberInfo(id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        if (CommonUtil.isEmpty(getMemberInfo)) {
+            log.error("No Member");
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        response.setData(getMemberInfo);
 
         return response;
     }

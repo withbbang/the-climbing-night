@@ -11,6 +11,7 @@ import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
 import com.admin.the_climbing_night.admin.mapper.AdminMapper;
+import com.admin.the_climbing_night.admin.vo.GetMemberInfoVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberVo;
 import com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo;
 
@@ -24,6 +25,10 @@ public class AdminService {
 
     public List<GetMemberVo> getMembers(GetMembersRequest req) {
         return adminMapper.getMembers(req);
+    }
+
+    public GetMemberInfoVo getMemberInfo(String req) {
+        return adminMapper.getMemberInfo(req);
     }
 
     public String isAdminMember(IsAdminMemberRequest req) {
