@@ -8,12 +8,12 @@
         , mee.name meetingName
         , mem.name hostName
         , ca.name climbingAreaName
-        , mee.hostDt hostDt
-        , mee.time time
         , ca.address address
         , ca.price price
         , ca.winPrice winPrice
         , ca.winwinYn winwinYn
+        , mee.hostDt hostDt
+        , mee.time time
         , ms.status status
     FROM
         meeting mee
@@ -37,6 +37,46 @@
           ]]>
         </if>
   </select>
+
+  <select id="getMeetingInfo" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo">
+    SELECT
+        mee.id id
+        , mee.name meetingName
+        , mem1.name hostName
+        , ca.name climbingAreaName
+        , ca.address address
+        , ca.price price
+        , ca.winPrice winPrice
+        , ca.winwinYn winwinYn
+        , ca.closeYn closeYn
+        , ca.description description
+        , mee.hostDt hostDt
+        , mee.time time
+        , mee.criticalMeetingYn criticalMeetingYn
+        , ms.status status
+    FROM
+        (
+          SELECT
+            id
+            , name
+            , memberFk
+            , climbingAreaFk
+            , hostDt
+            , time
+            , criticalMeetingYn
+            , meetingStatusFk
+          FROM
+            meeting
+          WHERE
+            id = #{id}
+        ) mee
+        JOIN member mem1 ON mee.memberFk = mem1.id
+        JOIN meetingStatus ms ON mee.meetingStatusFk = ms.id
+        JOIN climbingArea ca ON mee.climbingAreaFk = ca.id
+        JOIN attend a ON mee.id = a.meetingFk
+        JOIN member mem2 ON mem2.id = a.memberFk
+  </select>
+
   <select id="hasMeeting" parameterType="com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest" resultType="java.lang.String">
     SELECT
         id
@@ -69,6 +109,18 @@
         , #{time}
         , #{criticalMeetingYn}
         , #{meetingStatusFk}
+    )
+  </insert>
+
+  <insert id="insertAttend" parameterType="com.admin.the_climbing_night.meeting.vo.InsertAttendVo">
+    INSERT INTO attend (
+        id
+        , meetingFk
+        , memberFk
+    ) VALUES (
+        #{id}
+        , #{meetingFk}
+        , #{memberFk}
     )
   </insert>
 </mapper>

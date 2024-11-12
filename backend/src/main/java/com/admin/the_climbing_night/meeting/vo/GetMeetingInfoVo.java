@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class GetMeetingVo {
+public class GetMeetingInfoVo {
     private String id;
 
     private String meetingName;
@@ -24,9 +24,17 @@ public class GetMeetingVo {
 
     private String winwinYn;
 
+    private String closeYn;
+
+    private String description;
+
     private String hostDt;
 
     private String time;
 
+    private String criticalMeetingYn;
+
     private String status;
+
+    private String count;
 }
