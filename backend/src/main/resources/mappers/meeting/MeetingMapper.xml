@@ -2,6 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.admin.the_climbing_night.meeting.mapper.MeetingMapper">
+  <select id="getMeetings" parameterType="com.admin.the_climbing_night.meeting.domain.req.GetMeetingsRequest" resultType="com.admin.the_climbing_night.meeting.vo.GetMeetingVo">
+    SELECT
+        mee.id id
+        , mee.name meetingName
+        , mem.name hostName
+        , ca.name climbingAreaName
+        , mee.hostDt hostDt
+        , mee.time time
+        , ca.address address
+        , ca.price price
+        , ca.winPrice winPrice
+        , ca.winwinYn winwinYn
+        , ms.status status
+    FROM
+        meeting mee
+        JOIN member mem ON mee.memberFk = mem.id
+        JOIN meetingStatus ms ON mee.meetingStatusFk = ms.id
+        JOIN climbingArea ca ON mee.climbingAreaFk = ca.id
+    WHERE
+        1 = 1
+        <if test="meetingName != null and meetingName != ''">AND mee.name LIKE CONCAT('%', #{meetingName}, '%')</if>
+        <if test="hostName != null and hostName != ''">AND mem.name LIKE CONCAT('%', #{hostName}, '%')</if>
+        <if test="climbingAreaName != null and climbingAreaName != ''">AND ca.name LIKE CONCAT('%', #{climbingAreaName}, '%')</if>
+        <if test="winwinYn != null and winwinYn != ''">AND ca.winwinYn = #{winwinYn}</if>
+        <if test="startDt != null and startDt != ''">
+          <![CDATA[
+            AND mee.hostDt >= #{startDt}
+          ]]>
+        </if>
+        <if test="endDt != null and endDt != ''">
+          <![CDATA[
+            AND mee.hostDt <= #{endDt}
+          ]]>
+        </if>
+  </select>
   <select id="hasMeeting" parameterType="com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest" resultType="java.lang.String">
     SELECT
         id

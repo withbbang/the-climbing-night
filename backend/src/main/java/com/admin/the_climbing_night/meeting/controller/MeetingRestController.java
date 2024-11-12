@@ -1,5 +1,7 @@
 package com.admin.the_climbing_night.meeting.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
+import com.admin.the_climbing_night.meeting.domain.req.GetMeetingsRequest;
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.service.MeetingService;
+import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
 import com.admin.the_climbing_night.utils.CommonUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +25,26 @@ import lombok.extern.slf4j.Slf4j;
 public class MeetingRestController {
     @Autowired
     private MeetingService meetingService;
+
+    @PostMapping(value = "get-meetings")
+    public SingleResponse getMeetings(@RequestBody GetMeetingsRequest req) {
+        SingleResponse response = new SingleResponse();
+
+        List<GetMeetingVo> getMeetings = null;
+
+        try {
+            getMeetings = meetingService.getMeetings(req);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        response.setData(getMeetings);
+
+        return response;
+    }
 
     /**
      * 벙 만들기
