@@ -19,7 +19,7 @@ public interface MeetingMapper {
     List<GetMeetingVo> getMeetings(GetMeetingsRequest req);
 
     @DatabaseCryptoAdviceAnnotation
-    GetMeetingInfoVo getMeetingInfo(String id);
+    List<GetMeetingInfoVo> getMeetingInfo(String id);
 
     String hasMeeting(InsertMeetingRequest req);
 

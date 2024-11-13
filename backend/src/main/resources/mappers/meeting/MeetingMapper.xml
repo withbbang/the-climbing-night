@@ -54,6 +54,11 @@
         , mee.time time
         , mee.criticalMeetingYn criticalMeetingYn
         , ms.status status
+        , mem2.name participantName
+        , mem2.birthDt participantbirthDt
+        , l.level level
+        , l.color color
+        , d.degree degree
     FROM
         (
           SELECT
@@ -75,6 +80,8 @@
         JOIN climbingArea ca ON mee.climbingAreaFk = ca.id
         JOIN attend a ON mee.id = a.meetingFk
         JOIN member mem2 ON mem2.id = a.memberFk
+        JOIN level l ON l.id = mem2.levelFk
+        JOIN degree d ON d.id = mem2.degreeFk
   </select>
 
   <select id="hasMeeting" parameterType="com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest" resultType="java.lang.String">

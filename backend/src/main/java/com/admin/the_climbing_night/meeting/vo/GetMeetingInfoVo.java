@@ -36,5 +36,13 @@ public class GetMeetingInfoVo {
 
     private String status;
 
-    private String count;
+    private String participantName;
+
+    private String participantbirthDt;
+
+    private String level;
+
+    private String color;
+
+    private String degree;
 }

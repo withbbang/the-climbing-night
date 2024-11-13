@@ -25,7 +25,7 @@ public class MeetingService {
         return meetingMapper.getMeetings(req);
     }
 
-    public GetMeetingInfoVo getMeetingInfo(String id) {
+    public List<GetMeetingInfoVo> getMeetingInfo(String id) {
         return meetingMapper.getMeetingInfo(id);
     }
 
