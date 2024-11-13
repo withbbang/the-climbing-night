@@ -98,6 +98,13 @@
         AND name = #{name}
         AND birthDt = #{birthDt}
   </select>
+
+  <select id="getMemberCount" resultType="long">
+    SELECT
+        count(id)
+    FROM
+        member
+  </select>
   
   <insert id="insertMember" parameterType="com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest">
     INSERT INTO member (
@@ -196,6 +203,13 @@
     WHERE
         1 = 1
         AND id = #{id}
+  </select>
+
+  <select id="getClimbingAreaCount" resultType="int">
+    SELECT
+        count(id)
+    FROM
+        climbingArea
   </select>
 
   <insert id="insertClimbingArea" parameterType="com.admin.the_climbing_night.admin.domain.req.InsertClimbingAreaRequest">

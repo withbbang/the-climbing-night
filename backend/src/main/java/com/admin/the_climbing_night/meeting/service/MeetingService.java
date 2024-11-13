@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.admin.the_climbing_night.meeting.domain.req.GetMeetingsRequest;
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
+import com.admin.the_climbing_night.meeting.domain.req.UpdateMeetingRequest;
 import com.admin.the_climbing_night.meeting.mapper.MeetingMapper;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
@@ -33,9 +34,18 @@ public class MeetingService {
         return meetingMapper.hasMeeting(req);
     }
 
+    public long getMeetingCount(String climbingAreaFk) {
+        return meetingMapper.getMeetingCount(climbingAreaFk);
+    }
+
     @Transactional
     public int insertMeeting(InsertMeetingRequest req, InsertAttendVo insertAttendVo) {
         meetingMapper.insertMeeting(req);
         return meetingMapper.insertAttend(insertAttendVo);
+    }
+
+    @Transactional
+    public int updateMeeting(UpdateMeetingRequest req) {
+        return meetingMapper.updateMeeting(req);
     }
 }

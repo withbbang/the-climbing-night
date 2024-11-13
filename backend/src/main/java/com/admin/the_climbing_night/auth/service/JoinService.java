@@ -1,6 +1,5 @@
 package com.admin.the_climbing_night.auth.service;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +18,16 @@ public class JoinService {
     @Autowired
     JoinMapper joinMapper;
 
-    private final ModelMapper modelMapper;
-
     public IsMemberForAuthVo isMember(JoinRequest req) {
         return joinMapper.isMember(req);
     }
 
     public IsAdminVo isAdmin(String memberId) {
         return joinMapper.isAdmin(memberId);
+    }
+
+    public long getAdminCount() {
+        return joinMapper.getAdminCount();
     }
 
     @Transactional

@@ -177,9 +177,20 @@ public class AdminRestController {
             return response;
         }
 
+        long getMemberCount = 0;
+
+        try {
+            getMemberCount = adminService.getMemberCount();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
         int insertMember = 0;
 
-        req.setId("TCN" + "_" + CommonUtil.getCurrentTimestamp("yyyyMMddHHmmss"));
+        req.setId("TCN" + getMemberCount * 5);
         req.setCreateDt(CommonUtil.getCurrentTimestamp("yyyy-MM-dd HH:mm:ss"));
 
         try {
@@ -321,9 +332,20 @@ public class AdminRestController {
     public SingleResponse insertClimbingArea(@RequestBody InsertClimbingAreaRequest req) {
         SingleResponse response = new SingleResponse();
 
+        int getClimbingAreaCount = 0;
+
+        try {
+            getClimbingAreaCount = adminService.getClimbingAreaCount();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
         int insertClimbingArea = 0;
 
-        req.setId("TCNCA" + "_" + CommonUtil.getCurrentTimestamp("yyyyMMddHHmmss"));
+        req.setId("TCNCA" + getClimbingAreaCount * 5);
         req.setCreateDt(CommonUtil.getCurrentTimestamp("yyyy-MM-dd HH:mm:ss"));
 
         try {

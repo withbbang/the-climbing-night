@@ -49,6 +49,10 @@ public class AdminService {
         return adminMapper.isMember(req);
     }
 
+    public long getMemberCount() {
+        return adminMapper.getMemberCount();
+    }
+
     @Transactional
     public int insertMember(InsertMemberRequest req) {
         return adminMapper.insertMember(req);
@@ -65,6 +69,10 @@ public class AdminService {
 
     public GetClimbingAreaInfoVo getClimbingAreaInfo(String id) {
         return adminMapper.getClimbingAreaInfo(id);
+    }
+
+    public int getClimbingAreaCount() {
+        return adminMapper.getClimbingAreaCount();
     }
 
     @Transactional

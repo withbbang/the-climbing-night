@@ -95,6 +95,15 @@
         AND climbingAreaFk = #{climbingAreaFk}
   </select>
 
+  <select id="getMeetingCount" parameterType="java.lang.String" resultType="long">
+    SELECT
+        count(id)
+    FROM
+        meeting
+    WHERE
+        climbingAreaFk = #{climbingAreaFk}
+  </select>
+
   <insert id="insertMeeting" parameterType="com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest">
     INSERT INTO meeting (
         id
@@ -130,4 +139,22 @@
         , #{memberFk}
     )
   </insert>
+
+  <update id="updateMeeting" parameterType="com.admin.the_climbing_night.meeting.domain.req.UpdateMeetingRequest">
+    UPDATE
+        meeting
+    <set>
+        <if test="name != null and name != ''">name = #{name}</if>
+        <if test="memberFk != null and memberFk != ''">, memberFk = #{memberFk}</if>
+        <if test="climbingAreaFk != null and climbingAreaFk != ''">, climbingAreaFk = #{climbingAreaFk}</if>
+        <if test="hostDt != null and hostDt != ''">, hostDt = #{hostDt}</if>
+        <if test="time != null and time != ''">, time = #{time}</if>
+        <if test="updateDt != null and updateDt != ''">, updateDt = #{updateDt}</if>
+        <if test="criticalMeetingYn != null and criticalMeetingYn != ''">, criticalMeetingYn = #{criticalMeetingYn}</if>
+        <if test="meetingStatusFk != null and meetingStatusFk != ''">, meetingStatusFk = #{meetingStatusFk}</if>
+    </set>
+    WHERE
+        1 = 1
+        AND id = #{id}
+  </update>
 </mapper>

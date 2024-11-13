@@ -25,6 +25,13 @@
         AND memberId = #{memberId}
   </select>
 
+  <select id="getAdminCount" resultType="long">
+    SELECT
+        count(id)
+    FROM
+        admin
+  </select>
+
   <insert id="join" parameterType="com.admin.the_climbing_night.auth.vo.JoinVo">
     INSERT INTO admin
       (id, memberFk, memberId, password, grade)

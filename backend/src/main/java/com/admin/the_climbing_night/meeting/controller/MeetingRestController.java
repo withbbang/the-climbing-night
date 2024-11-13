@@ -15,6 +15,7 @@ import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
 import com.admin.the_climbing_night.meeting.domain.req.GetMeetingsRequest;
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
+import com.admin.the_climbing_night.meeting.domain.req.UpdateMeetingRequest;
 import com.admin.the_climbing_night.meeting.service.MeetingService;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
@@ -117,16 +118,27 @@ public class MeetingRestController {
             return response;
         }
 
+        long getMeetingCount = 0;
+
+        try {
+            getMeetingCount = meetingService.getMeetingCount(req.getClimbingAreaFk());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
         int insertmeeting = 0;
 
-        String meetingId = "TCNM" + "_" + CommonUtil.getCurrentTimestamp("yyyyMMddHHmmss");
+        String meetingId = req.getClimbingAreaFk() + "_" + getMeetingCount;
 
         req.setId(meetingId);
         req.setCreateDt(CommonUtil.getCurrentTimestamp("yyyy-MM-dd HH:mm:ss"));
 
         InsertAttendVo insertAttendVo = new InsertAttendVo();
 
-        insertAttendVo.setId("TCNMA" + "_" + CommonUtil.getCurrentTimestamp("yyyyMMddHHmmss"));
+        insertAttendVo.setId(meetingId + "_" + req.getMemberFk());
         insertAttendVo.setMeetingFk(meetingId);
         insertAttendVo.setMemberFk(req.getMemberFk());
 
@@ -141,6 +153,35 @@ public class MeetingRestController {
 
         if (insertmeeting < 1) {
             log.error("Insert Meeting Failed");
+            response.setResult(new Result(CodeMessage.ER0001));
+        }
+
+        return response;
+    }
+
+    /**
+     * 벙 수정
+     * 
+     * @param req
+     * @return
+     */
+    @PostMapping(value = "update-meeting")
+    public SingleResponse updateMeeting(@RequestBody UpdateMeetingRequest req) {
+        SingleResponse response = new SingleResponse();
+
+        int updateMeeting = 0;
+
+        try {
+            updateMeeting = meetingService.updateMeeting(req);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        if (updateMeeting < 1) {
+            log.error("Update Meeting Failed");
             response.setResult(new Result(CodeMessage.ER0001));
         }
 

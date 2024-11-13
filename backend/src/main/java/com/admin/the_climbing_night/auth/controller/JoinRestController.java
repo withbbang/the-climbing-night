@@ -65,11 +65,22 @@ public class JoinRestController {
             return response;
         }
 
+        long getAdminCount = 0;
+
+        try {
+            getAdminCount = joinService.getAdminCount();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
         int join = 0;
 
         JoinVo joinVo = new JoinVo();
 
-        joinVo.setId("TCN" + req.getDegreeFk() + "_" + CommonUtil.getCurrentTimestamp("yyyyMMddHHmmss"));
+        joinVo.setId("TCNADM" + getAdminCount * 5);
         joinVo.setMemberFk(isMemberVo.getId());
         joinVo.setMemberId(req.getMemberId());
         joinVo.setPassword(req.getPassword()); // TODO: 암호화 필요

@@ -37,6 +37,8 @@ public interface AdminMapper {
     @DatabaseCryptoAdviceAnnotation
     String isMember(IsMemberForAdminVo req);
 
+    long getMemberCount();
+
     @DatabaseCryptoAdviceAnnotation
     int insertMember(InsertMemberRequest req);
 
@@ -46,6 +48,8 @@ public interface AdminMapper {
     List<GetClimbingAreaVo> getClimbingAreas(GetClimbingAreasRequest req);
 
     GetClimbingAreaInfoVo getClimbingAreaInfo(String id);
+
+    int getClimbingAreaCount();
 
     int insertClimbingArea(InsertClimbingAreaRequest req);
 

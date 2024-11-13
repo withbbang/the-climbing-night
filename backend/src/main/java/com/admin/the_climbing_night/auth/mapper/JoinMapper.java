@@ -17,5 +17,7 @@ public interface JoinMapper {
 
     IsAdminVo isAdmin(String memberId);
 
+    long getAdminCount();
+
     int join(JoinVo vo);
 }
