@@ -27,6 +27,36 @@
         <if test="dormancyYn != null and dormancyYn != ''">AND m.dormancyYn = #{dormancyYn}</if>
         <if test="leaveYn != null and leaveYn != ''">AND m.leaveYn = #{leaveYn}</if>
         <if test="banYn != null and banYn != ''">AND m.banYn = #{banYn}</if>
+        <if test="startJoinDt != null and startJoinDt != ''">
+          <![CDATA[
+            AND m.joinDt >= #{startJoinDt}
+          ]]>
+        </if>
+        <if test="endJoinDt != null and endJoinDt != ''">
+          <![CDATA[
+            AND m.joinDt <= #{endJoinDt}
+          ]]>
+        </if>
+        <if test="startLeaveDt != null and startLeaveDt != ''">
+          <![CDATA[
+            AND m.leaveDt >= #{startLeaveDt}
+          ]]>
+        </if>
+        <if test="endLeaveDt != null and endLeaveDt != ''">
+          <![CDATA[
+            AND m.leaveDt <= #{endLeaveDt}
+          ]]>
+        </if>
+        <if test="startBanDt != null and startBanDt != ''">
+          <![CDATA[
+            AND m.banDt >= #{startBanDt}
+          ]]>
+        </if>
+        <if test="endBanDt != null and endBanDt != ''">
+          <![CDATA[
+            AND m.banDt <= #{endBanDt}
+          ]]>
+        </if>
   </select>
 
   <select id="getMemberInfo" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.admin.vo.GetMemberInfoVo">

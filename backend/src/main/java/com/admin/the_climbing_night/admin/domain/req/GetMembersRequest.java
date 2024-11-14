@@ -29,4 +29,16 @@ public class GetMembersRequest {
     private String leaveYn;
 
     private String banYn;
+
+    private String startJoinDt;
+
+    private String endJoinDt;
+
+    private String startLeaveDt;
+
+    private String endLeaveDt;
+
+    private String startBanDt;
+
+    private String endBanDt;
 }
