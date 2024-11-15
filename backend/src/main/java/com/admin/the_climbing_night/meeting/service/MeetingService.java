@@ -10,6 +10,7 @@ import com.admin.the_climbing_night.meeting.domain.req.GetMeetingsRequest;
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.UpdateMeetingRequest;
 import com.admin.the_climbing_night.meeting.mapper.MeetingMapper;
+import com.admin.the_climbing_night.meeting.vo.GetAttendVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
 import com.admin.the_climbing_night.meeting.vo.InsertAttendVo;
@@ -42,6 +43,10 @@ public class MeetingService {
     public int insertMeeting(InsertMeetingRequest req, InsertAttendVo insertAttendVo) {
         meetingMapper.insertMeeting(req);
         return meetingMapper.insertAttend(insertAttendVo);
+    }
+
+    public List<GetAttendVo> getAttends(String meetingFk) {
+        return meetingMapper.getAttends(meetingFk);
     }
 
     @Transactional

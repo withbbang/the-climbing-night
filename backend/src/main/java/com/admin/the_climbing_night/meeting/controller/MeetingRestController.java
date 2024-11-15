@@ -1,6 +1,8 @@
 package com.admin.the_climbing_night.meeting.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import com.admin.the_climbing_night.meeting.domain.req.GetMeetingsRequest;
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.UpdateMeetingRequest;
 import com.admin.the_climbing_night.meeting.service.MeetingService;
+import com.admin.the_climbing_night.meeting.vo.GetAttendVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
 import com.admin.the_climbing_night.meeting.vo.InsertAttendVo;
@@ -168,6 +171,48 @@ public class MeetingRestController {
     @PostMapping(value = "update-meeting")
     public SingleResponse updateMeeting(@RequestBody UpdateMeetingRequest req) {
         SingleResponse response = new SingleResponse();
+
+        List<GetAttendVo> getAttends = null;
+
+        try {
+            getAttends = meetingService.getAttends(req.getId());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        if (CommonUtil.isEmpty(getAttends)) {
+            log.error("No Meeting");
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        List<String> shouldDeleteAttends = getAttends.stream()
+                .filter(vo -> !req.getMemberFks().contains(vo.getMemberFk()))
+                .map(vo -> vo.getId())
+                .collect(Collectors.toList());
+
+        List<String> shouldInsertAttends = new ArrayList<>();
+
+        for (String memberFk : req.getMemberFks()) {
+            boolean isExist = true;
+
+            for (GetAttendVo vo : getAttends) {
+                if (vo.getMemberFk().equals(memberFk)) {
+                    isExist = false;
+                    break;
+                }
+            }
+
+            if (isExist) {
+                shouldInsertAttends.add(memberFk);
+            }
+        }
+
+        // TODO: 제거, 삽입할 attend 코드 추가
 
         int updateMeeting = 0;
 

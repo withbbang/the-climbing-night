@@ -140,6 +140,18 @@
     )
   </insert>
 
+  <select id="getAttends" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.meeting.vo.GetAttendVo">
+    SELECT
+        id
+        , meetingFk
+        , memberFk
+    FROM
+        attend
+    WHERE
+        1 = 1
+        AND meetingFk = #{meetingFk}
+  </select>
+
   <update id="updateMeeting" parameterType="com.admin.the_climbing_night.meeting.domain.req.UpdateMeetingRequest">
     UPDATE
         meeting
