@@ -10,6 +10,25 @@ import { ToastError } from 'modules/customErrorClasses';
 import IndexPT from './IndexPT';
 
 function IndexCT({}: IndexCTProps): React.JSX.Element {
+  useEffect(() => {
+    const customWindow = window as CustomWindow;
+    customWindow.goBack = handleGoBack;
+    customWindow.onResult = handleOnResult;
+
+    usePostData({
+      c: 'c',
+      d: handleParseDataFromJSInterface({
+        bridge: '',
+        action: '',
+      }),
+    });
+
+    return () => {
+      delete customWindow.goBack;
+      delete customWindow.onResult;
+    };
+  }, []);
+
   const { useSetActivePostDataByConfirmPopup } = usePostDataByConfirmPopupHook({
     message: 'hello',
     url: '/wlekfj',
@@ -50,25 +69,6 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
   const handleOnResult = (data?: any) => {
     console.warn('onResult visit?', data);
   };
-
-  useEffect(() => {
-    const customWindow = window as CustomWindow;
-    customWindow.goBack = handleGoBack;
-    customWindow.onResult = handleOnResult;
-
-    usePostData({
-      c: 'c',
-      d: handleParseDataFromJSInterface({
-        bridge: '',
-        action: '',
-      }),
-    });
-
-    return () => {
-      delete customWindow.goBack;
-      delete customWindow.onResult;
-    };
-  }, []);
 
   return <IndexPT onClick={onClick} />;
 }
