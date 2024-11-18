@@ -152,6 +152,31 @@
         AND meetingFk = #{meetingFk}
   </select>
 
+  <delete id="deleteAttends" parameterType="list">
+    DELETE FROM 
+      attend
+    WHERE 
+      id IN
+    <foreach collection="list" item="id" open="(" separator="," close=")">
+        #{id}
+    </foreach>
+  </delete>
+
+  <insert id="insertAttends" parameterType="list">
+    INSERT INTO attend (
+        id
+        , meetingFk
+        , memberFk
+    ) VALUES 
+      <foreach collection="list" item="vo" separator=",">
+        (
+          #{vo.id}
+          , #{vo.meetingFk}
+          , #{vo.memberFk}
+        )
+      </foreach>
+  </insert>
+
   <update id="updateMeeting" parameterType="com.admin.the_climbing_night.meeting.domain.req.UpdateMeetingRequest">
     UPDATE
         meeting

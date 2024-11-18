@@ -190,12 +190,12 @@ public class MeetingRestController {
             return response;
         }
 
-        List<String> shouldDeleteAttends = getAttends.stream()
+        List<String> deleteAttends = getAttends.stream()
                 .filter(vo -> !req.getMemberFks().contains(vo.getMemberFk()))
                 .map(vo -> vo.getId())
                 .collect(Collectors.toList());
 
-        List<String> shouldInsertAttends = new ArrayList<>();
+        List<InsertAttendVo> insertAttendsVo = new ArrayList<InsertAttendVo>();
 
         for (String memberFk : req.getMemberFks()) {
             boolean isExist = true;
@@ -208,16 +208,20 @@ public class MeetingRestController {
             }
 
             if (isExist) {
-                shouldInsertAttends.add(memberFk);
+                InsertAttendVo insertAttendVo = new InsertAttendVo();
+
+                insertAttendVo.setId(req.getId() + "_" + memberFk);
+                insertAttendVo.setMeetingFk(req.getId());
+                insertAttendVo.setMemberFk(memberFk);
+
+                insertAttendsVo.add(insertAttendVo);
             }
         }
-
-        // TODO: 제거, 삽입할 attend 코드 추가
 
         int updateMeeting = 0;
 
         try {
-            updateMeeting = meetingService.updateMeeting(req);
+            updateMeeting = meetingService.updateMeeting(deleteAttends, insertAttendsVo, req);
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));

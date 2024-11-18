@@ -50,7 +50,10 @@ public class MeetingService {
     }
 
     @Transactional
-    public int updateMeeting(UpdateMeetingRequest req) {
+    public int updateMeeting(List<String> deleteAttends, List<InsertAttendVo> insertAttendsVo,
+            UpdateMeetingRequest req) {
+        meetingMapper.deleteAttends(deleteAttends);
+        meetingMapper.insertAttends(insertAttendsVo);
         return meetingMapper.updateMeeting(req);
     }
 }

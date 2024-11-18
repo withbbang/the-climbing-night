@@ -33,5 +33,9 @@ public interface MeetingMapper {
 
     List<GetAttendVo> getAttends(String meetingFk);
 
+    void deleteAttends(List<String> deleteAttends);
+
+    void insertAttends(List<InsertAttendVo> insertAttendsVo);
+
     int updateMeeting(UpdateMeetingRequest req);
 }
