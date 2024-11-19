@@ -38,7 +38,7 @@ function Login({}: TypeLoginIn): React.JSX.Element {
           onChange={useChange}
           onKeyDown={useEnterKeyDown}
         />
-        <button>로그인</button>
+        <button onClick={() => {}}>로그인</button>
       </div>
     </div>
   );

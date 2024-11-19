@@ -15,4 +15,18 @@
         AND a.memberId = #{memberId}
         AND a.password = #{password}
   </select>
+
+  <select id="getIsLoggedIn" parameterType="com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo" resultType="com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo">
+    SELECT
+      a.memberId
+      , a.password
+      , a.grade
+      , a.name
+    FROM
+      admin a
+      join member m on a.memberFk = m.id
+    WHERE
+      1 = 1
+      AND a.accessToken = #{accessToken}
+  </select>
 </mapper>

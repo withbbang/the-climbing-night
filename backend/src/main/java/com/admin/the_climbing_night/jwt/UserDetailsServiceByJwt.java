@@ -5,21 +5,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.admin.the_climbing_night.main.mapper.MainMapper;
-import com.admin.the_climbing_night.main.vo.MainVo;
+
+import com.admin.the_climbing_night.auth.mapper.LoginMapper;
+import com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceByJwt implements UserDetailsService {
-    private final MainMapper mainMapper;
+    private final LoginMapper loginMapper;
     private final ModelMapper mapper;
 
     @Override
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        MainVo vo = mainMapper.getSingleTest(id);
+    public UserDetails loadUserByUsername(String accessToken) throws UsernameNotFoundException {
+        GetIsLoggedInVo vo = loginMapper.getIsLoggedIn(accessToken);
 
-        MainVo newVo = mapper.map(vo, MainVo.class);
+        GetIsLoggedInVo newVo = mapper.map(vo, GetIsLoggedInVo.class);
 
         return new UserDetailsByJwt(newVo);
     }

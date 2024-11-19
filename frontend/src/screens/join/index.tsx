@@ -1,15 +1,49 @@
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Action } from 'redux';
 import { PropState } from 'middlewares/configureReducer';
-import { Action } from '@reduxjs/toolkit';
-import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
-import JoinCT from './JoinCT';
+import { useEnterKeyDownHook, useChangeHook } from 'modules/customHooks';
+import Header from 'components/header';
+import AuthInput from 'components/authInput';
+import styles from './Join.module.scss';
 
-function mapStateToProps(state: PropState): CommonState {
-  return { ...state.common };
+function mapStateToProps(state: PropState) {
+  return {};
 }
 
 function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
   return {};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(JoinCT);
+function Join({}: TypeJoinIn): React.JSX.Element {
+  const navigate = useNavigate();
+  const { form, useChange } = useChangeHook({ email: '', password: '' });
+  const useEnterKeyDown = useEnterKeyDownHook(form, () => {});
+
+  return (
+    <div className={styles.wrap}>
+      <Header />
+      <div className={styles.innerWrap}>
+        <h2>Amdin 등록</h2>
+        <AuthInput
+          label={'email'}
+          value={form.email as string}
+          onChange={useChange}
+          onKeyDown={useEnterKeyDown}
+        />
+        <AuthInput
+          label={'password'}
+          value={form.password as string}
+          onChange={useChange}
+          onKeyDown={useEnterKeyDown}
+        />
+        <button onClick={() => {}}>확인</button>
+      </div>
+    </div>
+  );
+}
+
+interface TypeJoinIn {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Join);

@@ -3,6 +3,8 @@ package com.admin.the_climbing_night.jwt;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo;
 import com.admin.the_climbing_night.main.vo.MainVo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserDetailsByJwt implements UserDetails {
 
-    private final MainVo vo;
+    private final GetIsLoggedInVo vo;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -21,6 +23,10 @@ public class UserDetailsByJwt implements UserDetails {
         grades.add("GRADE_" + vo.getGrade());
 
         return grades.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    }
+
+    public String getMemberId() {
+        return vo.getMemberId();
     }
 
     @Override
@@ -32,7 +38,6 @@ public class UserDetailsByJwt implements UserDetails {
     public String getUsername() {
         return vo.getName().toString();
     }
-
 
     @Override
     public boolean isAccountNonExpired() {

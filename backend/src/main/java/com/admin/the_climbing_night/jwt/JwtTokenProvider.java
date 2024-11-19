@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo;
 import com.admin.the_climbing_night.auth.vo.LoginVo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -97,13 +98,20 @@ public class JwtTokenProvider {
     }
 
     /**
-     * Token에서 User ID 추출
+     * AccessToken에서 User ID 추출
      * 
-     * @param token
+     * @param accessToken
      * @return User ID
      */
-    public String getUserId(String token) {
-        return parseClaims(token).get("memberId", String.class);
+    public GetIsLoggedInVo getMemberInfo(String accessToken) {
+        GetIsLoggedInVo memberInfo = new GetIsLoggedInVo();
+
+        memberInfo.setMemberId(parseClaims(accessToken).get("memberId", String.class));
+        memberInfo.setGrade(parseClaims(accessToken).get("grade", String.class));
+        memberInfo.setName(parseClaims(accessToken).get("name", String.class));
+        memberInfo.setAccessToken(accessToken);
+
+        return memberInfo;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.admin.the_climbing_night.auth.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class LoginRestController {
     private CookieUtil cookieUtil;
 
     @PostMapping(value = "login")
-    public SingleResponse login(@RequestBody LoginRequest req, HttpServletResponse response) {
+    public SingleResponse<Map<String, String>> login(@RequestBody LoginRequest req, HttpServletResponse response) {
         SingleResponse responseBody = new SingleResponse();
 
         LoginVo loginVo = null;
@@ -54,8 +55,12 @@ public class LoginRestController {
 
         Map<String, String> token = loginService.makeToken(loginVo);
 
-        response.addCookie(cookieUtil.setCookie("accessToken", token.get("accessToken")));
         response.addCookie(cookieUtil.setCookie("refreshToken", token.get("refreshToken")));
+
+        Map<String, String> accessToken = new HashMap<String, String>();
+        accessToken.put("accessToken", token.get("accessToken"));
+
+        responseBody.setData(accessToken);
 
         return responseBody;
     }

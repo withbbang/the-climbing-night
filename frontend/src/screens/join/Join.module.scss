@@ -1,10 +1,38 @@
 .wrap {
   width: 100%;
   height: 100%;
-  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   @include background($more-light);
+
+  .innerWrap {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: solid 1px #aaa;
+    box-sizing: border-box;
+    border-radius: 15px;
+    padding: 30px;
+
+    > h2 {
+      margin: 0 0 20px 0;
+    }
+
+    > button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 10px 0;
+    }
+  }
+
+  @include mobile {
+    .innerWrap {
+      width: 70%;
+    }
+  }
 }
