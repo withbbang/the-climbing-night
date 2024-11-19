@@ -3,7 +3,7 @@ import { PropState } from 'middlewares/configureReducer';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import TCN_LOGO from 'assets/images/TCN_LOGO.svg';
 import styles from './Header.module.scss';
 
@@ -19,8 +19,10 @@ function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
 
 function Header(props: any) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleMovePage = (url: string) => {
+    if (location.pathname === url) return;
     navigate(url);
   };
 

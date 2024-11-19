@@ -1,0 +1,27 @@
+.inputDiv {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+
+  > span {
+    margin-right: auto;
+  }
+
+  > input {
+    height: 20px;
+  }
+}
+
+@include mobile {
+  .inputDiv {
+    flex-direction: column;
+    align-items: unset;
+    justify-self: unset;
+
+    > span {
+      margin-bottom: 5px;
+    }
+  }
+}

@@ -297,3 +297,12 @@ export function handleConvertDateFormat(date: Date, format: string): string {
       return '';
   }
 }
+
+/**
+ * 문자열 첫번째 글자만 대문자로 변환시키는 함수
+ * @param {string} value 변환될 값
+ * @returns {string} 변환된 값
+ */
+export function handleSetUpperCaseFirstCharacter(value: string): string {
+  return value.replace(/^[a-z]/, (char) => char.toUpperCase());
+}

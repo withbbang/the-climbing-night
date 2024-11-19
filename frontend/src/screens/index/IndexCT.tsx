@@ -6,7 +6,6 @@ import {
   usePostDataByConfirmPopupHook,
   usePostDataHook,
 } from 'modules/customHooks';
-import { handleParseDataFromJSInterface } from 'modules/utils';
 import { ToastError } from 'modules/customErrorClasses';
 import { DOMAIN } from 'modules/constants';
 import IndexPT from './IndexPT';
