@@ -25,7 +25,7 @@ function AuthInput({
       />
       {isSearch && (
         <div className={styles.search} onClick={onSearch}>
-          <SVG type="search" width="17px" height="17px" />
+          <SVG type="search" width="15px" height="15px" />
         </div>
       )}
     </div>

@@ -40,7 +40,10 @@ function Login({}: TypeLoginIn): React.JSX.Element {
           onChange={useChange}
           onKeyDown={useEnterKeyDown}
         />
-        <button onClick={() => {}}>로그인</button>
+        <div className={styles.btns}>
+          <button onClick={() => navigate('/join')}>관리자 등록</button>
+          <button onClick={() => {}}>로그인</button>
+        </div>
       </div>
     </div>
   );
