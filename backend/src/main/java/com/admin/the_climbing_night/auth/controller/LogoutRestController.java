@@ -18,13 +18,10 @@ public class LogoutRestController {
     public SingleResponse logout(HttpServletResponse response) {
         SingleResponse responseBody = new SingleResponse();
 
-        Cookie accessToken = new Cookie("accessToken", null);
         Cookie refreshToken = new Cookie("refreshToken", null);
 
-        accessToken.setMaxAge(0);
         refreshToken.setMaxAge(0);
 
-        response.addCookie(accessToken);
         response.addCookie(refreshToken);
 
         return responseBody;

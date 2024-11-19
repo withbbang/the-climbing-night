@@ -18,6 +18,7 @@
     "react/button-has-type": "off",
     "react/self-closing-comp": "warn",
     "no-use-before-define": "warn",
+    "no-case-declarations": "off",
     "no-empty-pattern": "warn",
     "no-unused-vars": "warn",
     "no-shadow": "warn",

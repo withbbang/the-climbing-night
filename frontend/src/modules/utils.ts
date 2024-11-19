@@ -237,30 +237,34 @@ export async function handleParseDataFromJSInterface({
  * @returns {Promise<TypeKeyValueForm>} resolve된 파라미터 객체
  */
 export async function handleSetParamsWithSync(
-  params: any,
+  params?: any,
 ): Promise<TypeKeyValueForm> {
   const newParams: TypeKeyValueForm = {};
   const keyArray: string[] = [];
   const promiseValueArray: any[] = [];
 
-  Object.entries(params).forEach(([key, value]) => {
-    keyArray.push(key);
-    promiseValueArray.push(
-      new Promise<string | number>((resolve, reject) => {
-        try {
-          resolve(value as string | number);
-        } catch (error: any) {
-          reject(error);
-        }
-      }),
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      keyArray.push(key);
+      promiseValueArray.push(
+        new Promise<string | number>((resolve, reject) => {
+          try {
+            resolve(value as string | number);
+          } catch (error: any) {
+            reject(error);
+          }
+        }),
+      );
+    });
+
+    const valueArray: (string | number)[] = await Promise.all(
+      promiseValueArray,
     );
-  });
 
-  const valueArray: (string | number)[] = await Promise.all(promiseValueArray);
-
-  keyArray.forEach((key, idx) => {
-    newParams[key] = valueArray[idx];
-  });
+    keyArray.forEach((key, idx) => {
+      newParams[key] = valueArray[idx];
+    });
+  }
 
   return newParams;
 }
