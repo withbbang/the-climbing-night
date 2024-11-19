@@ -10,6 +10,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class JoinRequest {
+    @RequiredAnnotation
     private String id;
 
     @RequiredAnnotation
@@ -17,16 +18,4 @@ public class JoinRequest {
 
     @RequiredAnnotation
     private String password;
-
-    @RequiredAnnotation
-    private String name;
-
-    @RequiredAnnotation
-    private String birthDt;
-
-    @RequiredAnnotation
-    private String phoneNo;
-
-    @RequiredAnnotation
-    private String degreeFk;
 }

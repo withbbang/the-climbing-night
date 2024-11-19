@@ -27,12 +27,14 @@ function Login({}: TypeLoginIn): React.JSX.Element {
       <div className={styles.innerWrap}>
         <h2>로그인</h2>
         <AuthInput
+          title={'이메일'}
           label={'email'}
           value={form.email as string}
           onChange={useChange}
           onKeyDown={useEnterKeyDown}
         />
         <AuthInput
+          title={'비밀번호'}
           label={'password'}
           value={form.password as string}
           onChange={useChange}

@@ -9,10 +9,7 @@
         member
     WHERE
         1 = 1
-        AND name = #{name}
-        AND birthDt = #{birthDt}
-        AND phoneNo = #{phoneNo}
-        AND degreeFk = #{degreeFk}
+        AND id = #{id}
   </select>
 
   <select id="isAdmin" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.auth.vo.IsAdminVo">

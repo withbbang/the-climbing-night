@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.the_climbing_night.member.mapper.MemberMapper">
+  <select id="getMemberInfoByJoin" parameterType="com.admin.the_climbing_night.member.domain.req.GetMemberInfoByJoinRequest" resultType="com.admin.the_climbing_night.member.vo.GetMemberInfoByJoinVo">
+    SELECT
+        m.id
+        , m.name
+        , IFNULL(m.birthDt, '') birthDt
+        , d.degree
+    FROM
+        member m
+        JOIN degree d ON m.degreeFk = d.id
+    WHERE
+        1 = 1
+        AND name LIKE CONCAT('%', #{name}, '%');
+  </select>
+</mapper>

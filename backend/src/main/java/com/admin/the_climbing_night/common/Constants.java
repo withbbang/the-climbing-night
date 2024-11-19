@@ -16,7 +16,8 @@ public final class Constants {
     public void init() {
         AUTH_WHITELIST = "local".equals(profile)
                 ? new String[] { "/**" }
-                : new String[] { "/", "/api/login", "/api/test", "/api/join", "/api/logout" };
+                : new String[] { "/", "/api/login", "/api/test", "/api/join", "/api/logout",
+                        "/api/get-member-info-by-join" };
     }
 
     public static String[] getAuthWhitelist() {
