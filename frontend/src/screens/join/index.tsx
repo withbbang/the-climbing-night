@@ -22,14 +22,14 @@ function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
   return {};
 }
 
-function Join({}: TypeJoinIn): React.JSX.Element {
+function Join({}: TypeJoin): React.JSX.Element {
   const navigate = useNavigate();
   const [isPopupActive, setIsPopupActive] = useState<boolean>(false);
   const [memberInfos, setMemberInfos] = useState<Array<GetMemberInfoByJoin>>(
     [],
   );
   const { form, setForm, useChange } = useChangeHook({
-    email: '',
+    memberId: '',
     password: '',
     id: '',
     information: '',
@@ -44,23 +44,16 @@ function Join({}: TypeJoinIn): React.JSX.Element {
     },
     successCb: (response) => {
       if (response.length === 1) {
+        const [{ id, degree, name, birthDt }] = response;
+
         setForm((prevState) => ({
           ...prevState,
-          id: response[0].id,
-          information: `${response[0].degree} ${
-            response[0].name
-          } ${`${response[0].birthDt}`.substring(2, 4)}`,
+          id,
+          information: `${degree} ${name} ${`${birthDt}`.substring(2, 4)}`,
         }));
       } else if (response.length > 1) {
         handleSetMemberInfos(response);
       }
-    },
-    failCb: () => {
-      setForm((prevState) => ({
-        ...prevState,
-        id: '',
-        information: '',
-      }));
     },
   });
 
@@ -68,7 +61,7 @@ function Join({}: TypeJoinIn): React.JSX.Element {
   const { usePostData: usePostJoin } = usePostDataHook({
     url: `${DOMAIN}/api/join`,
     beforeCb: () => {
-      if (!form.email) throw new Error('이메일을<br/>입력해주세요.');
+      if (!form.memberId) throw new Error('이메일을<br/>입력해주세요.');
       if (!form.password) throw new Error('비밀번호를<br/>입력해주세요.');
       if (!form.id) throw new Error('회원을 선택해주세요.');
     },
@@ -93,12 +86,12 @@ function Join({}: TypeJoinIn): React.JSX.Element {
 
   // 회원 정보 클릭 콜백
   const handleClickMemberInfo = (memberInfo: GetMemberInfoByJoin) => {
+    const { id, degree, name, birthDt } = memberInfo;
+
     setForm((prevState) => ({
       ...prevState,
-      id: memberInfo.id,
-      information: `${memberInfo.degree} ${
-        memberInfo.name
-      } ${`${memberInfo.birthDt}`.substring(2, 4)}`,
+      id,
+      information: `${degree} ${name} ${`${birthDt}`.substring(2, 4)}`,
     }));
     setIsPopupActive(false);
     setMemberInfos([]);
@@ -107,9 +100,9 @@ function Join({}: TypeJoinIn): React.JSX.Element {
   // admin 등록
   const handleJoin = () => {
     usePostJoin({
-      id: form.id,
-      memberId: form.email,
+      memberId: form.memberId,
       password: form.password,
+      id: form.id,
     });
   };
 
@@ -137,8 +130,8 @@ function Join({}: TypeJoinIn): React.JSX.Element {
         <h2>Amdin 등록</h2>
         <AuthInput
           title={'이메일'}
-          label={'email'}
-          value={form.email as string}
+          label={'memberId'}
+          value={form.memberId as string}
           onChange={useChange}
           onKeyDown={useJoinEnterKeyDown}
         />
@@ -159,8 +152,10 @@ function Join({}: TypeJoinIn): React.JSX.Element {
           title={'회원 이름'}
           label={'name'}
           value={`${form.name}`}
+          isSearch
           onChange={useChange}
           onKeyDown={useFindMember}
+          onSearch={() => usePostGetMemberInfo({ name: form.name })}
         />
         <button onClick={handleJoin}>확인</button>
       </div>
@@ -168,6 +163,6 @@ function Join({}: TypeJoinIn): React.JSX.Element {
   );
 }
 
-interface TypeJoinIn {}
+interface TypeJoin {}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Join);

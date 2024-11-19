@@ -1,5 +1,5 @@
 import React from 'react';
-import { handleSetUpperCaseFirstCharacter } from 'modules/utils';
+import SVG from 'modules/SVG';
 import styles from './AuthInput.module.scss';
 
 function AuthInput({
@@ -7,20 +7,27 @@ function AuthInput({
   label,
   value,
   disabled,
+  isSearch,
   onChange,
   onKeyDown,
+  onSearch,
 }: TypeAuthInput): React.JSX.Element {
   return (
     <div className={styles.inputDiv}>
-      <span>{handleSetUpperCaseFirstCharacter(title)}</span>
+      <span>{title}</span>
       <input
-        name={label.toLowerCase()}
-        type={label.toLowerCase()}
+        name={label}
+        type={label}
         value={value}
         disabled={disabled}
         onChange={onChange}
         onKeyDown={onKeyDown}
       />
+      {isSearch && (
+        <div className={styles.search} onClick={onSearch}>
+          <SVG type="search" width="17px" height="17px" />
+        </div>
+      )}
     </div>
   );
 }
@@ -30,8 +37,10 @@ interface TypeAuthInput {
   label: string;
   value: string;
   disabled?: boolean;
+  isSearch?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onSearch?: () => void;
 }
 
 export default AuthInput;

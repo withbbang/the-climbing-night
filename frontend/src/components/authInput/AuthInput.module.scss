@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 30px;
+  position: relative;
 
   > span {
     margin-right: auto;
@@ -16,6 +17,14 @@
 
   > input:disabled {
     border: none;
+  }
+
+  .search {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    cursor: pointer;
   }
 }
 
