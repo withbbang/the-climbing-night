@@ -2,33 +2,16 @@ import React, { useEffect } from 'react';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { CustomWindow } from 'modules/types';
 import {
+  useGetDataHook,
   usePostDataByConfirmPopupHook,
   usePostDataHook,
 } from 'modules/customHooks';
 import { handleParseDataFromJSInterface } from 'modules/utils';
 import { ToastError } from 'modules/customErrorClasses';
+import { DOMAIN } from 'modules/constants';
 import IndexPT from './IndexPT';
 
 function IndexCT({}: IndexCTProps): React.JSX.Element {
-  useEffect(() => {
-    const customWindow = window as CustomWindow;
-    customWindow.goBack = handleGoBack;
-    customWindow.onResult = handleOnResult;
-
-    usePostData({
-      c: 'c',
-      d: handleParseDataFromJSInterface({
-        bridge: '',
-        action: '',
-      }),
-    });
-
-    return () => {
-      delete customWindow.goBack;
-      delete customWindow.onResult;
-    };
-  }, []);
-
   const { useSetActivePostDataByConfirmPopup } = usePostDataByConfirmPopupHook({
     message: 'hello',
     url: '/wlekfj',
@@ -44,8 +27,25 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
   });
 
   const { usePostData } = usePostDataHook({
-    url: '/welkjtl',
+    url: `${DOMAIN}/api/get-member-info/0`,
   });
+
+  const { useGetData } = useGetDataHook({
+    url: `${DOMAIN}/api/get-member-info/0`,
+  });
+
+  useEffect(() => {
+    const customWindow = window as CustomWindow;
+    customWindow.goBack = handleGoBack;
+    customWindow.onResult = handleOnResult;
+
+    useGetData();
+
+    return () => {
+      delete customWindow.goBack;
+      delete customWindow.onResult;
+    };
+  }, []);
 
   const test = (p: string): Promise<string> =>
     new Promise((resolve) => {

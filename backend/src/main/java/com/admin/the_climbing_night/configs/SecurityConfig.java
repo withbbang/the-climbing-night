@@ -57,7 +57,7 @@ public class SecurityConfig {
 
                 // 권한 규칙 작성
                 http.authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers(Constants.AUTH_WHITELIST).permitAll()
+                                .requestMatchers(Constants.getAuthWhitelist()).permitAll()
                                 // PreAuthrization 사용하여 특정 컨트롤러에 인증 로직을 통과하게끔 하고
                                 // 나머지는 모두 패스하는 방식
                                 // .anyRequest().permitAll()

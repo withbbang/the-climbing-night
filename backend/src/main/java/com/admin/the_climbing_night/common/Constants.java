@@ -1,9 +1,25 @@
 package com.admin.the_climbing_night.common;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import jakarta.annotation.PostConstruct;
+
+@Component
 public final class Constants {
-    public static final String[] AUTH_WHITELIST = { "/", "/api/login", "/api/test", "/api/join",
-            "/api/update-authority", "/api/update-member", "/api/insert-member", "/api/insert-meeting",
-            "/api/get-members", "/api/get-member-info/{}", "/api/insert-climbing-area", "/api/get-climbing-areas",
-            "/api/get-climbing-area-info/{}", "/api/update-climbing-area", "/api/get-meetings",
-            "/api/get-meeting-info/{}" };
+    @Value("${spring.profiles.active}")
+    private String profile;
+
+    public static String[] AUTH_WHITELIST;
+
+    @PostConstruct
+    public void init() {
+        AUTH_WHITELIST = "local".equals(profile)
+                ? new String[] { "/**" }
+                : new String[] { "/", "/api/login", "/api/test", "/api/join", "/api/logout" };
+    }
+
+    public static String[] getAuthWhitelist() {
+        return AUTH_WHITELIST;
+    }
 }

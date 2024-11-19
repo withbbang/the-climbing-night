@@ -10,6 +10,8 @@ import { ToastError } from 'modules/customErrorClasses';
 import FindMemberPT from './FindMemberPT';
 
 function FindMemberCT({}: FindMemberCTProps): React.JSX.Element {
+  useEffect(() => {});
+
   return <FindMemberPT />;
 }
 

@@ -10,9 +10,11 @@ import { ToastError } from 'modules/customErrorClasses';
 import LoginPT from './LoginPT';
 
 function LoginCT({}: LoginCTProps): React.JSX.Element {
+  useEffect(() => {});
+
   return <LoginPT />;
 }
 
-interface LoginCTProps {}
+interface LoginCTProps extends CommonState {}
 
 export default LoginCT;
