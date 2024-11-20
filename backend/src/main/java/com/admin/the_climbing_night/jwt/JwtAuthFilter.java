@@ -57,6 +57,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
 
+            log.info("[JwtAuthFilter doFilterInternal] accessToken : {}", accessToken);
+
             // JWT가 있는 경우
             if (!CommonUtil.isEmpty(accessToken)) {
                 // JWT 유효성 검증
@@ -64,6 +66,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     vo = userDetailsServiceByJwt.getIsLoggedIn(accessToken);
 
                     if (CommonUtil.isEmpty(vo)) {
+                        log.error("[JwtAuthFilter doFilterInternal] No Admin");
                         throw new UsernameNotFoundException("Admin Not Found");
                     }
 
@@ -73,39 +76,50 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             useDetailsByJwt, null, useDetailsByJwt.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                } else {
-                    throw new IllegalArgumentException("Invalid Access Token");
                 }
             } else {
+                log.error("[JwtAuthFilter doFilterInternal] accessToken is Empty");
                 throw new IllegalArgumentException("Invalid Access Token");
             }
         } catch (UsernameNotFoundException e) {
             // TODO: access token 유효성 검사 성공시 로직 구현 필요
             // 실패: 토큰들 제거 (local storage, db)
+            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
+                    CodeMessage.ER1000.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1000, HttpServletResponse.SC_OK);
             return; // Stop the filter chain here
         } catch (IllegalArgumentException e) {
             // TODO: access token 유효성 검사 성공시 로직 구현 필요
             // 실패: 토큰들 제거 (local storage, db)
+            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
+                    CodeMessage.ER1001.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1001, HttpServletResponse.SC_OK);
             return; // Stop the filter chain here
         } catch (MalformedJwtException e) {
             // TODO: access token 유효성 검사 성공시 로직 구현 필요
             // 실패: 토큰들 제거 (local storage, db)
+            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
+                    CodeMessage.ER1002.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1002, HttpServletResponse.SC_OK);
             return; // Stop the filter chain here
         } catch (ExpiredJwtException e) {
             // TODO: access token 유효성 검사 성공시 로직 구현 필요
             // 실패: 토큰들 제거 (local storage, db)
+            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
+                    CodeMessage.ER1003.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1003, HttpServletResponse.SC_OK);
             return; // Stop the filter chain here
         } catch (UnsupportedJwtException e) {
             // TODO: access token 유효성 검사 성공시 로직 구현 필요
             // 실패: 토큰들 제거 (local storage, db)
+            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
+                    CodeMessage.ER1004.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1004, HttpServletResponse.SC_OK);
             return; // Stop the filter chain here
         } catch (Exception e) {
             // TODO: access token 유효성 검사 성공시 로직 구현 필요
+            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
+                    CodeMessage.ER1004.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER9999, HttpServletResponse.SC_OK);
             return; // Stop the filter chain here
         }
