@@ -238,8 +238,9 @@ export function useGetDataHook({
         if (
           error.code === 'ER1000' ||
           error.code === 'ER1001' ||
-          error.code === 'ER1000' ||
-          error.code === 'ER1001'
+          error.code === 'ER1002' ||
+          error.code === 'ER1003' ||
+          error.code === 'ER1004'
         )
           dispatch(setAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
 
@@ -271,8 +272,9 @@ export function useGetDataHook({
       if (
         error.code === 'ER1000' ||
         error.code === 'ER1001' ||
-        error.code === 'ER1000' ||
-        error.code === 'ER1001'
+        error.code === 'ER1002' ||
+        error.code === 'ER1003' ||
+        error.code === 'ER1004'
       )
         dispatch(setAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
 
@@ -337,8 +339,9 @@ export function usePostDataHook({
         if (
           error.code === 'ER1000' ||
           error.code === 'ER1001' ||
-          error.code === 'ER1000' ||
-          error.code === 'ER1001'
+          error.code === 'ER1002' ||
+          error.code === 'ER1003' ||
+          error.code === 'ER1004'
         )
           dispatch(setAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
 
