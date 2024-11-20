@@ -24,4 +24,8 @@ public class UserDetailsServiceByJwt implements UserDetailsService {
 
         return new UserDetailsByJwt(newVo);
     }
+
+    public GetIsLoggedInVo getIsLoggedIn(String accessToken) {
+        return loginMapper.getIsLoggedIn(accessToken);
+    }
 }

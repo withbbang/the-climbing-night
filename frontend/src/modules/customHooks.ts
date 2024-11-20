@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { PropState } from 'middlewares/configureReducer';
 import {
   useSetErrorBtnCb,
   useSetConfirmBtnCb,
@@ -18,6 +19,7 @@ import {
   useSetToastMessage,
   useSetToastPopupStatus,
 } from 'middlewares/reduxToolkits/commonSlice';
+import { setAccessToken } from 'middlewares/reduxToolkits/authSlice';
 import { getAPI, postAPI } from './apis';
 import {
   TypeGetAPIHookParams,
@@ -213,6 +215,8 @@ export function useGetDataHook({
   errorPopupBtnCb,
 }: TypeGetAPIHookParams) {
   const dispatch = useDispatch();
+  const { accessToken }: any =
+    useSelector((state: PropState) => state.auth.accessToken) || '';
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const useSetToastPopup = useSetToastPopupHook();
   const [data, setData] = useState<any>(null);
@@ -226,10 +230,19 @@ export function useGetDataHook({
       try {
         await beforeCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
-        response = await getAPI(url, failCb);
+        response = await getAPI(url, accessToken, failCb);
         isSuccess = true;
       } catch (error: any) {
         isSuccess = false;
+
+        if (
+          error.code === 'ER1000' ||
+          error.code === 'ER1001' ||
+          error.code === 'ER1000' ||
+          error.code === 'ER1001'
+        )
+          dispatch(setAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
+
         if (error instanceof ToastError) useSetToastPopup(error.message);
         else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
@@ -250,10 +263,19 @@ export function useGetDataHook({
     try {
       beforeCb?.();
       dispatch(useSetIsLoading({ isLoading: true }));
-      response = await getAPI(url, failCb);
+      response = await getAPI(url, accessToken, failCb);
       isSuccess = true;
     } catch (error: any) {
       isSuccess = false;
+
+      if (
+        error.code === 'ER1000' ||
+        error.code === 'ER1001' ||
+        error.code === 'ER1000' ||
+        error.code === 'ER1001'
+      )
+        dispatch(setAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
+
       if (error instanceof ToastError) useSetToastPopup(error.message);
       else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
     } finally {
@@ -287,6 +309,8 @@ export function usePostDataHook({
   errorPopupBtnCb,
 }: TypePostAPIHookParams) {
   const dispatch = useDispatch();
+  const { accessToken }: any =
+    useSelector((state: PropState) => state.auth.accessToken) || '';
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const useSetToastPopup = useSetToastPopupHook();
   const [data, setData] = useState<any>(null);
@@ -303,11 +327,21 @@ export function usePostDataHook({
         response = await postAPI(
           url,
           await handleSetParamsWithSync(params),
+          accessToken,
           failCb,
         );
         isSuccess = true;
       } catch (error: any) {
         isSuccess = false;
+
+        if (
+          error.code === 'ER1000' ||
+          error.code === 'ER1001' ||
+          error.code === 'ER1000' ||
+          error.code === 'ER1001'
+        )
+          dispatch(setAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
+
         if (error instanceof ToastError) useSetToastPopup(error.message);
         else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
@@ -342,6 +376,7 @@ export function usePostDataByConfirmPopupHook({
   errorPopupBtnCb,
 }: TypePostAPIByConfirmPopupHook) {
   const dispatch = useDispatch();
+  const accessToken = useSelector((state: PropState) => state.auth.accessToken);
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const useSetToastPopup = useSetToastPopupHook();
   const [data, setData] = useState<any>();
@@ -364,6 +399,7 @@ export function usePostDataByConfirmPopupHook({
               response = await postAPI(
                 url,
                 await handleSetParamsWithSync(params),
+                accessToken,
                 failCb,
               );
               isSuccess = true;

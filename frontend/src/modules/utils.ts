@@ -25,31 +25,27 @@ import {
  * 상태코드, 에러 메세지, 에러팝업 콜백 함수 담고 있는 파라미터 객체
  * @param {TypeThrowErrorInAPI} parameters
  */
-export function handleThrowErrorInAPI({
-  status,
-  message = 'You should set default error message',
-  failCb,
-}: TypeThrowErrorInAPI) {
+export function handleThrowErrorInAPI({ status, failCb }: TypeThrowErrorInAPI) {
   failCb?.();
   switch (status) {
     case 400:
-      throw new BadRequestError(message);
+      throw new BadRequestError();
     case 401:
-      throw new UnauthorizedError(message);
+      throw new UnauthorizedError();
     case 403:
-      throw new ForbiddenError(message);
+      throw new ForbiddenError();
     case 404:
-      throw new NotFoundError(message);
+      throw new NotFoundError();
     case 405:
-      throw new MethodNotAllowedError(message);
+      throw new MethodNotAllowedError();
     case 408:
-      throw new RequestTimeoutError(message);
+      throw new RequestTimeoutError();
     case 500:
-      throw new InternalServerErrorError(message);
+      throw new InternalServerErrorError();
     case 502:
-      throw new BadGatewayError(message);
+      throw new BadGatewayError();
     case 503:
-      throw new ServiceUnavailableError(message);
+      throw new ServiceUnavailableError();
     default:
       break;
   }
@@ -68,7 +64,7 @@ export function handleThrowCustomErrorInAPI({
 }: TypeThrowCustomErrorInAPI) {
   failCb?.(code, message);
   // TODO: 코드에 따라 switch case 분기 필요
-  throw new CustomAPIError(message);
+  throw new CustomAPIError(message, code);
 }
 
 /**

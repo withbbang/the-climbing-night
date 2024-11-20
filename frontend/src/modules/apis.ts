@@ -1,3 +1,8 @@
+/**
+ * credentials: 'include' 참고 사이트
+ * https://velog.io/@seungrok-yoon/Fetch-API%EC%9D%98-credentials
+ */
+
 import {
   handleSetParamsWithSync,
   handleThrowCustomErrorInAPI,
@@ -7,10 +12,15 @@ import {
 /**
  * GET API
  * @param {string} url 요청 URL
+ * @param {string | undefined} accessToken AccessToken
  * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @returns {Promise<any>}
  */
-function getAPI(url: string, failCb?: () => any): Promise<any> {
+function getAPI(
+  url: string,
+  accessToken: string = '',
+  failCb?: () => any,
+): Promise<any> {
   console.debug('URL: ', url);
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -18,6 +28,7 @@ function getAPI(url: string, failCb?: () => any): Promise<any> {
       //   mode: "no-cors",
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       credentials: 'include',
@@ -52,12 +63,14 @@ function getAPI(url: string, failCb?: () => any): Promise<any> {
  * POST API
  * @param {string} url 요청 URL
  * @param {any} payload 요청 DATA
+ * @param {string | undefined} accessToken AccessToken
  * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @returns {Promise<any>}
  */
 async function postAPI(
   url: string,
   payload: any,
+  accessToken: string = '',
   failCb?: () => any,
 ): Promise<any> {
   const data = await handleSetParamsWithSync(payload);
@@ -69,6 +82,7 @@ async function postAPI(
       //   mode: "no-cors",
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
@@ -104,12 +118,14 @@ async function postAPI(
  * PUT API
  * @param {string} url 요청 URL
  * @param {any} payload 요청 DATA
+ * @param {string | undefined} accessToken AccessToken
  * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @returns {Promise<any>}
  */
 async function putAPI(
   url: string,
   payload: any,
+  accessToken: string = '',
   failCb?: () => any,
 ): Promise<any> {
   const data = await handleSetParamsWithSync(payload);
@@ -121,6 +137,7 @@ async function putAPI(
       //   mode: "no-cors",
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
@@ -155,12 +172,14 @@ async function putAPI(
  * DELETE API
  * @param {string} url 요청 URL
  * @param {any} payload 요청 DATA
+ * @param {string | undefined} accessToken AccessToken
  * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @returns {Promise<any>}
  */
 async function deleteAPI(
   url: string,
   payload: any,
+  accessToken: string = '',
   failCb?: () => any,
 ): Promise<any> {
   const data = await handleSetParamsWithSync(payload);
@@ -172,6 +191,7 @@ async function deleteAPI(
       //   mode: "no-cors",
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),

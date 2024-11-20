@@ -55,6 +55,26 @@ public class LoginRestController {
 
         Map<String, String> token = loginService.makeToken(loginVo);
 
+        int updateAdminForLogin = 0;
+
+        req.setAccessToken(token.get("accessToken"));
+
+        try {
+            updateAdminForLogin = loginService.updateAdminForLogin(req);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            responseBody.setResult(new Result(CodeMessage.ER0001));
+
+            return responseBody;
+        }
+
+        if (updateAdminForLogin < 1) {
+            log.error("No Admin");
+            responseBody.setResult(new Result(CodeMessage.ER0001));
+
+            return responseBody;
+        }
+
         response.addCookie(cookieUtil.setCookie("refreshToken", token.get("refreshToken")));
 
         Map<String, String> accessToken = new HashMap<String, String>();

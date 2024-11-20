@@ -1,5 +1,6 @@
 package com.admin.the_climbing_night.configs;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -26,6 +27,7 @@ import lombok.AllArgsConstructor;
 public class SecurityConfig {
         private final UserDetailsServiceByJwt userDetailsServiceByJwt;
         private final JwtTokenProvider jwtTokenProvider;
+        private final ModelMapper modelMapper;
         private final CookieUtil cookieUtil;
 
         private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -47,7 +49,7 @@ public class SecurityConfig {
 
                 // JwtAuthFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
                 http.addFilterBefore(
-                                new JwtAuthFilter(userDetailsServiceByJwt, jwtTokenProvider,
+                                new JwtAuthFilter(userDetailsServiceByJwt, jwtTokenProvider, modelMapper,
                                                 cookieUtil),
                                 UsernamePasswordAuthenticationFilter.class);
 
@@ -57,7 +59,7 @@ public class SecurityConfig {
 
                 // 권한 규칙 작성
                 http.authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers(Constants.getAuthWhitelist()).permitAll()
+                                .requestMatchers(Constants.AUTH_WHITELIST).permitAll()
                                 // PreAuthrization 사용하여 특정 컨트롤러에 인증 로직을 통과하게끔 하고
                                 // 나머지는 모두 패스하는 방식
                                 // .anyRequest().permitAll()

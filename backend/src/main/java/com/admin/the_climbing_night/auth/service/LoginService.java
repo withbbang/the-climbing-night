@@ -5,6 +5,7 @@ import java.util.Map;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.admin.the_climbing_night.auth.domain.req.LoginRequest;
 import com.admin.the_climbing_night.auth.mapper.LoginMapper;
@@ -33,5 +34,10 @@ public class LoginService {
         Map<String, String> token = jwtTokenProvider.createToken(newLoginVo);
 
         return token;
+    }
+
+    @Transactional
+    public int updateAdminForLogin(LoginRequest req) {
+        return loginMapper.updateAdminForLogin(req);
     }
 }

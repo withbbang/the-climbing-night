@@ -15,4 +15,6 @@ public class LoginRequest {
 
     @RequiredAnnotation
     private String password;
+
+    private String accessToken;
 }

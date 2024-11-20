@@ -19,9 +19,8 @@
   <select id="getIsLoggedIn" parameterType="com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo" resultType="com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo">
     SELECT
       a.memberId
-      , a.password
       , a.grade
-      , a.name
+      , m.name
     FROM
       admin a
       join member m on a.memberFk = m.id
@@ -29,4 +28,14 @@
       1 = 1
       AND a.accessToken = #{accessToken}
   </select>
+
+  <update id="updateAdminForLogin" parameterType="com.admin.the_climbing_night.auth.domain.req.LoginRequest">
+    UPDATE
+        admin
+    SET
+        accessToken = #{accessToken}
+    WHERE
+        1 = 1
+        AND memberId = #{memberId}
+  </update>
 </mapper>

@@ -16,4 +16,6 @@ public interface LoginMapper {
 
     @DatabaseCryptoAdviceAnnotation
     GetIsLoggedInVo getIsLoggedIn(String accessToken);
+
+    int updateAdminForLogin(LoginRequest req);
 }

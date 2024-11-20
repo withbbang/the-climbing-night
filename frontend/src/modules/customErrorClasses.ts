@@ -67,11 +67,11 @@ export class RequestTimeoutError extends APIError {
 
 // 500
 export class InternalServerErrorError extends APIError {
-  constructor(message: string = 'Internal Server Error Error') {
+  constructor(message: string = 'Internal Server Error') {
     super(message);
   }
 
-  name = 'Internal Server Error Error';
+  name = 'Internal Server Error';
 }
 
 // 502
@@ -94,8 +94,9 @@ export class ServiceUnavailableError extends APIError {
 
 // Status Code는 정상이지만 서버 로직에 의한 에러
 export class CustomAPIError extends APIError {
-  constructor(message: string = 'Custom API Error') {
+  constructor(message: string = 'Custom API Error', code?: string) {
     super(message);
+    this.code = code;
   }
 
   name = 'Custom API Error';
