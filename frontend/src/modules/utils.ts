@@ -310,3 +310,8 @@ export function handleConvertDateFormat(date: Date, format: string): string {
 export function handleSetUpperCaseFirstCharacter(value: string): string {
   return value.replace(/^[a-z]/, (char) => char.toUpperCase());
 }
+
+export function handleCheckEmail(email: string): boolean {
+  // eslint-disable-next-line
+  return /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/.test(email);
+}

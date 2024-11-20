@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PropState } from 'middlewares/configureReducer';
 import { AuthState, setAccessToken } from 'middlewares/reduxToolkits/authSlice';
 import { connect } from 'react-redux';

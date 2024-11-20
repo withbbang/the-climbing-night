@@ -20,6 +20,7 @@ function getAPI(url: string, failCb?: () => any): Promise<any> {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     })
       .then((response) => {
         if (response.status < 400) {
@@ -71,6 +72,7 @@ async function postAPI(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
+      credentials: 'include',
     })
       .then((response) => {
         if (response.status < 400) {

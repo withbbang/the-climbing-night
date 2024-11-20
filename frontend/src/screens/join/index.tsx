@@ -11,23 +11,25 @@ import {
 import Header from 'components/header';
 import AuthInput from 'components/authInput';
 import { DOMAIN } from 'modules/constants';
-import { GetMemberInfoByJoin } from 'modules/apiTypes';
+import { GetMemberInfoByJoinApiType } from 'modules/apiTypes';
+import { AuthState } from 'middlewares/reduxToolkits/authSlice';
+import { handleCheckEmail } from 'modules/utils';
 import styles from './Join.module.scss';
 
-function mapStateToProps(state: PropState) {
-  return {};
+function mapStateToProps(state: PropState): AuthState {
+  return { ...state.auth };
 }
 
 function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
   return {};
 }
 
-function Join({}: TypeJoin): React.JSX.Element {
+function Join({ accessToken }: TypeJoin): React.JSX.Element {
   const navigate = useNavigate();
   const [isPopupActive, setIsPopupActive] = useState<boolean>(false);
-  const [memberInfos, setMemberInfos] = useState<Array<GetMemberInfoByJoin>>(
-    [],
-  );
+  const [memberInfos, setMemberInfos] = useState<
+    Array<GetMemberInfoByJoinApiType>
+  >([]);
   const { form, setForm, useChange } = useChangeHook({
     memberId: '',
     password: '',
@@ -35,6 +37,10 @@ function Join({}: TypeJoin): React.JSX.Element {
     information: '',
     name: '',
   });
+
+  useEffect(() => {
+    if (accessToken) navigate('/', { replace: true });
+  }, []);
 
   // 회원 정보 가져오기
   const { usePostData: usePostGetMemberInfo } = usePostDataHook({
@@ -62,6 +68,8 @@ function Join({}: TypeJoin): React.JSX.Element {
     url: `${DOMAIN}/api/join`,
     beforeCb: () => {
       if (!form.memberId) throw new Error('이메일을<br/>입력해주세요.');
+      if (!handleCheckEmail(`${form.memberId}`))
+        throw new Error('이메일을<br/>확인해주세요.');
       if (!form.password) throw new Error('비밀번호를<br/>입력해주세요.');
       if (!form.id) throw new Error('회원을 선택해주세요.');
     },
@@ -79,13 +87,15 @@ function Join({}: TypeJoin): React.JSX.Element {
   );
 
   // 회원 정보 조회 콜백
-  const handleSetMemberInfos = (response: Array<GetMemberInfoByJoin>) => {
+  const handleSetMemberInfos = (
+    response: Array<GetMemberInfoByJoinApiType>,
+  ) => {
     setMemberInfos(response);
     setIsPopupActive(true);
   };
 
   // 회원 정보 클릭 콜백
-  const handleClickMemberInfo = (memberInfo: GetMemberInfoByJoin) => {
+  const handleClickMemberInfo = (memberInfo: GetMemberInfoByJoinApiType) => {
     const { id, degree, name, birthDt } = memberInfo;
 
     setForm((prevState) => ({
@@ -115,7 +125,7 @@ function Join({}: TypeJoin): React.JSX.Element {
           onClick={() => setIsPopupActive(false)}
         >
           <ul className={styles.modalBody}>
-            {memberInfos.map((memberInfo: GetMemberInfoByJoin) => (
+            {memberInfos.map((memberInfo: GetMemberInfoByJoinApiType) => (
               <li
                 key={memberInfo.id}
                 onClick={() => handleClickMemberInfo(memberInfo)}
@@ -163,6 +173,6 @@ function Join({}: TypeJoin): React.JSX.Element {
   );
 }
 
-interface TypeJoin {}
+interface TypeJoin extends AuthState {}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Join);

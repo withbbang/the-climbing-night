@@ -28,6 +28,7 @@ import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
 import com.admin.the_climbing_night.utils.CommonUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -70,8 +71,10 @@ public class AdminRestController {
      * @return
      */
     @GetMapping(value = "get-member-info/{id}")
-    public SingleResponse<GetMemberVo> getMemberInfo(@PathVariable String id) {
+    public SingleResponse<GetMemberVo> getMemberInfo(@PathVariable String id, HttpServletRequest req) {
         SingleResponse response = new SingleResponse();
+
+        log.info("cookie: ", req.getCookies());
 
         GetMemberInfoVo getMemberInfo = null;
 
