@@ -99,12 +99,12 @@ public class JwtTokenProvider {
     }
 
     /**
-     * AccessToken에서 User ID 추출
+     * AccessToken에서 Admin 정보 추출
      * 
      * @param accessToken
      * @return User ID
      */
-    public GetIsLoggedInVo getMemberInfo(String accessToken) {
+    public GetIsLoggedInVo getAdminInfo(String accessToken) {
         GetIsLoggedInVo memberInfo = new GetIsLoggedInVo();
 
         memberInfo.setMemberId(parseClaims(accessToken).get("memberId", String.class));

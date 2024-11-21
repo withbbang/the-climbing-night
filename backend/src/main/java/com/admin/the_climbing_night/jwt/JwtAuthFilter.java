@@ -52,6 +52,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
 
         String requestURI = request.getRequestURI();
+        boolean shouldCheckRefreshToken = false; // Refresh Token 검증 플래그
+        boolean shouldRegenerateToken = false; // Token 재생성 플래그
 
         // Skip filter for whitelisted URIs
         for (String uri : Constants.AUTH_WHITELIST) {
@@ -97,30 +99,79 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             sendErrorCustomResponse(response, CodeMessage.ER1000, HttpServletResponse.SC_OK);
             return;
         } catch (IllegalArgumentException e) {
-            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
+            log.error("[JwtAuthFilter doFilterInternal] IllegalArgumentException: {}",
                     CodeMessage.ER1001.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1001, HttpServletResponse.SC_OK);
             return;
         } catch (MalformedJwtException e) {
-            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
+            log.error("[JwtAuthFilter doFilterInternal] MalformedJwtException: {}",
                     CodeMessage.ER1002.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1002, HttpServletResponse.SC_OK);
             return;
         } catch (ExpiredJwtException e) {
-            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
-                    CodeMessage.ER1003.getMessage());
-            sendErrorCustomResponse(response, CodeMessage.ER1003, HttpServletResponse.SC_OK);
-            return;
+            // Refresh Token 유효성 검증을 위한 플래그 변경
+            shouldCheckRefreshToken = true;
         } catch (UnsupportedJwtException e) {
-            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
+            log.error("[JwtAuthFilter doFilterInternal] UnsupportedJwtException: {}",
                     CodeMessage.ER1004.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1004, HttpServletResponse.SC_OK);
             return;
         } catch (Exception e) {
-            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
-                    CodeMessage.ER1004.getMessage());
+            log.error("[JwtAuthFilter doFilterInternal] Exception: {}",
+                    e.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER9999, HttpServletResponse.SC_OK);
             return;
+        }
+
+        // Access Token 만료, Refresh Token 검증
+        if (shouldCheckRefreshToken) {
+            try {
+                jwtTokenProvider.validateToken(cookieUtil.getCookie(request, "refreshToken"));
+                shouldRegenerateToken = true;
+            } catch (IllegalArgumentException e) {
+                log.error("[JwtAuthFilter doFilterInternal] IllegalArgumentException: {}",
+                        CodeMessage.ER1001.getMessage());
+                sendErrorCustomResponse(response, CodeMessage.ER1001, HttpServletResponse.SC_OK);
+                return;
+            } catch (MalformedJwtException e) {
+                log.error("[JwtAuthFilter doFilterInternal] MalformedJwtException: {}",
+                        CodeMessage.ER1002.getMessage());
+                sendErrorCustomResponse(response, CodeMessage.ER1002, HttpServletResponse.SC_OK);
+                return;
+            } catch (ExpiredJwtException e) {
+                log.error("[JwtAuthFilter doFilterInternal] ExpiredJwtException: {}",
+                        CodeMessage.ER1003.getMessage());
+                sendErrorCustomResponse(response, CodeMessage.ER1003, HttpServletResponse.SC_OK);
+                return;
+            } catch (UnsupportedJwtException e) {
+                log.error("[JwtAuthFilter doFilterInternal] UnsupportedJwtException: {}",
+                        CodeMessage.ER1004.getMessage());
+                sendErrorCustomResponse(response, CodeMessage.ER1004, HttpServletResponse.SC_OK);
+                return;
+            } catch (Exception e) {
+                log.error("[JwtAuthFilter doFilterInternal] Exception: {}",
+                        e.getMessage());
+                sendErrorCustomResponse(response, CodeMessage.ER9999, HttpServletResponse.SC_OK);
+                return;
+            } finally {
+                if (shouldRegenerateToken) {
+                    vo = userDetailsServiceByJwt.getIsLoggedIn(accessToken);
+
+                    if (CommonUtil.isEmpty(vo)) {
+                        log.error("[JwtAuthFilter doFilterInternal] No Admin");
+                        throw new UsernameNotFoundException("Admin Not Found");
+                    }
+
+                    UserDetailsByJwt useDetailsByJwt = new UserDetailsByJwt(modelMapper.map(vo, GetIsLoggedInVo.class));
+
+                    // Create authentication token and set it in SecurityContext
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            useDetailsByJwt, null, useDetailsByJwt.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                } else {
+                    return;
+                }
+            }
         }
 
         JwtTokenVo tokenUtilVo = new JwtTokenVo();
@@ -190,6 +241,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         response.getWriter().flush();
     }
 
+    /**
+     * 인가 확인 성공 시 커스텀 응답 만들기
+     * 
+     * @param responseWrapper
+     * @param newAccessToken
+     * @throws IOException
+     */
     private void sendSuccessCustomResponse(ContentCachingResponseWrapper responseWrapper, String newAccessToken)
             throws IOException {
         byte[] responseContent = responseWrapper.getContentAsByteArray();
