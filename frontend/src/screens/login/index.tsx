@@ -10,7 +10,10 @@ import {
 } from 'modules/customHooks';
 import Header from 'components/header';
 import AuthInput from 'components/authInput';
-import { AuthState, setAccessToken } from 'middlewares/reduxToolkits/authSlice';
+import {
+  AuthState,
+  useSetAccessToken,
+} from 'middlewares/reduxToolkits/authSlice';
 import { DOMAIN } from 'modules/constants';
 import { handleCheckEmail } from 'modules/utils';
 import styles from './Login.module.scss';
@@ -22,7 +25,7 @@ function mapStateToProps(state: PropState): AuthState {
 function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
   return {
     handleLogin: (accessToken: string): void => {
-      dispatch(setAccessToken({ accessToken }));
+      dispatch(useSetAccessToken({ accessToken }));
     },
   };
 }
@@ -44,8 +47,8 @@ function Login({ accessToken, handleLogin }: TypeLogin): React.JSX.Element {
         throw new Error('이메일을<br/>확인해주세요.');
       if (!form.password) throw new Error('비밀번호를<br/>입력해주세요.');
     },
-    successCb: (response) => {
-      handleLogin(response);
+    successCb: ({ accessToken }) => {
+      handleLogin(accessToken);
       navigate('/', { replace: true });
     },
   });

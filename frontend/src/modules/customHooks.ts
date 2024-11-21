@@ -19,7 +19,7 @@ import {
   useSetToastMessage,
   useSetToastPopupStatus,
 } from 'middlewares/reduxToolkits/commonSlice';
-import { setAccessToken } from 'middlewares/reduxToolkits/authSlice';
+import { useSetAccessToken } from 'middlewares/reduxToolkits/authSlice';
 import { getAPI, postAPI } from './apis';
 import {
   TypeGetAPIHookParams,
@@ -215,7 +215,7 @@ export function useGetDataHook({
   errorPopupBtnCb,
 }: TypeGetAPIHookParams) {
   const dispatch = useDispatch();
-  const { accessToken }: any =
+  const accessToken: string =
     useSelector((state: PropState) => state.auth.accessToken) || '';
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const useSetToastPopup = useSetToastPopupHook();
@@ -231,6 +231,10 @@ export function useGetDataHook({
         await beforeCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
         response = await getAPI(url, accessToken, failCb);
+
+        if (response.accessToken)
+          dispatch(useSetAccessToken({ accessToken: response.accessToken }));
+
         isSuccess = true;
       } catch (error: any) {
         isSuccess = false;
@@ -242,14 +246,14 @@ export function useGetDataHook({
           error.code === 'ER1003' ||
           error.code === 'ER1004'
         )
-          dispatch(setAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
+          dispatch(useSetAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
 
         if (error instanceof ToastError) useSetToastPopup(error.message);
         else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
         if (isSuccess) {
-          setData(response);
-          await successCb?.(response);
+          setData(response.data);
+          await successCb?.(response.data);
         }
         dispatch(useSetIsLoading({ isLoading: false }));
       }
@@ -264,7 +268,10 @@ export function useGetDataHook({
     try {
       beforeCb?.();
       dispatch(useSetIsLoading({ isLoading: true }));
-      response = await getAPI(url, accessToken, failCb);
+
+      if (response.accessToken)
+        dispatch(useSetAccessToken({ accessToken: response.accessToken }));
+
       isSuccess = true;
     } catch (error: any) {
       isSuccess = false;
@@ -276,15 +283,15 @@ export function useGetDataHook({
         error.code === 'ER1003' ||
         error.code === 'ER1004'
       )
-        dispatch(setAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
+        dispatch(useSetAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
 
       if (error instanceof ToastError) useSetToastPopup(error.message);
       else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
     } finally {
       if (isSuccess) {
-        setData(response);
+        setData(response.data);
         dispatch(useSetIsLoading({ isLoading: false }));
-        await successCb?.(response);
+        await successCb?.(response.data);
       } else {
         dispatch(useSetIsLoading({ isLoading: false }));
       }
@@ -311,7 +318,7 @@ export function usePostDataHook({
   errorPopupBtnCb,
 }: TypePostAPIHookParams) {
   const dispatch = useDispatch();
-  const { accessToken }: any =
+  const accessToken: string =
     useSelector((state: PropState) => state.auth.accessToken) || '';
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const useSetToastPopup = useSetToastPopupHook();
@@ -332,6 +339,10 @@ export function usePostDataHook({
           accessToken,
           failCb,
         );
+
+        if (response.accessToken)
+          dispatch(useSetAccessToken({ accessToken: response.accessToken }));
+
         isSuccess = true;
       } catch (error: any) {
         isSuccess = false;
@@ -343,15 +354,15 @@ export function usePostDataHook({
           error.code === 'ER1003' ||
           error.code === 'ER1004'
         )
-          dispatch(setAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
+          dispatch(useSetAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
 
         if (error instanceof ToastError) useSetToastPopup(error.message);
         else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
         if (isSuccess) {
-          setData(response);
+          setData(response.data);
           dispatch(useSetIsLoading({ isLoading: false }));
-          await successCb?.(response);
+          await successCb?.(response.data);
         } else {
           dispatch(useSetIsLoading({ isLoading: false }));
         }
@@ -405,6 +416,12 @@ export function usePostDataByConfirmPopupHook({
                 accessToken,
                 failCb,
               );
+
+              if (response.accessToken)
+                dispatch(
+                  useSetAccessToken({ accessToken: response.accessToken }),
+                );
+
               isSuccess = true;
               dispatch(
                 useSetIsConfirmPopupActive({ isConfirmPopupActive: false }),
@@ -415,13 +432,23 @@ export function usePostDataByConfirmPopupHook({
               dispatch(useSetCancelBtnCb({}));
             } catch (error: any) {
               isSuccess = false;
+
+              if (
+                error.code === 'ER1000' ||
+                error.code === 'ER1001' ||
+                error.code === 'ER1002' ||
+                error.code === 'ER1003' ||
+                error.code === 'ER1004'
+              )
+                dispatch(useSetAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
+
               if (error instanceof ToastError) useSetToastPopup(error.message);
               else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
             } finally {
               if (isSuccess) {
-                setData(response);
+                setData(response.data);
                 dispatch(useSetIsLoading({ isLoading: false }));
-                await successCb?.(response);
+                await successCb?.(response.data);
               } else {
                 dispatch(useSetIsLoading({ isLoading: false }));
               }

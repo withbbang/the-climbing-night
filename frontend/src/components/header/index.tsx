@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { PropState } from 'middlewares/configureReducer';
-import { AuthState, setAccessToken } from 'middlewares/reduxToolkits/authSlice';
+import {
+  AuthState,
+  useSetAccessToken,
+} from 'middlewares/reduxToolkits/authSlice';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -18,7 +21,7 @@ function mapStateToProps(state: PropState): AuthState {
 function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
   return {
     handleLogout: (): void => {
-      dispatch(setAccessToken(''));
+      dispatch(useSetAccessToken({ accessToken: '' }));
     },
   };
 }

@@ -1,20 +1,27 @@
 package com.admin.the_climbing_night.jwt;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo;
 import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.Constants;
 import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
+import com.admin.the_climbing_night.jwt.service.JwtService;
+import com.admin.the_climbing_night.jwt.vo.JwtTokenVo;
 import com.admin.the_climbing_night.utils.CommonUtil;
 import com.admin.the_climbing_night.utils.CookieUtil;
+import com.admin.the_climbing_night.utils.TokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -34,6 +41,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
     private final ModelMapper modelMapper;
     private final CookieUtil cookieUtil;
+    private final TokenUtil tokenUtil;
+    private final JwtService jwtService;
 
     /**
      * JWT 토큰 검증 필터 수행
@@ -53,9 +62,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         GetIsLoggedInVo vo = null;
+        String accessToken = null;
 
         try {
-            String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
+            accessToken = request.getHeader("Authorization").replace("Bearer ", "");
 
             log.info("[JwtAuthFilter doFilterInternal] accessToken : {}", accessToken);
 
@@ -82,49 +92,76 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 throw new IllegalArgumentException("Invalid Access Token");
             }
         } catch (UsernameNotFoundException e) {
-            // TODO: access token 유효성 검사 성공시 로직 구현 필요
-            // 실패: 토큰들 제거 (local storage, db)
             log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
                     CodeMessage.ER1000.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1000, HttpServletResponse.SC_OK);
-            return; // Stop the filter chain here
+            return;
         } catch (IllegalArgumentException e) {
-            // TODO: access token 유효성 검사 성공시 로직 구현 필요
-            // 실패: 토큰들 제거 (local storage, db)
             log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
                     CodeMessage.ER1001.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1001, HttpServletResponse.SC_OK);
-            return; // Stop the filter chain here
+            return;
         } catch (MalformedJwtException e) {
-            // TODO: access token 유효성 검사 성공시 로직 구현 필요
-            // 실패: 토큰들 제거 (local storage, db)
             log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
                     CodeMessage.ER1002.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1002, HttpServletResponse.SC_OK);
-            return; // Stop the filter chain here
+            return;
         } catch (ExpiredJwtException e) {
-            // TODO: access token 유효성 검사 성공시 로직 구현 필요
-            // 실패: 토큰들 제거 (local storage, db)
             log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
                     CodeMessage.ER1003.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1003, HttpServletResponse.SC_OK);
-            return; // Stop the filter chain here
+            return;
         } catch (UnsupportedJwtException e) {
-            // TODO: access token 유효성 검사 성공시 로직 구현 필요
-            // 실패: 토큰들 제거 (local storage, db)
             log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
                     CodeMessage.ER1004.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1004, HttpServletResponse.SC_OK);
-            return; // Stop the filter chain here
+            return;
         } catch (Exception e) {
-            // TODO: access token 유효성 검사 성공시 로직 구현 필요
             log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
                     CodeMessage.ER1004.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER9999, HttpServletResponse.SC_OK);
-            return; // Stop the filter chain here
+            return;
         }
 
-        filterChain.doFilter(request, response); // 다음 필터로 넘기기
+        JwtTokenVo tokenUtilVo = new JwtTokenVo();
+        tokenUtilVo.setMemberId(vo.getMemberId());
+        tokenUtilVo.setGrade(vo.getGrade());
+        tokenUtilVo.setName(vo.getName());
+
+        Map<String, String> token = tokenUtil.makeToken(tokenUtilVo);
+        String newAccessToken = token.get("accessToken");
+
+        tokenUtilVo.setAccessToken(newAccessToken);
+
+        int updateAdminForRequest = 0;
+
+        try {
+            updateAdminForRequest = jwtService.updateAdminForRequest(tokenUtilVo);
+        } catch (Exception e) {
+            log.error("[JwtAuthFilter doFilterInternal] Access Token Update Error: {}",
+                    e.getMessage());
+            sendErrorCustomResponse(response, CodeMessage.ER9999,
+                    HttpServletResponse.SC_OK);
+            return;
+        }
+
+        if (updateAdminForRequest < 1) {
+            log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
+                    CodeMessage.ER1000.getMessage());
+            sendErrorCustomResponse(response, CodeMessage.ER1000,
+                    HttpServletResponse.SC_OK);
+            return;
+        }
+
+        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+
+        try {
+            filterChain.doFilter(request, responseWrapper);
+            sendSuccessCustomResponse(responseWrapper, newAccessToken);
+        } finally {
+            response.addCookie(cookieUtil.setCookie("refreshToken", token.get("refreshToken")));
+            responseWrapper.copyBodyToResponse();
+        }
     }
 
     /**
@@ -151,5 +188,29 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
         response.getWriter().flush();
+    }
+
+    private void sendSuccessCustomResponse(ContentCachingResponseWrapper responseWrapper, String newAccessToken)
+            throws IOException {
+        byte[] responseContent = responseWrapper.getContentAsByteArray();
+        String originalResponseBody = new String(responseContent, responseWrapper.getCharacterEncoding());
+
+        // 기존 응답 본문을 SingleResponse 객체로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        SingleResponse<?> existingResponse = objectMapper.readValue(originalResponseBody, SingleResponse.class);
+
+        // 새로운 accessToken 설정
+        existingResponse.setAccessToken(newAccessToken);
+
+        // 수정된 응답 본문을 JSON으로 변환
+        String jsonResponse = objectMapper.writeValueAsString(existingResponse);
+
+        // 응답 버퍼 초기화
+        responseWrapper.resetBuffer();
+        responseWrapper.setContentType("application/json");
+        responseWrapper.getWriter().write(jsonResponse);
+        responseWrapper.getWriter().flush();
+
+        log.info("Real Response Body: {}", jsonResponse);
     }
 }

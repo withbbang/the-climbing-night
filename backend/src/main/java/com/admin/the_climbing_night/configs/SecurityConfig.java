@@ -17,7 +17,10 @@ import com.admin.the_climbing_night.jwt.JwtAuthFilter;
 import com.admin.the_climbing_night.jwt.JwtAuthenticationEntryPoint;
 import com.admin.the_climbing_night.jwt.JwtTokenProvider;
 import com.admin.the_climbing_night.jwt.UserDetailsServiceByJwt;
+import com.admin.the_climbing_night.jwt.service.JwtService;
 import com.admin.the_climbing_night.utils.CookieUtil;
+import com.admin.the_climbing_night.utils.TokenUtil;
+
 import lombok.AllArgsConstructor;
 
 @Configuration
@@ -29,6 +32,8 @@ public class SecurityConfig {
         private final JwtTokenProvider jwtTokenProvider;
         private final ModelMapper modelMapper;
         private final CookieUtil cookieUtil;
+        private final TokenUtil tokenUtil;
+        private final JwtService jwtService;
 
         private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
         private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -50,7 +55,7 @@ public class SecurityConfig {
                 // JwtAuthFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
                 http.addFilterBefore(
                                 new JwtAuthFilter(userDetailsServiceByJwt, jwtTokenProvider, modelMapper,
-                                                cookieUtil),
+                                                cookieUtil, tokenUtil, jwtService),
                                 UsernamePasswordAuthenticationFilter.class);
 
                 http.exceptionHandling((exceptionHandling) -> exceptionHandling

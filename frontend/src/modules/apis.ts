@@ -44,13 +44,14 @@ function getAPI(
         console.debug('result: ', result);
         const {
           result: { code, message },
+          accessToken,
           data,
         } = result;
 
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve(data);
+        resolve({ accessToken, data });
       })
       .catch((error) => {
         console.error(error);
@@ -99,13 +100,14 @@ async function postAPI(
         console.debug('result: ', result);
         const {
           result: { code, message },
+          accessToken,
           data,
         } = result;
 
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve(data);
+        resolve({ accessToken, data });
       })
       .catch((error) => {
         console.error(error);
@@ -153,13 +155,14 @@ async function putAPI(
         console.debug('result: ', result);
         const {
           result: { code, message },
+          accessToken,
           data,
         } = result;
 
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve(data);
+        resolve({ accessToken, data });
       })
       .catch((error) => {
         console.error(error);
@@ -207,13 +210,14 @@ async function deleteAPI(
         console.debug('result: ', result);
         const {
           result: { code, message },
+          accessToken,
           data,
         } = result;
 
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve(data);
+        resolve({ accessToken, data });
       })
       .catch((error) => {
         console.error(error);

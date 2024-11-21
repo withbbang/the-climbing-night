@@ -2,6 +2,7 @@ package com.admin.the_climbing_night.auth.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.admin.the_climbing_night.annotations.DatabaseCryptoAdviceAnnotation;
 import com.admin.the_climbing_night.auth.domain.req.LoginRequest;
@@ -17,5 +18,6 @@ public interface LoginMapper {
     @DatabaseCryptoAdviceAnnotation
     GetIsLoggedInVo getIsLoggedIn(String accessToken);
 
+    @Transactional
     int updateAdminForLogin(LoginRequest req);
 }

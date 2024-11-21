@@ -15,8 +15,10 @@ import com.admin.the_climbing_night.auth.vo.LoginVo;
 import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
+import com.admin.the_climbing_night.jwt.vo.JwtTokenVo;
 import com.admin.the_climbing_night.utils.CommonUtil;
 import com.admin.the_climbing_night.utils.CookieUtil;
+import com.admin.the_climbing_night.utils.TokenUtil;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api")
 public class LoginRestController {
+    @Autowired
+    private TokenUtil tokenUtil;
+
     @Autowired
     private LoginService loginService;
 
@@ -53,7 +58,12 @@ public class LoginRestController {
             return responseBody;
         }
 
-        Map<String, String> token = loginService.makeToken(loginVo);
+        JwtTokenVo tokenUtilVo = new JwtTokenVo();
+        tokenUtilVo.setMemberId(loginVo.getMemberId());
+        tokenUtilVo.setGrade(loginVo.getGrade());
+        tokenUtilVo.setName(loginVo.getName());
+
+        Map<String, String> token = tokenUtil.makeToken(tokenUtilVo);
 
         int updateAdminForLogin = 0;
 

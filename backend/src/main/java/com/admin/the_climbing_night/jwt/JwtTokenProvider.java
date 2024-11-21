@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo;
-import com.admin.the_climbing_night.auth.vo.LoginVo;
+import com.admin.the_climbing_night.jwt.vo.JwtTokenVo;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -42,7 +43,7 @@ public class JwtTokenProvider {
      * @param vo
      * @return Map<String, String>
      */
-    public Map<String, String> createToken(LoginVo vo) {
+    public Map<String, String> createToken(JwtTokenVo vo) {
         String accessToken = createAccessToken(vo, ACCESS_TOKEN_EXP_TIME);
         String refreshToken = createRefreshToken(vo, REFRESH_TOKEN_EXP_TIME);
 
@@ -57,16 +58,16 @@ public class JwtTokenProvider {
     /**
      * Access Token 생성
      * 
-     * @param member
+     * @param vo
      * @param expireTime
      * @return String
      */
-    private String createAccessToken(LoginVo member, long expireTime) {
+    private String createAccessToken(JwtTokenVo vo, long expireTime) {
         Claims claims = Jwts.claims();
 
-        claims.put("memberId", member.getMemberId());
-        claims.put("grade", member.getGrade());
-        claims.put("name", member.getName());
+        claims.put("memberId", vo.getMemberId());
+        claims.put("grade", vo.getGrade());
+        claims.put("name", vo.getName());
 
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tokenValidity = now.plusSeconds(expireTime);
@@ -83,7 +84,7 @@ public class JwtTokenProvider {
      * @param expireTime
      * @return String
      */
-    private String createRefreshToken(LoginVo member, long expireTime) {
+    private String createRefreshToken(JwtTokenVo member, long expireTime) {
         Claims claims = Jwts.claims();
 
         claims.put("memberId", member.getMemberId());

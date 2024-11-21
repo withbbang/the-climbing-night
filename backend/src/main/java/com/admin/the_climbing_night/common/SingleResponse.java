@@ -12,6 +12,7 @@ import lombok.ToString;
 @ToString
 public class SingleResponse<T> {
     private Result result;
+    private String accessToken;
     private T data;
 
     public SingleResponse() {

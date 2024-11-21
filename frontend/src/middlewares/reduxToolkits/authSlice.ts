@@ -12,12 +12,12 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAccessToken: (state, action) => {
+    useSetAccessToken: (state, action) => {
       state.accessToken = action.payload.accessToken;
     },
   },
 });
 
-export const { setAccessToken } = authSlice.actions;
+export const { useSetAccessToken } = authSlice.actions;
 
 export default authSlice.reducer;
