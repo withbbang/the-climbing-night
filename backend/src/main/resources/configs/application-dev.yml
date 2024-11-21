@@ -31,7 +31,7 @@ mybatis:
 logging:
   file:
     path: "logs" #TODO: 환경마다 변경 필요
-    name: "spring-boot-turorial"
+    name: "the-climbing-night"
 
 key:
   section: # 구간 암복호화
@@ -40,6 +40,6 @@ key:
     aes-key: abcdefghijklmnopqrstuvwxyz123456
 
 jwt:
-  access-token-exp-time: 86400000 # 1일
-  refresh-token-exp-time: 2592000000 # 30일
+  access-token-exp-time: 3600 # 1시간
+  refresh-token-exp-time: 43200 # 12시간
   secret-key: 6dbd7e7d120c47b0446038cba0b5149c1b48d722536d164937f3ec07f22d46f6
