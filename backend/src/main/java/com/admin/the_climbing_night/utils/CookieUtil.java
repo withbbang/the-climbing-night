@@ -18,6 +18,7 @@ public class CookieUtil {
 
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
+        cookie.setPath("/");
 
         return cookie;
     }
