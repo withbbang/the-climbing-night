@@ -28,6 +28,13 @@ public class JwtTokenProvider {
     private final long ACCESS_TOKEN_EXP_TIME;
     private final long REFRESH_TOKEN_EXP_TIME;
 
+    /**
+     * jwt 토큰 생성자
+     * 
+     * @param secretKey
+     * @param accessTokenExpTime
+     * @param refreshTokenExpTime
+     */
     public JwtTokenProvider(@Value("${jwt.secret-key}") String secretKey,
             @Value("${jwt.access-token-exp-time}") long accessTokenExpTime,
             @Value("${jwt.refresh-token-exp-time}") long refreshTokenExpTime) {

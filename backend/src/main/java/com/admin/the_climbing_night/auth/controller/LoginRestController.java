@@ -36,6 +36,13 @@ public class LoginRestController {
     @Autowired
     private CookieUtil cookieUtil;
 
+    /**
+     * 로그인
+     * 
+     * @param req
+     * @param response
+     * @return
+     */
     @PostMapping(value = "login")
     public SingleResponse<Map<String, String>> login(@RequestBody LoginRequest req, HttpServletResponse response) {
         SingleResponse responseBody = new SingleResponse();

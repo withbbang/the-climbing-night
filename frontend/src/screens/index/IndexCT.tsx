@@ -38,6 +38,8 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
     customWindow.goBack = handleGoBack;
     customWindow.onResult = handleOnResult;
 
+    useGetData();
+
     return () => {
       delete customWindow.goBack;
       delete customWindow.onResult;

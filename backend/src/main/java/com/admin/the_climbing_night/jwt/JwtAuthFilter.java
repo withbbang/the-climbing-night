@@ -1,11 +1,9 @@
 package com.admin.the_climbing_night.jwt;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +13,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo;
 import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.Constants;
+import com.admin.the_climbing_night.common.CustomException;
 import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
 import com.admin.the_climbing_night.jwt.service.JwtService;
@@ -55,7 +54,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         boolean shouldCheckRefreshToken = false; // Refresh Token 검증 플래그
         boolean shouldRegenerateToken = false; // Token 재생성 플래그
 
-        // Skip filter for whitelisted URIs
+        // 화이트리스트 스킵
         for (String uri : Constants.AUTH_WHITELIST) {
             if (requestURI.equals(uri)) {
                 filterChain.doFilter(request, response);
@@ -67,7 +66,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String accessToken = null;
 
         try {
-            accessToken = request.getHeader("Authorization").replace("Bearer ", "");
+            accessToken = request.getHeader("Authorization").replace("Bearer", "").strip();
 
             log.info("[JwtAuthFilter doFilterInternal] accessToken : {}", accessToken);
 
@@ -84,14 +83,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
                     UserDetailsByJwt useDetailsByJwt = new UserDetailsByJwt(modelMapper.map(vo, GetIsLoggedInVo.class));
 
-                    // Create authentication token and set it in SecurityContext
+                    // 토큰 생성 및 SecurityContext 설정
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             useDetailsByJwt, null, useDetailsByJwt.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             } else {
-                log.error("[JwtAuthFilter doFilterInternal] accessToken is Empty");
-                throw new IllegalArgumentException("Invalid Access Token");
+                throw new CustomException(CodeMessage.ER0030);
             }
         } catch (UsernameNotFoundException e) {
             log.error("[JwtAuthFilter doFilterInternal] UsernameNotFoundException: {}",
@@ -115,6 +113,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.error("[JwtAuthFilter doFilterInternal] UnsupportedJwtException: {}",
                     CodeMessage.ER1004.getMessage());
             sendErrorCustomResponse(response, CodeMessage.ER1004, HttpServletResponse.SC_OK);
+            return;
+        } catch (CustomException e) {
+            log.error("[JwtAuthFilter doFilterInternal] accessToken is Empty");
+            sendErrorCustomResponse(response, CodeMessage.ER0030, HttpServletResponse.SC_OK);
             return;
         } catch (Exception e) {
             log.error("[JwtAuthFilter doFilterInternal] Exception: {}",
@@ -164,7 +166,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
                     UserDetailsByJwt useDetailsByJwt = new UserDetailsByJwt(modelMapper.map(vo, GetIsLoggedInVo.class));
 
-                    // Create authentication token and set it in SecurityContext
+                    // 토큰 생성 및 SecurityContext 설정
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             useDetailsByJwt, null, useDetailsByJwt.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);

@@ -220,45 +220,6 @@ export function useGetDataHook({
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const useSetToastPopup = useSetToastPopupHook();
   const [data, setData] = useState<any>(null);
-  let isSuccess = false;
-  let response: any;
-
-  useEffect(() => {
-    (async () => {
-      if (!url) return;
-
-      try {
-        await beforeCb?.();
-        dispatch(useSetIsLoading({ isLoading: true }));
-        response = await getAPI(url, accessToken, failCb);
-
-        if (response.accessToken)
-          dispatch(useSetAccessToken({ accessToken: response.accessToken }));
-
-        isSuccess = true;
-      } catch (error: any) {
-        isSuccess = false;
-
-        if (
-          error.code === 'ER1000' ||
-          error.code === 'ER1001' ||
-          error.code === 'ER1002' ||
-          error.code === 'ER1003' ||
-          error.code === 'ER1004'
-        )
-          dispatch(useSetAccessToken({ accessToken: '' })); // 인가 실패로 인한 토큰 제거
-
-        if (error instanceof ToastError) useSetToastPopup(error.message);
-        else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
-      } finally {
-        if (isSuccess) {
-          setData(response.data);
-          await successCb?.(response.data);
-        }
-        dispatch(useSetIsLoading({ isLoading: false }));
-      }
-    })();
-  }, []);
 
   const useGetData = useCallback(async () => {
     if (!url) return;
@@ -266,8 +227,9 @@ export function useGetDataHook({
     let response: any;
 
     try {
-      beforeCb?.();
+      await beforeCb?.();
       dispatch(useSetIsLoading({ isLoading: true }));
+      response = await getAPI(url, accessToken, failCb);
 
       if (response.accessToken)
         dispatch(useSetAccessToken({ accessToken: response.accessToken }));
@@ -296,7 +258,7 @@ export function useGetDataHook({
         dispatch(useSetIsLoading({ isLoading: false }));
       }
     }
-  }, [data]);
+  }, [url, beforeCb, successCb, failCb, errorPopupBtnCb, accessToken, data]);
 
   return { data, useGetData };
 }
@@ -368,7 +330,7 @@ export function usePostDataHook({
         }
       }
     },
-    [url, beforeCb, successCb, failCb, errorPopupBtnCb, data],
+    [url, beforeCb, successCb, failCb, errorPopupBtnCb, accessToken, data],
   );
 
   return { data, usePostData };
@@ -482,6 +444,7 @@ export function usePostDataByConfirmPopupHook({
       cancelBtnCb,
       failCb,
       errorPopupBtnCb,
+      accessToken,
       data,
     ],
   );

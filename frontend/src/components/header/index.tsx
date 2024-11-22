@@ -7,7 +7,11 @@ import {
 import { connect } from 'react-redux';
 import { Action } from 'redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { usePostDataHook } from 'modules/customHooks';
+import {
+  useGetDataHook,
+  usePostDataHook,
+  useSetInfoPopupHook,
+} from 'modules/customHooks';
 import TCN_LOGO from 'assets/images/TCN_LOGO.svg';
 import { DOMAIN } from 'modules/constants';
 import styles from './Header.module.scss';
@@ -27,8 +31,27 @@ function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
 }
 
 function Header({ accessToken, handleLogout }: TypeHeader) {
+  const useSetInfoPopup = useSetInfoPopupHook();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // 관리자 페이지 권한 검증
+  const { useGetData: useAdminPageRedirect } = useGetDataHook({
+    url: `${DOMAIN}/api/admin-page-redirect`,
+    successCb: (response) => {
+      if (response) navigate(response.path);
+      else useSetInfoPopup('권한이 없습니다.');
+    },
+  });
+
+  // 벙관리 페이지 권한 검증
+  const { useGetData: useMeetingPageRedirect } = useGetDataHook({
+    url: `${DOMAIN}/api/meeting-page-redirect`,
+    successCb: (response) => {
+      if (response) navigate(response.path);
+      else useSetInfoPopup('권한이 없습니다.');
+    },
+  });
 
   // 로그아웃
   const { usePostData: useLogout } = usePostDataHook({
@@ -42,6 +65,17 @@ function Header({ accessToken, handleLogout }: TypeHeader) {
   // 페이지 이동
   const handleMovePage = (url: string) => {
     if (location.pathname === url) return;
+
+    if (url === '/admin') {
+      useAdminPageRedirect();
+      return;
+    }
+
+    if (url === '/meeting') {
+      useMeetingPageRedirect();
+      return;
+    }
+
     navigate(url);
   };
 
