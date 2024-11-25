@@ -15,6 +15,7 @@ import com.admin.the_climbing_night.main.domain.req.MainRequest;
 import com.admin.the_climbing_night.main.service.MainService;
 import com.admin.the_climbing_night.main.vo.MainVo;
 import com.admin.the_climbing_night.utils.CookieUtil;
+
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,9 +30,16 @@ public class MainRestController {
 
     @PostMapping(value = "test")
     public SingleResponse<MainVo> main(@RequestBody MainRequest req) {
-        MainVo vo = mainService.mainService(req);
-
         SingleResponse response = new SingleResponse();
+
+        log.info("name: {}", req.getName());
+        log.info("password: {}", req.getPassword());
+
+        MainVo vo = new MainVo();
+
+        vo.setName(req.getName());
+        vo.setPassword(req.getPassword());
+
         response.setData(vo);
 
         return response;

@@ -6,6 +6,7 @@ import {
   usePostDataByConfirmPopupHook,
   usePostDataHook,
 } from 'modules/customHooks';
+import { encrypt } from 'modules/utils';
 import { ToastError } from 'modules/customErrorClasses';
 import { DOMAIN } from 'modules/constants';
 import IndexPT from './IndexPT';
@@ -26,7 +27,7 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
   });
 
   const { usePostData } = usePostDataHook({
-    url: `${DOMAIN}/api/get-member-info/0`,
+    url: `${DOMAIN}/test`,
   });
 
   const { useGetData } = useGetDataHook({
@@ -38,7 +39,10 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
     customWindow.goBack = handleGoBack;
     customWindow.onResult = handleOnResult;
 
-    useGetData();
+    usePostData({
+      name: encrypt('hello'),
+      password: encrypt('1234'),
+    });
 
     return () => {
       delete customWindow.goBack;

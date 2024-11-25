@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js';
 import {
   CustomWindow,
   TypeJavascriptInterface,
@@ -18,6 +19,16 @@ import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from './customErrorClasses';
+import { SECTION_KEY } from './constants';
+
+/**
+ * 네트워크 구간 암복호화 키
+ */
+const KEY = SECTION_KEY || '';
+/**
+ * 네트워크 구간 암복호화 IV
+ */
+const IV = CryptoJS.enc.Utf8.parse(KEY.substring(0, 16)); // Use the first 16 characters for IV
 
 /**
  * [API 상태 코드에 따른 에러 발생 함수]
@@ -66,6 +77,52 @@ export function handleThrowCustomErrorInAPI({
   // TODO: 코드에 따라 switch case 분기 필요
   throw new CustomAPIError(message, code);
 }
+
+/**
+ * [네트워크 구간 암호화 함수]
+ *
+ * @param plainText 평문
+ * @returns
+ */
+export const encrypt = (plainText: string) => {
+  try {
+    const keyUtf8 = CryptoJS.enc.Utf8.parse(KEY);
+    const cipherText = CryptoJS.AES.encrypt(
+      CryptoJS.enc.Utf8.parse(plainText),
+      keyUtf8,
+      {
+        iv: IV,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      },
+    ).toString();
+
+    return cipherText;
+  } catch (error) {
+    return null;
+  }
+};
+
+/**
+ * [네트워크 구간 복호화 함수]
+ *
+ * @param cipherText 암호화된 텍스트
+ * @returns
+ */
+export const decrypt = (cipherText: string) => {
+  try {
+    const keyUtf8 = CryptoJS.enc.Utf8.parse(KEY);
+    const bytes = CryptoJS.AES.decrypt(cipherText, keyUtf8, {
+      iv: IV,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
+    });
+
+    return bytes.toString(CryptoJS.enc.Utf8);
+  } catch (error) {
+    return null;
+  }
+};
 
 /**
  * [화면 접근 OS 반환 함수]

@@ -99,7 +99,14 @@ public class LoggingAspect {
             log.info(info + " args: " + params);
         }
 
-        Object result = joinPoint.proceed();
+        Object result;
+
+        try {
+            result = joinPoint.proceed(args);
+        } catch (Exception e) {
+            log.error("Error: ", e);
+            throw e;
+        }
 
         log.info("[ " + className + "." + joinPoint.getSignature().getName() + " ] result: "
                 + result);

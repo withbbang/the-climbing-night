@@ -17,6 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class RequiredAspect {
+
+    /**
+     * 필수 파라미터 검증 Aspect
+     * 
+     * @param joinPoint
+     * @throws Throwable
+     */
     @Before("execution(* com.admin.the_climbing_night..controller.*.*(..))")
     public void checkRequired(JoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();

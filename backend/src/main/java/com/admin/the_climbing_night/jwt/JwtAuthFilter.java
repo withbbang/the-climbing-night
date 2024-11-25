@@ -57,8 +57,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // 화이트리스트 스킵
         for (String uri : Constants.AUTH_WHITELIST) {
             if (requestURI.equals(uri)) {
-                filterChain.doFilter(request, response);
-                return;
+                try {
+                    filterChain.doFilter(request, response);
+                    return;
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                    sendErrorCustomResponse(response, CodeMessage.ER9999, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+                    return;
+                }
             }
         }
 
