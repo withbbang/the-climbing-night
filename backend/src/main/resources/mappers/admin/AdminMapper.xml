@@ -101,10 +101,10 @@
         join member m on a.memberFk = m.id
     WHERE
         1 = 1
-        <if test="name != null and name != ''">m.name = #{name}</if>
-        <if test="birthDt != null and birthDt != ''">, m.birthDt = #{birthDt}</if>
-        <if test="levelFk != null and levelFk != ''">, m.levelFk = #{levelFk}</if>
-        <if test="degree != null and degree != ''">, m.degreeFk = #{degree}</if>
+        <if test="name != null and name != ''">AND m.name = #{name}</if>
+        <if test="birthDt != null and birthDt != ''">AND m.birthDt = #{birthDt}</if>
+        <if test="levelFk != null and levelFk != ''">AND m.levelFk = #{levelFk}</if>
+        <if test="degree != null and degree != ''">AND m.degreeFk = #{degree}</if>
   </select>
 
   <update id="updateAuthority" parameterType="com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest">
@@ -124,9 +124,11 @@
         member
     WHERE
         1 = 1
-        AND id = #{id}
         AND name = #{name}
-        AND birthDt = #{birthDt}
+        <if test="id != null and id != ''">AND id = #{id}</if>
+        <if test="birthDt != null and birthDt != ''">AND birthDt = #{birthDt}</if>
+        <if test="levelFk != null and levelFk != ''">AND levelFk = #{levelFk}</if>
+        <if test="degree != null and degree != ''">AND degreeFk = #{degree}</if>
   </select>
 
   <select id="getMemberCount" resultType="long">
@@ -156,7 +158,7 @@
         , #{name}
         , #{birthDt}
         , #{levelFk}
-        , #{degree}
+        , #{degreeFk}
         , #{winwinYn}
         , #{sex}
         , #{blackCnt}

@@ -1,0 +1,30 @@
+.wrap {
+  width: 100%;
+
+  .innerWrap {
+    display: flex;
+    align-items: center;
+
+    .icon {
+      display: flex;
+      flex-direction: column;
+      margin-right: 10px;
+
+      .top {
+        width: 100%;
+        height: 50%;
+        display: flex;
+        background-color: $less-dark;
+        box-sizing: border-box;
+      }
+
+      .bottom {
+        width: 100%;
+        height: 50%;
+        display: flex;
+        background-color: $less-light;
+        box-sizing: border-box;
+      }
+    }
+  }
+}

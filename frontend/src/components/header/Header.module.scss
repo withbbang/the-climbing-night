@@ -8,6 +8,7 @@
   border-bottom: solid 0.5px $less-dark;
   box-sizing: border-box;
   z-index: 100;
+  @include background($more-light);
 
   .innerWrap {
     display: flex;
@@ -41,6 +42,10 @@
         padding: 0 20px;
         white-space: nowrap;
         cursor: pointer;
+
+        &.selectedMenu {
+          background-color: $light;
+        }
 
         &:hover {
           background-color: $light;

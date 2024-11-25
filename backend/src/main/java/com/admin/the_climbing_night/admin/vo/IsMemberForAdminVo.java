@@ -10,12 +10,14 @@ import lombok.ToString;
 @Setter
 @ToString
 public class IsMemberForAdminVo {
-    @RequiredAnnotation
     private String id;
 
     @RequiredAnnotation
     private String name;
 
-    @RequiredAnnotation
     private String birthDt;
+
+    private String levelFk;
+
+    private String degreeFk;
 }

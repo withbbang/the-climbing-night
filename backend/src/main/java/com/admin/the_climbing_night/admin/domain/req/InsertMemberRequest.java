@@ -10,7 +10,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class InsertMemberRequest {
-    @RequiredAnnotation
     private String id;
 
     @RequiredAnnotation
@@ -23,7 +22,7 @@ public class InsertMemberRequest {
     private String levelFk;
 
     @RequiredAnnotation
-    private String degree;
+    private String degreeFk;
 
     private String phoneNo;
 

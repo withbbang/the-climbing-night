@@ -157,8 +157,9 @@ public class AdminRestController {
 
         IsMemberForAdminVo isMemberVo = new IsMemberForAdminVo();
 
-        isMemberVo.setId(req.getId());
         isMemberVo.setName(req.getName());
+        isMemberVo.setLevelFk(req.getLevelFk());
+        isMemberVo.setDegreeFk(req.getDegreeFk());
         isMemberVo.setBirthDt(req.getBirthDt());
 
         try {

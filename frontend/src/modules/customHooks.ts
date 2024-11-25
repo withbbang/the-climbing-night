@@ -78,7 +78,7 @@ export function useChangeHook(keyValueForm: TypeKeyValueForm) {
 export function useEnterKeyDownHook(value: any, cb: () => any) {
   const useEnterKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
         e.currentTarget.blur();
         cb();
       }
@@ -229,10 +229,12 @@ export function useGetDataHook({
     try {
       await beforeCb?.();
       dispatch(useSetIsLoading({ isLoading: true }));
-      response = await getAPI(url, accessToken, failCb);
-
-      if (response.accessToken)
-        dispatch(useSetAccessToken({ accessToken: response.accessToken }));
+      response = await getAPI(
+        url,
+        accessToken,
+        (accessToken: string) => dispatch(useSetAccessToken({ accessToken })),
+        failCb,
+      );
 
       isSuccess = true;
     } catch (error: any) {
@@ -251,9 +253,9 @@ export function useGetDataHook({
       else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
     } finally {
       if (isSuccess) {
-        setData(response.data);
+        setData(response);
         dispatch(useSetIsLoading({ isLoading: false }));
-        await successCb?.(response.data);
+        await successCb?.(response);
       } else {
         dispatch(useSetIsLoading({ isLoading: false }));
       }
@@ -299,11 +301,9 @@ export function usePostDataHook({
           url,
           await handleSetParamsWithSync(params),
           accessToken,
+          (accessToken: string) => dispatch(useSetAccessToken({ accessToken })),
           failCb,
         );
-
-        if (response.accessToken)
-          dispatch(useSetAccessToken({ accessToken: response.accessToken }));
 
         isSuccess = true;
       } catch (error: any) {
@@ -322,9 +322,9 @@ export function usePostDataHook({
         else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
         if (isSuccess) {
-          setData(response.data);
+          setData(response);
           dispatch(useSetIsLoading({ isLoading: false }));
-          await successCb?.(response.data);
+          await successCb?.(response);
         } else {
           dispatch(useSetIsLoading({ isLoading: false }));
         }
@@ -376,13 +376,10 @@ export function usePostDataByConfirmPopupHook({
                 url,
                 await handleSetParamsWithSync(params),
                 accessToken,
+                (accessToken: string) =>
+                  dispatch(useSetAccessToken({ accessToken })),
                 failCb,
               );
-
-              if (response.accessToken)
-                dispatch(
-                  useSetAccessToken({ accessToken: response.accessToken }),
-                );
 
               isSuccess = true;
               dispatch(
@@ -408,9 +405,9 @@ export function usePostDataByConfirmPopupHook({
               else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
             } finally {
               if (isSuccess) {
-                setData(response.data);
+                setData(response);
                 dispatch(useSetIsLoading({ isLoading: false }));
-                await successCb?.(response.data);
+                await successCb?.(response);
               } else {
                 dispatch(useSetIsLoading({ isLoading: false }));
               }

@@ -7,3 +7,20 @@ export interface GetMemberInfoByJoinApiType {
   birthDt: string;
   degree: string;
 }
+
+/**
+ * 레벨 조회 api 타입
+ */
+export interface GetLevelsType {
+  id: string;
+  level: string;
+  color: string;
+}
+
+/**
+ * 기수 조회 api 타입
+ */
+export interface GetDegreesType {
+  id: string;
+  degree: string;
+}

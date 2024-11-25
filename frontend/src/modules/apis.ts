@@ -19,6 +19,7 @@ import {
 function getAPI(
   url: string,
   accessToken: string = '',
+  setAccessToken: (accessToken: string) => void,
   failCb?: () => any,
 ): Promise<any> {
   console.debug('URL: ', url);
@@ -48,10 +49,12 @@ function getAPI(
           data,
         } = result;
 
+        if (accessToken) setAccessToken(accessToken);
+
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve({ accessToken, data });
+        resolve(data);
       })
       .catch((error) => {
         console.error(error);
@@ -72,6 +75,7 @@ async function postAPI(
   url: string,
   payload: any,
   accessToken: string = '',
+  setAccessToken: (accessToken: string) => void,
   failCb?: () => any,
 ): Promise<any> {
   const data = await handleSetParamsWithSync(payload);
@@ -104,10 +108,12 @@ async function postAPI(
           data,
         } = result;
 
+        if (accessToken) setAccessToken(accessToken);
+
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve({ accessToken, data });
+        resolve(data);
       })
       .catch((error) => {
         console.error(error);
@@ -128,6 +134,7 @@ async function putAPI(
   url: string,
   payload: any,
   accessToken: string = '',
+  setAccessToken: (accessToken: string) => void,
   failCb?: () => any,
 ): Promise<any> {
   const data = await handleSetParamsWithSync(payload);
@@ -159,10 +166,12 @@ async function putAPI(
           data,
         } = result;
 
+        if (accessToken) setAccessToken(accessToken);
+
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve({ accessToken, data });
+        resolve(data);
       })
       .catch((error) => {
         console.error(error);
@@ -183,6 +192,7 @@ async function deleteAPI(
   url: string,
   payload: any,
   accessToken: string = '',
+  setAccessToken: (accessToken: string) => void,
   failCb?: () => any,
 ): Promise<any> {
   const data = await handleSetParamsWithSync(payload);
@@ -214,10 +224,12 @@ async function deleteAPI(
           data,
         } = result;
 
+        if (accessToken) setAccessToken(accessToken);
+
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve({ accessToken, data });
+        resolve(data);
       })
       .catch((error) => {
         console.error(error);

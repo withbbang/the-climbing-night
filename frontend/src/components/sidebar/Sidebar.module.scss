@@ -1,0 +1,35 @@
+.wrap {
+  width: 15%;
+  border-right: solid 0.5px $less-dark;
+  box-sizing: border-box;
+
+  .innerWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    .menus {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      .menu {
+        display: flex;
+        align-items: center;
+        width: calc(100% - 40px);
+        padding: 20px;
+        cursor: pointer;
+
+        &.selectedMenu {
+          background-color: $light;
+        }
+
+        &:hover {
+          background-color: $light;
+        }
+      }
+    }
+  }
+}

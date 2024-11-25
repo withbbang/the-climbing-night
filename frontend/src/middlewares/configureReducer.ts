@@ -3,10 +3,12 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import common, { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import auth, { AuthState } from 'middlewares/reduxToolkits/authSlice';
+import sidebar, { SidebarState } from 'middlewares/reduxToolkits/sidebar';
 
 const rootReducer = combineReducers({
   common,
   auth,
+  sidebar,
   // add others...
 });
 
@@ -20,7 +22,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth'], // add others...
+  whitelist: ['auth', 'sidebar'], // add others...
 };
 
 /**
@@ -31,6 +33,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 interface PropState {
   common: CommonState;
   auth: AuthState;
+  sidebar: SidebarState;
   // add others...
 }
 

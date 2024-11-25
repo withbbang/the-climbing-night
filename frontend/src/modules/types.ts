@@ -144,3 +144,8 @@ export interface SVGProps {
   fill?: string;
   stroke?: string;
 }
+
+export interface TypeSidebarItem {
+  title: string;
+  nick: string;
+}

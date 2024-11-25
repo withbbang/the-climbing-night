@@ -4,6 +4,7 @@ import {
   AuthState,
   useSetAccessToken,
 } from 'middlewares/reduxToolkits/authSlice';
+import { useSetSelectedSidebarToken } from 'middlewares/reduxToolkits/sidebar';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -27,10 +28,17 @@ function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
     handleLogout: (): void => {
       dispatch(useSetAccessToken({ accessToken: '' }));
     },
+    handleSetSelectedSidebar: (selectedSidebar: string): void => {
+      dispatch(useSetSelectedSidebarToken({ selectedSidebar }));
+    },
   };
 }
 
-function Header({ accessToken, handleLogout }: TypeHeader) {
+function Header({
+  accessToken,
+  handleLogout,
+  handleSetSelectedSidebar,
+}: TypeHeader) {
   const useSetInfoPopup = useSetInfoPopupHook();
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,15 +75,18 @@ function Header({ accessToken, handleLogout }: TypeHeader) {
     if (location.pathname === url) return;
 
     if (url === '/admin') {
+      handleSetSelectedSidebar('authority');
       useAdminPageRedirect();
       return;
     }
 
     if (url === '/meeting') {
+      handleSetSelectedSidebar('');
       useMeetingPageRedirect();
       return;
     }
 
+    handleSetSelectedSidebar('');
     navigate(url);
   };
 
@@ -87,16 +98,31 @@ function Header({ accessToken, handleLogout }: TypeHeader) {
         </div>
         <div className={styles.menus}>
           <div
-            className={styles.menu}
+            className={
+              location.pathname === '/find-member'
+                ? [styles.menu, styles.selectedMenu].join(' ')
+                : styles.menu
+            }
             onClick={() => handleMovePage('/find-member')}
           >
             회원 검색
           </div>
-          <div className={styles.menu} onClick={() => handleMovePage('/admin')}>
+          <div
+            className={
+              location.pathname === '/admin'
+                ? [styles.menu, styles.selectedMenu].join(' ')
+                : styles.menu
+            }
+            onClick={() => handleMovePage('/admin')}
+          >
             관리자
           </div>
           <div
-            className={styles.menu}
+            className={
+              location.pathname === '/meeting'
+                ? [styles.menu, styles.selectedMenu].join(' ')
+                : styles.menu
+            }
             onClick={() => handleMovePage('/meeting')}
           >
             벙 관리
@@ -118,6 +144,7 @@ function Header({ accessToken, handleLogout }: TypeHeader) {
 
 interface TypeHeader extends AuthState {
   handleLogout: () => void;
+  handleSetSelectedSidebar: (selectedSidebar: string) => void;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

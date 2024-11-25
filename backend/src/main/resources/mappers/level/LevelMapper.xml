@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.the_climbing_night.level.mapper.LevelMapper">
+  <select id="getLevels" resultType="com.admin.the_climbing_night.level.vo.GetLevelVo">
+    SELECT
+        id
+        , level
+        , color
+    FROM
+        level
+    ORDER BY
+        CASE
+          WHEN level = 'VB' THEN -1
+          ELSE CAST(SUBSTRING(level, 2) AS DECIMAL)
+        END ASC;
+  </select>
+</mapper>
