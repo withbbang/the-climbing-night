@@ -78,6 +78,14 @@ function InsertMember({}: TypeInsertMember) {
     },
   });
 
+  // blackCnt input onBlur
+  const handleBlur = () => {
+    setForm((prevState) => ({
+      ...prevState,
+      blackCnt: 3,
+    }));
+  };
+
   // 확인 버튼 콜백
   const useInsertMember = () => {
     usePostData({
@@ -193,6 +201,7 @@ function InsertMember({}: TypeInsertMember) {
                 value={form.blackCnt}
                 max={3}
                 min={0}
+                onBlur={handleBlur}
                 onChange={useChange}
               />
             </div>

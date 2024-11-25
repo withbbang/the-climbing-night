@@ -128,7 +128,7 @@
         <if test="id != null and id != ''">AND id = #{id}</if>
         <if test="birthDt != null and birthDt != ''">AND birthDt = #{birthDt}</if>
         <if test="levelFk != null and levelFk != ''">AND levelFk = #{levelFk}</if>
-        <if test="degree != null and degree != ''">AND degreeFk = #{degree}</if>
+        <if test="degreeFk != null and degreeFk != ''">AND degreeFk = #{degreeFk}</if>
   </select>
 
   <select id="getMemberCount" resultType="long">

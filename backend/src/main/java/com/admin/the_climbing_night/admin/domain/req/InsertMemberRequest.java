@@ -15,7 +15,6 @@ public class InsertMemberRequest {
     @RequiredAnnotation
     private String name;
 
-    @RequiredAnnotation
     private String birthDt;
 
     @RequiredAnnotation
