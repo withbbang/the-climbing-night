@@ -1,7 +1,6 @@
 package com.admin.the_climbing_night.member.vo;
 
-import com.admin.the_climbing_night.annotations.DatabaseCryptoAdviceAnnotation;
-import com.admin.the_climbing_night.annotations.DatabaseCryptoFieldAnnotation;
+import com.admin.the_climbing_night.annotations.SectionEncryptFieldAnnotation;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,10 +12,10 @@ import lombok.ToString;
 public class GetMemberInfoByJoinVo {
     private String id;
 
-    // @DatabaseCryptoFieldAnnotation
+    @SectionEncryptFieldAnnotation
     private String name;
 
-    // @DatabaseCryptoFieldAnnotation
+    @SectionEncryptFieldAnnotation
     private String birthDt;
 
     private String degree;

@@ -2,16 +2,21 @@ package com.admin.the_climbing_night.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.admin.the_climbing_night.annotations.DatabaseCryptoFieldAnnotation;
 import com.admin.the_climbing_night.annotations.SectionDecryptFieldAnnotation;
 import com.admin.the_climbing_night.annotations.SectionEncryptFieldAnnotation;
 import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.CustomException;
+
 import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.Field;
 
@@ -26,6 +31,29 @@ public class Crypto {
 
     @Value("${key.section.aes-key}")
     private String SECTION_KEY;
+
+    private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+
+    /**
+     * 해쉬 메소드
+     * 
+     * @param planText
+     * @return
+     */
+    public static String hash(String planText) {
+        return PASSWORD_ENCODER.encode(planText);
+    }
+
+    /**
+     * 해쉬 검증 메소드
+     * 
+     * @param planText
+     * @param hashedText
+     * @return
+     */
+    public static boolean match(String planText, String hashedText) {
+        return PASSWORD_ENCODER.matches(planText, hashedText);
+    }
 
     /**
      * AES 암호화
@@ -86,15 +114,19 @@ public class Crypto {
      * @throws Exception
      */
     private void processFields(Object arg) throws Exception {
+        if (arg == null)
+            return;
+
         Field[] fields = arg.getClass().getDeclaredFields();
 
         for (Field field : fields) {
-            field.setAccessible(true);
+            field.setAccessible(true); // This works for most user-defined fields
+            Object fieldValue = field.get(arg);
 
             // Check if the field is annotated with @SectionEncryptFieldAnnotation
             if (field.isAnnotationPresent(SectionEncryptFieldAnnotation.class)) {
-                Object fieldValue = field.get(arg);
                 if (fieldValue instanceof String) {
+                    log.info("Encrypting field: {}", field.getName());
                     try {
                         String encryptedValue = encrypt((String) fieldValue, "section");
                         field.set(arg, encryptedValue);
@@ -103,10 +135,16 @@ public class Crypto {
                         throw e;
                     }
                 }
-            } else {
-                // If the field is not annotated but is an object, recurse into it
-                Object fieldValue = field.get(arg);
-                if (fieldValue != null && !isPrimitiveOrWrapper(fieldValue.getClass())) {
+            } else if (fieldValue != null) {
+                // If the field is a List, iterate through its elements
+                if (fieldValue instanceof List<?>) {
+                    List<?> list = (List<?>) fieldValue;
+                    for (Object item : list) {
+                        processFields(item); // Recursively process each element
+                    }
+                }
+                // Handle other types of collections or objects recursively
+                else if (!isPrimitiveOrWrapper(fieldValue.getClass())) {
                     processFields(fieldValue);
                 }
             }

@@ -5,6 +5,7 @@
   <select id="login" parameterType="com.admin.the_climbing_night.auth.domain.req.LoginRequest" resultType="com.admin.the_climbing_night.auth.vo.LoginVo">
     SELECT
         a.memberId
+        , a.password
         , a.grade
         , m.name
     FROM
@@ -13,7 +14,6 @@
     WHERE
         1 = 1
         AND a.memberId = #{memberId}
-        AND a.password = #{password}
   </select>
 
   <select id="getIsLoggedIn" parameterType="com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo" resultType="com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo">

@@ -14,7 +14,8 @@ public class MainVo {
     private String name;
 
     @SectionEncryptFieldAnnotation
-    private String password;
+    private String birthDt;
 
-    private int grade;
+    @SectionEncryptFieldAnnotation
+    private String phoneNo;
 }

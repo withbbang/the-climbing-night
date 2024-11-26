@@ -15,6 +15,7 @@ import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
 import com.admin.the_climbing_night.utils.CommonUtil;
+import com.admin.the_climbing_night.utils.Crypto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -83,7 +84,7 @@ public class JoinRestController {
         joinVo.setId("TCNADM" + getAdminCount * 5);
         joinVo.setMemberFk(isMemberVo.getId());
         joinVo.setMemberId(req.getMemberId());
-        joinVo.setPassword(req.getPassword()); // TODO: 암호화 필요
+        joinVo.setPassword(Crypto.hash(req.getPassword()));
         joinVo.setGrade(50);
 
         try {

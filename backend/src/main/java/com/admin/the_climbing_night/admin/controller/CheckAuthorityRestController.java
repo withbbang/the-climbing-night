@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.admin.the_climbing_night.admin.vo.CheckAuthorityVo;
 import com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo;
-import com.admin.the_climbing_night.common.CodeMessage;
-import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
 import com.admin.the_climbing_night.jwt.JwtTokenProvider;
 
@@ -20,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-public class CheckAuthorityController {
+public class CheckAuthorityRestController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
@@ -31,8 +30,8 @@ public class CheckAuthorityController {
      * @return
      */
     @GetMapping(value = "admin-page-redirect")
-    public SingleResponse<Map<String, String>> adminPageRedirect(HttpServletRequest request) {
-        SingleResponse<Map<String, String>> response = new SingleResponse<Map<String, String>>();
+    public SingleResponse<CheckAuthorityVo> adminPageRedirect(HttpServletRequest request) {
+        SingleResponse<CheckAuthorityVo> response = new SingleResponse<CheckAuthorityVo>();
 
         GetIsLoggedInVo adminVo = jwtTokenProvider
                 .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
@@ -42,9 +41,9 @@ public class CheckAuthorityController {
             return response;
         }
 
-        Map<String, String> path = new HashMap<>();
+        CheckAuthorityVo path = new CheckAuthorityVo();
 
-        path.put("path", "/admin");
+        path.setPath("/admin");
 
         response.setData(path);
 
@@ -58,8 +57,8 @@ public class CheckAuthorityController {
      * @return
      */
     @GetMapping(value = "meeting-page-redirect")
-    public SingleResponse<Map<String, String>> meetingPageRedirect(HttpServletRequest request) {
-        SingleResponse<Map<String, String>> response = new SingleResponse<Map<String, String>>();
+    public SingleResponse<CheckAuthorityVo> meetingPageRedirect(HttpServletRequest request) {
+        SingleResponse<CheckAuthorityVo> response = new SingleResponse<CheckAuthorityVo>();
 
         GetIsLoggedInVo adminVo = jwtTokenProvider
                 .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
@@ -69,9 +68,9 @@ public class CheckAuthorityController {
             return response;
         }
 
-        Map<String, String> path = new HashMap<>();
+        CheckAuthorityVo path = new CheckAuthorityVo();
 
-        path.put("path", "/meeting");
+        path.setPath("/meeting");
 
         response.setData(path);
 

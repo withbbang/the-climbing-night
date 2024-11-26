@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.admin.the_climbing_night.auth.domain.req.LoginRequest;
 import com.admin.the_climbing_night.auth.service.LoginService;
+import com.admin.the_climbing_night.auth.vo.AccessTokenVo;
 import com.admin.the_climbing_night.auth.vo.LoginVo;
 import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.Result;
@@ -18,6 +19,7 @@ import com.admin.the_climbing_night.common.SingleResponse;
 import com.admin.the_climbing_night.jwt.vo.JwtTokenVo;
 import com.admin.the_climbing_night.utils.CommonUtil;
 import com.admin.the_climbing_night.utils.CookieUtil;
+import com.admin.the_climbing_night.utils.Crypto;
 import com.admin.the_climbing_night.utils.TokenUtil;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,8 +46,8 @@ public class LoginRestController {
      * @return
      */
     @PostMapping(value = "login")
-    public SingleResponse<Map<String, String>> login(@RequestBody LoginRequest req, HttpServletResponse response) {
-        SingleResponse responseBody = new SingleResponse();
+    public SingleResponse<AccessTokenVo> login(@RequestBody LoginRequest req, HttpServletResponse response) {
+        SingleResponse<AccessTokenVo> responseBody = new SingleResponse<AccessTokenVo>();
 
         LoginVo loginVo = null;
 
@@ -60,6 +62,14 @@ public class LoginRestController {
 
         if (CommonUtil.isEmpty(loginVo)) {
             log.error("No Admin");
+            responseBody.setResult(new Result(CodeMessage.ER0001));
+
+            return responseBody;
+        }
+
+        // 비밀번호 일치 여부
+        if (!Crypto.match(req.getPassword(), loginVo.getPassword())) {
+            log.error("비밀번호 불일치");
             responseBody.setResult(new Result(CodeMessage.ER0001));
 
             return responseBody;
@@ -94,8 +104,8 @@ public class LoginRestController {
 
         response.addCookie(cookieUtil.setCookie("refreshToken", token.get("refreshToken")));
 
-        Map<String, String> accessToken = new HashMap<String, String>();
-        accessToken.put("accessToken", token.get("accessToken"));
+        AccessTokenVo accessToken = new AccessTokenVo();
+        accessToken.setAccessToken(token.get("accessToken"));
 
         responseBody.setData(accessToken);
 

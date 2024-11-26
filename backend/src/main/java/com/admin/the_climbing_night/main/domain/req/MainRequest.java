@@ -12,10 +12,11 @@ import lombok.ToString;
 @ToString
 public class MainRequest {
     @RequiredAnnotation
-    @SectionDecryptFieldAnnotation
     private String name;
 
     @RequiredAnnotation
-    @SectionDecryptFieldAnnotation
-    private String password;
+    private String birthDt;
+
+    @RequiredAnnotation
+    private String phoneNo;
 }

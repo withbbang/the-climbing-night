@@ -33,12 +33,14 @@ public class MainRestController {
         SingleResponse response = new SingleResponse();
 
         log.info("name: {}", req.getName());
-        log.info("password: {}", req.getPassword());
+        log.info("birthDt: {}", req.getBirthDt());
+        log.info("phoneNo: {}", req.getPhoneNo());
 
         MainVo vo = new MainVo();
 
         vo.setName(req.getName());
-        vo.setPassword(req.getPassword());
+        vo.setBirthDt(req.getBirthDt());
+        vo.setPhoneNo(req.getPhoneNo());
 
         response.setData(vo);
 

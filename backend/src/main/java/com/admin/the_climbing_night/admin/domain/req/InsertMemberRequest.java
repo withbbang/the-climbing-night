@@ -1,6 +1,8 @@
 package com.admin.the_climbing_night.admin.domain.req;
 
+import com.admin.the_climbing_night.annotations.DatabaseCryptoFieldAnnotation;
 import com.admin.the_climbing_night.annotations.RequiredAnnotation;
+import com.admin.the_climbing_night.annotations.SectionDecryptFieldAnnotation;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +15,10 @@ public class InsertMemberRequest {
     private String id;
 
     @RequiredAnnotation
+    @SectionDecryptFieldAnnotation
     private String name;
 
+    @SectionDecryptFieldAnnotation
     private String birthDt;
 
     @RequiredAnnotation
@@ -23,6 +27,7 @@ public class InsertMemberRequest {
     @RequiredAnnotation
     private String degreeFk;
 
+    @SectionDecryptFieldAnnotation
     private String phoneNo;
 
     @RequiredAnnotation

@@ -15,7 +15,7 @@ import {
   useSetAccessToken,
 } from 'middlewares/reduxToolkits/authSlice';
 import { DOMAIN } from 'modules/constants';
-import { handleCheckEmail } from 'modules/utils';
+import { encrypt, handleCheckEmail } from 'modules/utils';
 import styles from './Login.module.scss';
 
 function mapStateToProps(state: PropState): AuthState {
@@ -60,7 +60,7 @@ function Login({ accessToken, handleLogin }: TypeLogin): React.JSX.Element {
   const useLogin = () => {
     usePostLogin({
       memberId: form.memberId,
-      password: form.password,
+      password: encrypt(`${form.password}`),
     });
   };
 

@@ -40,8 +40,9 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
     customWindow.onResult = handleOnResult;
 
     usePostData({
-      name: encrypt('hello'),
-      password: encrypt('1234'),
+      name: '김영선',
+      birthDt: '1234',
+      phoneNo: '01077453381',
     });
 
     return () => {

@@ -31,8 +31,9 @@ public class MemberRestController {
      * @return
      */
     @PostMapping(value = "get-member-info-by-join")
-    public SingleResponse<GetMemberInfoByJoinVo> getMemberInfoByJoin(@RequestBody GetMemberInfoByJoinRequest req) {
-        SingleResponse response = new SingleResponse();
+    public SingleResponse<List<GetMemberInfoByJoinVo>> getMemberInfoByJoin(
+            @RequestBody GetMemberInfoByJoinRequest req) {
+        SingleResponse<List<GetMemberInfoByJoinVo>> response = new SingleResponse<List<GetMemberInfoByJoinVo>>();
 
         List<GetMemberInfoByJoinVo> getMemberInfoByJoin = null;
 
@@ -41,6 +42,8 @@ public class MemberRestController {
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
         }
 
         response.setData(getMemberInfoByJoin);

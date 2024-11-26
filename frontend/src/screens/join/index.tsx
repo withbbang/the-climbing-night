@@ -13,7 +13,7 @@ import AuthInput from 'components/authInput';
 import { DOMAIN } from 'modules/constants';
 import { GetMemberInfoByJoinApiType } from 'modules/apiTypes';
 import { AuthState } from 'middlewares/reduxToolkits/authSlice';
-import { handleCheckEmail } from 'modules/utils';
+import { decrypt, encrypt, handleCheckEmail } from 'modules/utils';
 import styles from './Join.module.scss';
 
 function mapStateToProps(state: PropState): AuthState {
@@ -52,10 +52,18 @@ function Join({ accessToken }: TypeJoin): React.JSX.Element {
       if (response.length === 1) {
         const [{ id, degree, name, birthDt }] = response;
 
+        const decryptedName = decrypt(name) || '';
+        const decryptedBirthDt = decrypt(birthDt) || '';
+
         setForm((prevState) => ({
           ...prevState,
           id,
-          information: `${degree} ${name} ${`${birthDt}`.substring(2, 4)}`,
+          name: decryptedName,
+          birthDt: decryptedBirthDt,
+          information: `${degree} ${decryptedName} ${`${decryptedBirthDt}`.substring(
+            2,
+            4,
+          )}`,
         }));
       } else if (response.length > 1) {
         handleSetMemberInfos(response);
@@ -83,14 +91,20 @@ function Join({ accessToken }: TypeJoin): React.JSX.Element {
 
   // 회원 이름 입력 후 엔터 콜백
   const useFindMember = useEnterKeyDownHook(form, () =>
-    usePostGetMemberInfo({ name: form.name }),
+    usePostGetMemberInfo({ name: encrypt(`${form.name}`) }),
   );
 
   // 회원 정보 조회 콜백
   const handleSetMemberInfos = (
     response: Array<GetMemberInfoByJoinApiType>,
   ) => {
-    setMemberInfos(response);
+    const decryptedMemberInfos = response.map((memberInfo) => {
+      const { id, degree, name, birthDt } = memberInfo;
+
+      return { id, degree, name: decrypt(name), birthDt: decrypt(birthDt) };
+    }) as GetMemberInfoByJoinApiType[];
+
+    setMemberInfos(decryptedMemberInfos);
     setIsPopupActive(true);
   };
 
@@ -111,7 +125,7 @@ function Join({ accessToken }: TypeJoin): React.JSX.Element {
   const handleJoin = () => {
     usePostJoin({
       memberId: form.memberId,
-      password: form.password,
+      password: encrypt(`${form.password}`),
       id: form.id,
     });
   };
@@ -165,7 +179,9 @@ function Join({ accessToken }: TypeJoin): React.JSX.Element {
           isSearch
           onChange={useChange}
           onKeyDown={useFindMember}
-          onSearch={() => usePostGetMemberInfo({ name: form.name })}
+          onSearch={() =>
+            usePostGetMemberInfo({ name: encrypt(`${form.name}`) })
+          }
         />
         <button onClick={handleJoin}>확인</button>
       </div>
