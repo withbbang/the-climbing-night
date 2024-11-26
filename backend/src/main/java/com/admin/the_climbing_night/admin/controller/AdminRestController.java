@@ -161,6 +161,7 @@ public class AdminRestController {
         isMemberVo.setLevelFk(req.getLevelFk());
         isMemberVo.setDegreeFk(req.getDegreeFk());
         isMemberVo.setBirthDt(req.getBirthDt());
+        isMemberVo.setPhoneNo(req.getPhoneNo());
 
         try {
             isMember = adminService.isMember(isMemberVo);

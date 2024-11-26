@@ -145,6 +145,7 @@
         , birthDt
         , levelFk
         , degreeFk
+        , phoneNo
         , winwinYn
         , sex
         , blackCnt
@@ -159,6 +160,7 @@
         , #{birthDt}
         , #{levelFk}
         , #{degreeFk}
+        , #{phoneNo}
         , #{winwinYn}
         , #{sex}
         , #{blackCnt}

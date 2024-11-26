@@ -10,6 +10,7 @@ import {
 } from 'modules/customHooks';
 import { DOMAIN } from 'modules/constants';
 import { GetDegreesType, GetLevelsType } from 'modules/apiTypes';
+import { encrypt } from 'modules/utils';
 import PageTitle from 'components/pageTitle';
 import styles from './InsertMember.module.scss';
 
@@ -89,11 +90,11 @@ function InsertMember({}: TypeInsertMember) {
   // 확인 버튼 콜백
   const useInsertMember = () => {
     usePostData({
-      name: form.name,
-      birthDt: form.birthDt,
+      name: encrypt(`${form.name}`),
+      birthDt: encrypt(`${form.birthDt}`),
       levelFk: form.levelFk,
       degreeFk: form.degreeFk,
-      phoneNo: form.phoneNo,
+      phoneNo: encrypt(`${form.phoneNo}`),
       winwinYn: form.winwinYn,
       sex: form.sex,
       blackCnt: form.blackCnt,

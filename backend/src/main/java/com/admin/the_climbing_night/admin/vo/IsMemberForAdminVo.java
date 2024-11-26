@@ -19,4 +19,6 @@ public class IsMemberForAdminVo {
     private String levelFk;
 
     private String degreeFk;
+
+    private String phoneNo;
 }
