@@ -5,6 +5,7 @@ import Header from 'components/header';
 import Sidebar from 'components/sidebar';
 import { TypeSidebarItem } from 'modules/types';
 import InsertMember from 'components/adminComponents/insertMember';
+import Authority from 'components/adminComponents/authority';
 import styles from './Admin.module.scss';
 
 function AdminPT({
@@ -18,7 +19,7 @@ function AdminPT({
       <div className={styles.innerWrap}>
         <Sidebar sidebarItems={sidebarItems} />
         {!isAdmin ? null : selectedSidebar === 'authority' ? (
-          <InsertMember />
+          <Authority />
         ) : selectedSidebar === 'insert-member' ? (
           <InsertMember />
         ) : selectedSidebar === 'update-memeber' ? (
