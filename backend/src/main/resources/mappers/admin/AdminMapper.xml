@@ -93,6 +93,30 @@
         AND m.id = #{id}
   </select>
 
+  <select id="getAdmins" parameterType="com.admin.the_climbing_night.admin.domain.req.GetAdminsRequest" resultType="com.admin.the_climbing_night.admin.vo.GetAdminVo">
+    SELECT
+        a.id
+        , m.name
+        , a.memberId
+        , IFNULL(m.birthDt, '') birthDt
+        , l.level
+        , l.color
+        , d.degree
+        , IFNULL(m.phoneNo, '') phoneNo
+        , a.grade
+    FROM
+        admin a
+        join member m on a.memberFk = m.id
+        join degree d on d.id = m.degreeFk
+        join level l on l.id = m.levelFk
+    WHERE
+        1 = 1
+        <if test="name != null and name != ''">AND m.name = #{name}</if>
+        <if test="degree != null and degree != ''">AND d.id = #{degree}</if>
+        <if test="phoneNo != null and phoneNo != ''">AND m.phoneNo = #{phoneNo}</if>
+        <if test="grade != null and grade != ''">AND a.grade = #{grade}</if>
+  </select>
+
   <select id="isAdminMember" parameterType="com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest" resultType="java.lang.String">
     SELECT
         a.id

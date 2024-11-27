@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.admin.the_climbing_night.admin.domain.req.UpdateMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.GetAdminsRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetClimbingAreasRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertClimbingAreaRequest;
@@ -14,6 +15,7 @@ import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.UpdateClimbingAreaRequest;
 import com.admin.the_climbing_night.admin.mapper.AdminMapper;
+import com.admin.the_climbing_night.admin.vo.GetAdminVo;
 import com.admin.the_climbing_night.admin.vo.GetClimbingAreaInfoVo;
 import com.admin.the_climbing_night.admin.vo.GetClimbingAreaVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberInfoVo;
@@ -34,6 +36,10 @@ public class AdminService {
 
     public GetMemberInfoVo getMemberInfo(String id) {
         return adminMapper.getMemberInfo(id);
+    }
+
+    public List<GetAdminVo> getAdmins(GetAdminsRequest req) {
+        return adminMapper.getAdmins(req);
     }
 
     public String isAdminMember(IsAdminMemberRequest req) {

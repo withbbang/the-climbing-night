@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.admin.the_climbing_night.admin.domain.req.UpdateMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.GetAdminsRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetClimbingAreasRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertClimbingAreaRequest;
@@ -18,6 +19,7 @@ import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.UpdateClimbingAreaRequest;
 import com.admin.the_climbing_night.admin.service.AdminService;
+import com.admin.the_climbing_night.admin.vo.GetAdminVo;
 import com.admin.the_climbing_night.admin.vo.GetClimbingAreaInfoVo;
 import com.admin.the_climbing_night.admin.vo.GetClimbingAreaVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberInfoVo;
@@ -92,6 +94,32 @@ public class AdminRestController {
         }
 
         response.setData(getMemberInfo);
+
+        return response;
+    }
+
+    /**
+     * 어드민 리스트 조회
+     * 
+     * @param req
+     * @return
+     */
+    @PostMapping(value = "get-admins")
+    public SingleResponse<List<GetAdminVo>> getAdmins(@RequestBody GetAdminsRequest req) {
+        SingleResponse<List<GetAdminVo>> response = new SingleResponse<List<GetAdminVo>>();
+
+        List<GetAdminVo> getAdmins = null;
+
+        try {
+            getAdmins = adminService.getAdmins(req);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        response.setData(getAdmins);
 
         return response;
     }

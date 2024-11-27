@@ -24,3 +24,18 @@ export interface GetDegreesType {
   id: string;
   degree: string;
 }
+
+/**
+ * 어드민 조회 api 타입
+ */
+export interface GetAdminsType {
+  id: string;
+  name: string;
+  memberId: string;
+  birthDt: string;
+  level: string;
+  color: string;
+  degree: string;
+  phoneNo: string;
+  grade: string;
+}
