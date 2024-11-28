@@ -126,7 +126,6 @@ public class Crypto {
             // Check if the field is annotated with @SectionEncryptFieldAnnotation
             if (field.isAnnotationPresent(SectionEncryptFieldAnnotation.class)) {
                 if (fieldValue instanceof String) {
-                    log.info("Encrypting field: {}", field.getName());
                     try {
                         String encryptedValue = encrypt((String) fieldValue, "section");
                         field.set(arg, encryptedValue);

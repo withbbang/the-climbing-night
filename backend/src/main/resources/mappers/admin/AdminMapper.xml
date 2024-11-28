@@ -111,10 +111,33 @@
         join level l on l.id = m.levelFk
     WHERE
         1 = 1
-        <if test="name != null and name != ''">AND m.name = #{name}</if>
+        <if test="name != null and name != ''">AND m.name LIKE CONCAT('%', #{name}, '%')</if>
         <if test="degree != null and degree != ''">AND d.id = #{degree}</if>
-        <if test="phoneNo != null and phoneNo != ''">AND m.phoneNo = #{phoneNo}</if>
+        <if test="phoneNo != null and phoneNo != ''">AND m.phoneNo LIKE CONCAT('%', #{phoneNo}, '%')</if>
         <if test="grade != null and grade != ''">AND a.grade = #{grade}</if>
+  </select>
+
+  <select id="getAdminInfo" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.admin.vo.GetMemberInfoVo">
+    SELECT
+        a.memberId
+        , a.grade
+        , m.name
+        , m.birthDt
+        , l.level
+        , l.color
+        , d.degree
+        , m.phoneNo
+        , m.winwinYn
+        , m.joinDt
+        , m.image
+    FROM
+        member m
+        JOIN admin a ON m.id = a.memberFk
+        JOIN level l ON m.levelFk = l.id
+        JOIN degree d ON m.degreeFk = d.id
+    WHERE
+        1 = 1
+        AND a.id = #{id}
   </select>
 
   <select id="isAdminMember" parameterType="com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest" resultType="java.lang.String">

@@ -12,6 +12,7 @@ function CommonInput({
   min,
   required,
   onChange,
+  onKeyDown,
   onBlur,
 }: TypeCommonInput): React.JSX.Element {
   return (
@@ -28,6 +29,7 @@ function CommonInput({
             max={max}
             min={min}
             onChange={onChange}
+            onKeyDown={onKeyDown}
             onBlur={onBlur}
           />
         ) : tagType === 'select' ? (
@@ -63,6 +65,7 @@ interface TypeCommonInput {
       | React.ChangeEvent<HTMLSelectElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
   ) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
 }
 

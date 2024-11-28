@@ -28,6 +28,8 @@ function AdminPT({
           <InsertMember />
         ) : selectedSidebar === 'update-climbing-area' ? (
           <InsertMember />
+        ) : selectedSidebar === 'manage-degree' ? (
+          <InsertMember />
         ) : null}
       </div>
     </div>

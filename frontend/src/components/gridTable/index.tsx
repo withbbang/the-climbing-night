@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
-import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the Data Grid
+import { AgGridReact } from 'ag-grid-react'; // https://www.ag-grid.com/
+import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import styles from './GridTable.module.scss';
 
@@ -32,7 +32,7 @@ function GridTable({
           paginationPageSize={10}
           paginationPageSizeSelector={[10, 25, 50]}
           onCellClicked={(e: any) => {
-            onClickRow(e.data.id);
+            if (onClickRow) onClickRow(e.data.id);
           }}
         />
       </div>
@@ -44,7 +44,7 @@ interface TypeGridTable {
   columns: any[];
   lists: any[];
   disableCheckbox?: boolean;
-  onClickRow: (id: string) => void;
+  onClickRow?: (id: string) => void;
 }
 
 export default GridTable;

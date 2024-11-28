@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Action } from 'redux';
 import {
   useChangeHook,
+  useEnterKeyDownHook,
   useGetDataHook,
   usePostDataHook,
 } from 'modules/customHooks';
@@ -14,7 +15,10 @@ import { decrypt, encrypt } from 'modules/utils';
 import PageTitle from 'components/pageTitle';
 import CommonInput from 'components/commonInput';
 import GridTable from 'components/gridTable';
-import { levelCellRenderer } from 'components/gridTable/components';
+import {
+  levelCellRenderer,
+  buttonCellRenderer,
+} from 'components/gridTable/components';
 import styles from './Authority.module.scss';
 
 function mapStateToProps(state: PropState) {
@@ -48,7 +52,11 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
     { field: '휴대폰 번호', flex: 2 },
     { field: '아이디', flex: 2 },
     { field: '레벨', cellRenderer: levelCellRenderer },
-    { field: '권한' },
+    {
+      field: '권한',
+      cellRenderer: (props: any) =>
+        buttonCellRenderer(props, () => console.log('clicked')),
+    },
   ];
   const { form, useChange } = useChangeHook({
     name: '',
@@ -89,6 +97,18 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
     },
   });
 
+  // 검색
+  const handleSearch = () => {
+    usePostAdmins({
+      ...form,
+      name: encrypt(`${form.name}`),
+      phoneNo: encrypt(`${form.phoneNo}`),
+    });
+  };
+
+  // 이름 및 휴대폰 번호 입력 후 엔터 콜백
+  const useEnterKeyDown = useEnterKeyDownHook(form, handleSearch);
+
   // 디테일 페이지로 이동
   const handleClickRow = (id: string) => {
     // TODO: move page
@@ -109,6 +129,7 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
                   type="text"
                   value={`${form.name}`}
                   onChange={useChange}
+                  onKeyDown={useEnterKeyDown}
                 />
               </div>
               <div className={styles.input}>
@@ -135,6 +156,7 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
                   type="numeric"
                   value={`${form.phoneNo}`}
                   onChange={useChange}
+                  onKeyDown={useEnterKeyDown}
                 />
               </div>
               <div className={styles.input}>
@@ -156,7 +178,7 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
             </div>
           </div>
           <div className={styles.btnBox}>
-            <button>확인</button>
+            <button onClick={handleSearch}>확인</button>
           </div>
           <div className={styles.listBox}>
             <GridTable
