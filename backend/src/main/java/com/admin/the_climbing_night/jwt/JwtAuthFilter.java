@@ -75,8 +75,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             accessToken = request.getHeader("Authorization").replace("Bearer", "").strip();
 
-            log.info("[JwtAuthFilter doFilterInternal] accessToken : {}", accessToken);
-
             // JWT가 있는 경우
             if (!CommonUtil.isEmpty(accessToken)) {
                 // JWT 유효성 검증

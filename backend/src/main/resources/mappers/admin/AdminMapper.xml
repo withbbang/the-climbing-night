@@ -140,28 +140,24 @@
         AND a.id = #{id}
   </select>
 
-  <select id="isAdminMember" parameterType="com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest" resultType="java.lang.String">
+  <select id="isAdminMember" parameterType="com.admin.the_climbing_night.admin.domain.req.UpdateAdminRequest" resultType="java.lang.String">
     SELECT
-        a.id
+        id
     FROM
-        admin a
-        join member m on a.memberFk = m.id
+        admin
     WHERE
         1 = 1
-        <if test="name != null and name != ''">AND m.name = #{name}</if>
-        <if test="birthDt != null and birthDt != ''">AND m.birthDt = #{birthDt}</if>
-        <if test="levelFk != null and levelFk != ''">AND m.levelFk = #{levelFk}</if>
-        <if test="degree != null and degree != ''">AND m.degreeFk = #{degree}</if>
+        <if test="id != null and id != ''">AND id = #{id}</if>
   </select>
 
-  <update id="updateAuthority" parameterType="com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest">
+  <update id="updateAuthority" parameterType="com.admin.the_climbing_night.admin.domain.req.UpdateAdminRequest">
     UPDATE
         admin 
     SET
         grade = #{grade}
     WHERE
         1 = 1
-        AND memberId = #{memberId}
+        AND id = #{id}
   </update>
 
   <select id="isMember" parameterType="com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo" resultType="java.lang.String">

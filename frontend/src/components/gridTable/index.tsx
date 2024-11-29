@@ -32,7 +32,7 @@ function GridTable({
           paginationPageSize={10}
           paginationPageSizeSelector={[10, 25, 50]}
           onCellClicked={(e: any) => {
-            if (onClickRow) onClickRow(e.data.id);
+            if (onClickRow) onClickRow(e.data);
           }}
         />
       </div>

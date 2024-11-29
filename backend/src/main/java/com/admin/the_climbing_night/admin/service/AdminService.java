@@ -12,7 +12,7 @@ import com.admin.the_climbing_night.admin.domain.req.GetClimbingAreasRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertClimbingAreaRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
-import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.UpdateAdminRequest;
 import com.admin.the_climbing_night.admin.domain.req.UpdateClimbingAreaRequest;
 import com.admin.the_climbing_night.admin.mapper.AdminMapper;
 import com.admin.the_climbing_night.admin.vo.GetAdminVo;
@@ -42,12 +42,12 @@ public class AdminService {
         return adminMapper.getAdmins(req);
     }
 
-    public String isAdminMember(IsAdminMemberRequest req) {
+    public String isAdminMember(UpdateAdminRequest req) {
         return adminMapper.isAdminMember(req);
     }
 
     @Transactional
-    public int updateAuthority(IsAdminMemberRequest req) {
+    public int updateAuthority(UpdateAdminRequest req) {
         return adminMapper.updateAuthority(req);
     }
 

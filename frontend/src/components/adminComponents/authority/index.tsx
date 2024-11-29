@@ -15,10 +15,8 @@ import { decrypt, encrypt } from 'modules/utils';
 import PageTitle from 'components/pageTitle';
 import CommonInput from 'components/commonInput';
 import GridTable from 'components/gridTable';
-import {
-  levelCellRenderer,
-  buttonCellRenderer,
-} from 'components/gridTable/components';
+import { levelCellRenderer } from 'components/gridTable/components';
+import { Radio, RadioGroup } from 'components/radio';
 import styles from './Authority.module.scss';
 
 function mapStateToProps(state: PropState) {
@@ -54,15 +52,16 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
     { field: '레벨', cellRenderer: levelCellRenderer },
     {
       field: '권한',
-      cellRenderer: (props: any) =>
-        buttonCellRenderer(props, () => console.log('clicked')),
     },
   ];
-  const { form, useChange } = useChangeHook({
+  const { form, setForm, useChange } = useChangeHook({
     name: '',
     grade: '',
     phoneNo: '',
     degree: '',
+    isActive: 'N',
+    selectedId: '',
+    selectedGrade: '',
   });
 
   useEffect(() => {
@@ -97,6 +96,32 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
     },
   });
 
+  // 권한 수정
+  const { usePostData: usePostUpdateAuthority } = usePostDataHook({
+    url: `${DOMAIN}/api/update-authority`,
+    beforeCb: () => {
+      const grade = admins.filter(
+        (admin: GetAdminsType) => admin.id === form.selectedId,
+      )[0]?.grade;
+
+      if (grade === form.selectedGrade) throw new Error('동일한 권한입니다.');
+    },
+    successCb: () => {
+      usePostAdmins({
+        ...form,
+        name: encrypt(`${form.name}`),
+        phoneNo: encrypt(`${form.phoneNo}`),
+      });
+
+      setForm((prevState) => ({
+        ...prevState,
+        isActive: 'N',
+        selectedId: '',
+        selectedGrade: '',
+      }));
+    },
+  });
+
   // 검색
   const handleSearch = () => {
     usePostAdmins({
@@ -109,96 +134,151 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
   // 이름 및 휴대폰 번호 입력 후 엔터 콜백
   const useEnterKeyDown = useEnterKeyDownHook(form, handleSearch);
 
-  // 디테일 페이지로 이동
-  const handleClickRow = (id: string) => {
-    // TODO: move page
+  // 리스트 클릭 시 권한 수정 팝업
+  const handleClickRow = (data: any) => {
+    setForm((prevState) => ({
+      ...prevState,
+      isActive: 'Y',
+      selectedId: data.id,
+      selectedGrade: data.grade,
+    }));
+  };
+
+  // 권한 변경 팝업 내 권한 클릭
+  const handleClickAuthority = (grade: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      selectedGrade: grade,
+    }));
+  };
+
+  // 권한 수정 버튼 콜백
+  const handleSubmit = () => {
+    usePostUpdateAuthority({
+      id: form.selectedId,
+      grade: form.selectedGrade,
+    });
   };
 
   return (
-    <div className={styles.wrap}>
-      <div className={styles.innerWrap}>
-        <PageTitle title="권한 관리" />
-        <div className={styles.contents}>
-          <div className={styles.inputBox}>
-            <div className={styles.inputs}>
-              <div className={styles.input}>
-                <CommonInput
-                  title="이름"
-                  tagType="input"
-                  name="name"
-                  type="text"
-                  value={`${form.name}`}
-                  onChange={useChange}
-                  onKeyDown={useEnterKeyDown}
-                />
+    <>
+      {form.isActive === 'Y' && (
+        <>
+          <div
+            className={styles.background}
+            onClick={() =>
+              setForm((prevState) => ({
+                ...prevState,
+                isActive: 'N',
+                selectedId: '',
+                selectedGrade: '',
+              }))
+            }
+          />
+          <div className={styles.modalBody}>
+            <RadioGroup label="권한 변경">
+              {grade
+                .filter((item) => item.value !== '')
+                .map((item) => (
+                  <Radio
+                    key={item.value}
+                    selectedValue={`${form.selectedGrade}`}
+                    value={item.value}
+                    onClick={handleClickAuthority}
+                  >
+                    {item.label}
+                  </Radio>
+                ))}
+            </RadioGroup>
+            <button onClick={handleSubmit}>수정</button>
+          </div>
+        </>
+      )}
+      <div className={styles.wrap}>
+        <div className={styles.innerWrap}>
+          <PageTitle title="권한 관리" />
+          <div className={styles.contents}>
+            <div className={styles.inputBox}>
+              <div className={styles.inputs}>
+                <div className={styles.input}>
+                  <CommonInput
+                    title="이름"
+                    tagType="input"
+                    name="name"
+                    type="text"
+                    value={`${form.name}`}
+                    onChange={useChange}
+                    onKeyDown={useEnterKeyDown}
+                  />
+                </div>
+                <div className={styles.input}>
+                  <CommonInput
+                    title="등급"
+                    tagType="select"
+                    name="grade"
+                    value={`${form.grade}`}
+                    options={grade.map(({ value, label }) => ({
+                      id: value,
+                      value,
+                      label,
+                    }))}
+                    onChange={useChange}
+                  />
+                </div>
               </div>
-              <div className={styles.input}>
-                <CommonInput
-                  title="등급"
-                  tagType="select"
-                  name="grade"
-                  value={`${form.grade}`}
-                  options={grade.map(({ value, label }) => ({
-                    id: value,
-                    value,
-                    label,
-                  }))}
-                  onChange={useChange}
-                />
+              <div className={styles.inputs}>
+                <div className={styles.input}>
+                  <CommonInput
+                    title="휴대폰 번호"
+                    tagType="input"
+                    name="phoneNo"
+                    type="numeric"
+                    value={`${form.phoneNo}`}
+                    onChange={useChange}
+                    onKeyDown={useEnterKeyDown}
+                  />
+                </div>
+                <div className={styles.input}>
+                  <CommonInput
+                    title="기수"
+                    tagType="select"
+                    name="degreeFk"
+                    value={`${form.degreeFk}`}
+                    options={degreeOptions.map(
+                      ({ id, degree }: GetDegreesType) => ({
+                        id,
+                        value: id,
+                        label: degree,
+                      }),
+                    )}
+                    onChange={useChange}
+                  />
+                </div>
               </div>
             </div>
-            <div className={styles.inputs}>
-              <div className={styles.input}>
-                <CommonInput
-                  title="휴대폰 번호"
-                  tagType="input"
-                  name="phoneNo"
-                  type="numeric"
-                  value={`${form.phoneNo}`}
-                  onChange={useChange}
-                  onKeyDown={useEnterKeyDown}
-                />
-              </div>
-              <div className={styles.input}>
-                <CommonInput
-                  title="기수"
-                  tagType="select"
-                  name="degreeFk"
-                  value={`${form.degreeFk}`}
-                  options={degreeOptions.map(
-                    ({ id, degree }: GetDegreesType) => ({
-                      id,
-                      value: id,
-                      label: degree,
-                    }),
-                  )}
-                  onChange={useChange}
-                />
-              </div>
+            <div className={styles.btnBox}>
+              <button onClick={handleSearch}>확인</button>
             </div>
-          </div>
-          <div className={styles.btnBox}>
-            <button onClick={handleSearch}>확인</button>
-          </div>
-          <div className={styles.listBox}>
-            <GridTable
-              columns={columns}
-              lists={admins.map((admin) => ({
-                ...admin,
-                이름: admin.name,
-                기수: admin.degree,
-                생년월일: admin.birthDt,
-                '휴대폰 번호': admin.phoneNo,
-                아이디: admin.memberId,
-                레벨: `${admin.level}&nbsp<span style="background-color: ${admin.color}; padding: 0 10px;"/>`,
-                권한: grade.find(({ value }) => value === admin.grade)?.label, // TODO: DB 테이블 만들까 고민
-              }))}
-              onClickRow={handleClickRow}
-            />
+            <div className={styles.listBox}>
+              <GridTable
+                columns={columns}
+                lists={admins.map((admin) => ({
+                  ...admin,
+                  이름: admin.name,
+                  기수: admin.degree,
+                  생년월일: admin.birthDt,
+                  '휴대폰 번호': admin.phoneNo,
+                  아이디: admin.memberId,
+                  레벨: `${admin.level}&nbsp<span style="background-color: ${admin.color}; padding: 0 10px;"/>`,
+                  권한: grade.find(({ value }) => value === admin.grade)?.label, // TODO: DB 테이블 만들까 고민
+                }))}
+                onClickRow={handleClickRow}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

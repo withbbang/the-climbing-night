@@ -9,18 +9,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class IsAdminMemberRequest {
+public class UpdateAdminRequest {
     @RequiredAnnotation
-    private String memberId;
-
-    @RequiredAnnotation
-    private String name;
-
-    @RequiredAnnotation
-    private String birthDt;
-
-    @RequiredAnnotation
-    private String levelFk;
+    private String id;
 
     @RequiredAnnotation
     private String grade;

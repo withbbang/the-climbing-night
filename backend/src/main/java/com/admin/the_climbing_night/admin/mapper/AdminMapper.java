@@ -17,7 +17,7 @@ import com.admin.the_climbing_night.admin.domain.req.GetClimbingAreasRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertClimbingAreaRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
-import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.UpdateAdminRequest;
 import com.admin.the_climbing_night.admin.domain.req.UpdateClimbingAreaRequest;
 import com.admin.the_climbing_night.annotations.DatabaseCryptoAdviceAnnotation;
 
@@ -34,10 +34,10 @@ public interface AdminMapper {
     List<GetAdminVo> getAdmins(GetAdminsRequest req);
 
     @DatabaseCryptoAdviceAnnotation
-    String isAdminMember(IsAdminMemberRequest req);
+    String isAdminMember(UpdateAdminRequest req);
 
     @DatabaseCryptoAdviceAnnotation
-    int updateAuthority(IsAdminMemberRequest req);
+    int updateAuthority(UpdateAdminRequest req);
 
     @DatabaseCryptoAdviceAnnotation
     String isMember(IsMemberForAdminVo req);

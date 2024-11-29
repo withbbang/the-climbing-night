@@ -1,0 +1,19 @@
+.radioGroup {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: baseline;
+  border: none;
+
+  .radioGroupLabel {
+    font-size: 1.3rem;
+    margin: 10px 0;
+  }
+}
+
+.radio {
+  margin-bottom: 5px;
+
+  .radioInput {
+    margin-right: 10px;
+  }
+}

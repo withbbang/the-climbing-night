@@ -16,7 +16,7 @@ import com.admin.the_climbing_night.admin.domain.req.GetClimbingAreasRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertClimbingAreaRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
-import com.admin.the_climbing_night.admin.domain.req.IsAdminMemberRequest;
+import com.admin.the_climbing_night.admin.domain.req.UpdateAdminRequest;
 import com.admin.the_climbing_night.admin.domain.req.UpdateClimbingAreaRequest;
 import com.admin.the_climbing_night.admin.service.AdminService;
 import com.admin.the_climbing_night.admin.vo.GetAdminVo;
@@ -47,7 +47,7 @@ public class AdminRestController {
      */
     @PostMapping(value = "get-members")
     public SingleResponse<List<GetMemberVo>> getMembers(@RequestBody GetMembersRequest req) {
-        SingleResponse response = new SingleResponse();
+        SingleResponse<List<GetMemberVo>> response = new SingleResponse<List<GetMemberVo>>();
 
         List<GetMemberVo> getMembers = null;
 
@@ -72,8 +72,8 @@ public class AdminRestController {
      * @return
      */
     @GetMapping(value = "get-member-info/{id}")
-    public SingleResponse<GetMemberVo> getMemberInfo(@PathVariable String id) {
-        SingleResponse response = new SingleResponse();
+    public SingleResponse<GetMemberInfoVo> getMemberInfo(@PathVariable String id) {
+        SingleResponse<GetMemberInfoVo> response = new SingleResponse<GetMemberInfoVo>();
 
         GetMemberInfoVo getMemberInfo = null;
 
@@ -131,7 +131,7 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "update-authority")
-    public SingleResponse updateAuthority(@RequestBody IsAdminMemberRequest req) {
+    public SingleResponse updateAuthority(@RequestBody UpdateAdminRequest req) {
         SingleResponse response = new SingleResponse();
 
         String isAdminMember = null;
