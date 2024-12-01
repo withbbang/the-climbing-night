@@ -120,6 +120,14 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
         selectedGrade: '',
       }));
     },
+    failCb: () => {
+      setForm((prevState) => ({
+        ...prevState,
+        isActive: 'N',
+        selectedId: '',
+        selectedGrade: '',
+      }));
+    },
   });
 
   // 검색

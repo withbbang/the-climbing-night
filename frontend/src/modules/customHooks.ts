@@ -229,6 +229,7 @@ export function useGetDataHook({
     try {
       await beforeCb?.();
       dispatch(useSetIsLoading({ isLoading: true }));
+      console.debug('Access Token: ', accessToken);
       response = await getAPI(
         url,
         accessToken,
@@ -297,6 +298,7 @@ export function usePostDataHook({
       try {
         await beforeCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
+        console.debug('Access Token: ', accessToken);
         response = await postAPI(
           url,
           await handleSetParamsWithSync(params),
@@ -372,6 +374,7 @@ export function usePostDataByConfirmPopupHook({
             try {
               await beforeCb?.();
               dispatch(useSetIsLoading({ isLoading: true }));
+              console.debug('Access Token: ', accessToken);
               response = await postAPI(
                 url,
                 await handleSetParamsWithSync(params),

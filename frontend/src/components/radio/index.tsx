@@ -6,9 +6,9 @@ export function Radio({
   selectedValue,
   value,
   name,
-  defaultChecked,
   disabled,
   onClick,
+  onChange,
 }: TypeRadio) {
   return (
     <label
@@ -25,8 +25,9 @@ export function Radio({
         value={value}
         name={name}
         checked={selectedValue === value}
-        defaultChecked={defaultChecked}
         disabled={disabled}
+        onChange={onChange}
+        readOnly
       />
       {children}
     </label>
@@ -47,9 +48,9 @@ interface TypeRadio {
   selectedValue: string;
   value: string;
   name?: string;
-  defaultChecked?: boolean;
   disabled?: boolean;
   onClick?: (grade: string) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface TypeRadioGroup {
