@@ -11,7 +11,7 @@ export const GRADE = [
   },
   {
     value: '40',
-    label: '매니져',
+    label: '매니저',
   },
   {
     value: '30',

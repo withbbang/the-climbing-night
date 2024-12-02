@@ -62,6 +62,7 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
     isActive: 'N',
     selectedId: '',
     selectedGrade: '',
+    isUpdated: false,
   });
 
   useEffect(() => {
@@ -73,15 +74,31 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
     });
   }, []);
 
+  // FIXME: usePostUpdateAuthority의 successCb에서 usePostAdmins 요청시 이전 accessToken으로 요청하여 대안으로 useEffect 사용
+  useEffect(() => {
+    if (form.isUpdated) {
+      usePostAdmins({
+        ...form,
+        name: encrypt(`${form.name}`),
+        phoneNo: encrypt(`${form.phoneNo}`),
+      });
+
+      setForm((prevState) => ({
+        ...prevState,
+        isUpdated: false,
+      }));
+    }
+  }, [form.isUpdated]);
+
   // 어드민 리스트 조회
   const { usePostData: usePostAdmins } = usePostDataHook({
     url: `${DOMAIN}/api/get-admins`,
     successCb: (response) => {
-      const decryptedResponse = response.map((item: any) => ({
-        ...item,
-        name: decrypt(item.name),
-        birthDt: decrypt(item.birthDt),
-        phoneNo: decrypt(item.phoneNo),
+      const decryptedResponse = response.map((admin: GetAdminsType) => ({
+        ...admin,
+        name: decrypt(admin.name),
+        birthDt: decrypt(admin.birthDt),
+        phoneNo: decrypt(admin.phoneNo),
       }));
 
       setAdmins(decryptedResponse);
@@ -107,17 +124,12 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
       if (grade === form.selectedGrade) throw new Error('동일한 권한입니다.');
     },
     successCb: () => {
-      usePostAdmins({
-        ...form,
-        name: encrypt(`${form.name}`),
-        phoneNo: encrypt(`${form.phoneNo}`),
-      });
-
       setForm((prevState) => ({
         ...prevState,
         isActive: 'N',
         selectedId: '',
         selectedGrade: '',
+        isUpdated: true,
       }));
     },
     failCb: () => {
@@ -189,7 +201,7 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
                 .filter((item) => item.value !== '')
                 .map((item) => (
                   <Radio
-                    key={item.value}
+                    key={item.label}
                     selectedValue={`${form.selectedGrade}`}
                     value={item.value}
                     onClick={handleClickAuthority}

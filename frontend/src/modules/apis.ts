@@ -23,6 +23,7 @@ function getAPI(
   failCb?: () => any,
 ): Promise<any> {
   console.debug('URL: ', url);
+  console.debug('Access Token: ', accessToken);
   return new Promise((resolve, reject) => {
     fetch(url, {
       method: 'GET',
@@ -80,6 +81,7 @@ async function postAPI(
 ): Promise<any> {
   const data = await handleSetParamsWithSync(payload);
   console.debug('URL: ', url);
+  console.debug('Access Token: ', accessToken);
   console.debug('parameters: ', data);
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -139,6 +141,7 @@ async function putAPI(
 ): Promise<any> {
   const data = await handleSetParamsWithSync(payload);
   console.debug('URL: ', url);
+  console.debug('Access Token: ', accessToken);
   console.debug('parameters: ', data);
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -197,6 +200,7 @@ async function deleteAPI(
 ): Promise<any> {
   const data = await handleSetParamsWithSync(payload);
   console.debug('URL: ', url);
+  console.debug('Access Token: ', accessToken);
   console.debug('parameters: ', data);
   return new Promise((resolve, reject) => {
     fetch(url, {

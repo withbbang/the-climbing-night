@@ -220,16 +220,15 @@ export function useGetDataHook({
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const useSetToastPopup = useSetToastPopupHook();
   const [data, setData] = useState<any>(null);
+  let isSuccess = false;
+  let response: any;
 
   const useGetData = useCallback(async () => {
     if (!url) return;
-    let isSuccess = false;
-    let response: any;
 
     try {
       await beforeCb?.();
       dispatch(useSetIsLoading({ isLoading: true }));
-      console.debug('Access Token: ', accessToken);
       response = await getAPI(
         url,
         accessToken,
@@ -298,7 +297,6 @@ export function usePostDataHook({
       try {
         await beforeCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
-        console.debug('Access Token: ', accessToken);
         response = await postAPI(
           url,
           await handleSetParamsWithSync(params),
@@ -363,6 +361,8 @@ export function usePostDataByConfirmPopupHook({
 
   const useSetActivePostDataByConfirmPopup = useCallback(
     (params?: any) => {
+      if (!url) return;
+
       dispatch(useSetMessage({ message }));
       dispatch(useSetIsConfirmPopupActive({ isConfirmPopupActive: true }));
       dispatch(useSetConfirmBtnText({ confirmBtnText }));
@@ -374,7 +374,6 @@ export function usePostDataByConfirmPopupHook({
             try {
               await beforeCb?.();
               dispatch(useSetIsLoading({ isLoading: true }));
-              console.debug('Access Token: ', accessToken);
               response = await postAPI(
                 url,
                 await handleSetParamsWithSync(params),
