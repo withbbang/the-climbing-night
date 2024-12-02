@@ -11,13 +11,16 @@ import com.admin.the_climbing_night.admin.domain.req.GetAdminsRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetClimbingAreasRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertClimbingAreaRequest;
+import com.admin.the_climbing_night.admin.domain.req.InsertDegreeRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.UpdateAdminRequest;
 import com.admin.the_climbing_night.admin.domain.req.UpdateClimbingAreaRequest;
+import com.admin.the_climbing_night.admin.domain.req.UpdateDegreeRequest;
 import com.admin.the_climbing_night.admin.mapper.AdminMapper;
 import com.admin.the_climbing_night.admin.vo.GetAdminVo;
 import com.admin.the_climbing_night.admin.vo.GetClimbingAreaInfoVo;
 import com.admin.the_climbing_night.admin.vo.GetClimbingAreaVo;
+import com.admin.the_climbing_night.admin.vo.GetDegreeForAdminVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberInfoVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberVo;
 import com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo;
@@ -89,5 +92,19 @@ public class AdminService {
     @Transactional
     public int updateClimbingArea(UpdateClimbingAreaRequest req) {
         return adminMapper.updateClimbingArea(req);
+    }
+
+    public List<GetDegreeForAdminVo> getDegrees() {
+        return adminMapper.getDegrees();
+    }
+
+    @Transactional
+    public int insertDegree(InsertDegreeRequest req) {
+        return adminMapper.insertDegree(req);
+    }
+
+    @Transactional
+    public int updateDegree(UpdateDegreeRequest req) {
+        return adminMapper.updateDegree(req);
     }
 }

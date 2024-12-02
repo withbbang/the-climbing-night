@@ -8,6 +8,8 @@ function GridTable({
   columns,
   lists,
   disableCheckbox,
+  paginationPageSize,
+  paginationPageSizeSelector,
   onClickRow,
 }: TypeGridTable) {
   // 체크박스 기능
@@ -29,8 +31,10 @@ function GridTable({
           defaultColDef={{ flex: 1 }}
           rowSelection={disableCheckbox && rowSelection}
           pagination
-          paginationPageSize={10}
-          paginationPageSizeSelector={[10, 25, 50]}
+          paginationPageSize={paginationPageSize || 10}
+          paginationPageSizeSelector={
+            paginationPageSizeSelector || [10, 25, 50]
+          }
           onCellClicked={(e: any) => {
             if (onClickRow) onClickRow(e.data);
           }}
@@ -44,6 +48,8 @@ interface TypeGridTable {
   columns: any[];
   lists: any[];
   disableCheckbox?: boolean;
+  paginationPageSize?: number;
+  paginationPageSizeSelector?: number[];
   onClickRow?: (id: string) => void;
 }
 

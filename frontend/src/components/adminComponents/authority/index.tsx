@@ -10,7 +10,6 @@ import {
 } from 'modules/customHooks';
 import { DOMAIN, GRADE } from 'modules/constants';
 import { GetAdminsType, GetDegreesType } from 'modules/apiTypes';
-import { useSetSelectedSidebarToken } from 'middlewares/reduxToolkits/sidebar';
 import { decrypt, encrypt } from 'modules/utils';
 import PageTitle from 'components/pageTitle';
 import CommonInput from 'components/commonInput';
@@ -24,14 +23,10 @@ function mapStateToProps(state: PropState) {
 }
 
 function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
-  return {
-    handleSetSelectedSidebar: (selectedSidebar: string): void => {
-      dispatch(useSetSelectedSidebarToken({ selectedSidebar }));
-    },
-  };
+  return {};
 }
 
-function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
+function Authority({}: TypeAuthority) {
   const [admins, setAdmins] = useState<GetAdminsType[]>([]);
   const [degreeOptions, setDegreeOptions] = useState<GetDegreesType[]>([
     { id: '', degree: '전체' },
@@ -302,8 +297,6 @@ function Authority({ handleSetSelectedSidebar }: TypeAuthority) {
   );
 }
 
-interface TypeAuthority {
-  handleSetSelectedSidebar: (selectedSidebar: string) => void;
-}
+interface TypeAuthority {}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Authority);

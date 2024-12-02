@@ -6,6 +6,7 @@ import Sidebar from 'components/sidebar';
 import { TypeSidebarItem } from 'modules/types';
 import InsertMember from 'components/adminComponents/insertMember';
 import Authority from 'components/adminComponents/authority';
+import Degree from 'components/adminComponents/degree';
 import styles from './Admin.module.scss';
 
 function AdminPT({
@@ -28,8 +29,8 @@ function AdminPT({
           <InsertMember />
         ) : selectedSidebar === 'update-climbing-area' ? (
           <InsertMember />
-        ) : selectedSidebar === 'manage-degree' ? (
-          <InsertMember />
+        ) : selectedSidebar === 'degree' ? (
+          <Degree />
         ) : null}
       </div>
     </div>

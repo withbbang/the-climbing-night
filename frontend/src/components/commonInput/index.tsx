@@ -11,6 +11,7 @@ function CommonInput({
   max,
   min,
   required,
+  disabled,
   onChange,
   onKeyDown,
   onBlur,
@@ -28,6 +29,7 @@ function CommonInput({
             value={value}
             max={max}
             min={min}
+            disabled={disabled}
             onChange={onChange}
             onKeyDown={onKeyDown}
             onBlur={onBlur}
@@ -56,9 +58,10 @@ interface TypeCommonInput {
   type?: string;
   value: string;
   options?: any[];
-  required?: boolean;
   max?: number | string;
   min?: number | string;
+  required?: boolean;
+  disabled?: boolean;
   onChange?: (
     e:
       | React.ChangeEvent<HTMLInputElement>

@@ -20,7 +20,7 @@ function AdminCT({
     { title: '회원 수정', nick: 'update-memeber' },
     { title: '암장 추가', nick: 'insert-climbing-area' },
     { title: '암장 수정', nick: 'update-climbing-area' },
-    { title: '기수 관리', nick: 'manage-degree' },
+    { title: '기수 관리', nick: 'degree' },
   ];
 
   useEffect(() => {

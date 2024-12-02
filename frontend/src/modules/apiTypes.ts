@@ -23,6 +23,7 @@ export interface GetLevelsType {
 export interface GetDegreesType {
   id: string;
   degree: string;
+  description?: string;
 }
 
 /**

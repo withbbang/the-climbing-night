@@ -331,4 +331,38 @@
         1 = 1
         AND id = #{id}
   </update>
+
+  <select id="getDegrees" resultType="com.admin.the_climbing_night.admin.vo.GetDegreeForAdminVo">
+    SELECT
+      *
+      , (SELECT COUNT(*) FROM degree) count
+    FROM
+      degree
+    ORDER BY
+      CAST(id AS UNSIGNED) DESC;
+  </select>
+
+  <insert id="insertDegree" parameterType="com.admin.the_climbing_night.admin.domain.req.InsertDegreeRequest">
+    INSERT INTO degree (
+        id
+        , degree
+        , description
+    ) VALUES (
+        #{id}
+        , #{degree}
+        , #{description}
+    )
+  </insert>
+
+  <update id="updateDegree" parameterType="com.admin.the_climbing_night.admin.domain.req.UpdateDegreeRequest">
+    UPDATE
+        degree
+    <set>
+        <if test="degree != null and degree != ''">degree = #{degree}</if>
+        <if test="description != null">, description = #{description}</if>
+    </set>
+    WHERE
+        1 = 1
+        AND id = #{id}
+  </update>
 </mapper>

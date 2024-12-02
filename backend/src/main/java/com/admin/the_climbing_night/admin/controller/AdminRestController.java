@@ -15,13 +15,16 @@ import com.admin.the_climbing_night.admin.domain.req.GetAdminsRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetClimbingAreasRequest;
 import com.admin.the_climbing_night.admin.domain.req.GetMembersRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertClimbingAreaRequest;
+import com.admin.the_climbing_night.admin.domain.req.InsertDegreeRequest;
 import com.admin.the_climbing_night.admin.domain.req.InsertMemberRequest;
 import com.admin.the_climbing_night.admin.domain.req.UpdateAdminRequest;
 import com.admin.the_climbing_night.admin.domain.req.UpdateClimbingAreaRequest;
+import com.admin.the_climbing_night.admin.domain.req.UpdateDegreeRequest;
 import com.admin.the_climbing_night.admin.service.AdminService;
 import com.admin.the_climbing_night.admin.vo.GetAdminVo;
 import com.admin.the_climbing_night.admin.vo.GetClimbingAreaInfoVo;
 import com.admin.the_climbing_night.admin.vo.GetClimbingAreaVo;
+import com.admin.the_climbing_night.admin.vo.GetDegreeForAdminVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberInfoVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberVo;
 import com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo;
@@ -420,6 +423,83 @@ public class AdminRestController {
 
         if (updateClimbingArea < 1) {
             log.error("Update Climbing Area Failed");
+            response.setResult(new Result(CodeMessage.ER0001));
+        }
+
+        return response;
+    }
+
+    /**
+     * 관리자용 기수 조회
+     * 
+     * @return
+     */
+    @GetMapping(value = "get-degrees-for-admin")
+    public SingleResponse<List<GetDegreeForAdminVo>> getDegrees() {
+        SingleResponse<List<GetDegreeForAdminVo>> response = new SingleResponse<>();
+
+        List<GetDegreeForAdminVo> getDegrees = null;
+
+        try {
+            getDegrees = adminService.getDegrees();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        response.setData(getDegrees);
+
+        return response;
+    }
+
+    /**
+     * 기수 추가
+     * 
+     * @param req
+     * @return
+     */
+    @PostMapping(value = "insert-degree")
+    public SingleResponse insertDegree(@RequestBody InsertDegreeRequest req) {
+        SingleResponse response = new SingleResponse();
+
+        int insertDegree = 0;
+
+        try {
+            insertDegree = adminService.insertDegree(req);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        if (insertDegree < 1) {
+            log.error("Insert Degree Failed");
+            response.setResult(new Result(CodeMessage.ER0001));
+        }
+
+        return response;
+    }
+
+    @PostMapping(value = "update-degree")
+    public SingleResponse updateDegree(@RequestBody UpdateDegreeRequest req) {
+        SingleResponse response = new SingleResponse();
+
+        int updateDegree = 0;
+
+        try {
+            updateDegree = adminService.updateDegree(req);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        if (updateDegree < 1) {
+            log.error("Update Degree Failed");
             response.setResult(new Result(CodeMessage.ER0001));
         }
 
