@@ -4,8 +4,9 @@ import React from 'react';
 import Header from 'components/header';
 import Sidebar from 'components/sidebar';
 import { TypeSidebarItem } from 'modules/types';
-import InsertMember from 'components/adminComponents/insertMember';
 import Authority from 'components/adminComponents/authority';
+import InsertMember from 'components/adminComponents/insertMember';
+import UpdateMember from 'components/adminComponents/updateMember';
 import Degree from 'components/adminComponents/degree';
 import styles from './Admin.module.scss';
 
@@ -24,7 +25,7 @@ function AdminPT({
         ) : selectedSidebar === 'insert-member' ? (
           <InsertMember />
         ) : selectedSidebar === 'update-memeber' ? (
-          <InsertMember />
+          <UpdateMember />
         ) : selectedSidebar === 'insert-climbing-area' ? (
           <InsertMember />
         ) : selectedSidebar === 'update-climbing-area' ? (
