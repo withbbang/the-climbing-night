@@ -10,14 +10,29 @@
         , l.level
         , l.color
         , d.degree
+        , m.phoneNo
+        , IF(m.winwinYn = 'Y', 'O', 'X') winwinYn
+        , IF(m.sex = 'M', '남성', '여성') sex
+        , m.blackCnt
+        , IF(m.dormancyYn = 'Y', 'O', 'X') dormancyYn
+        , IF(m.leaveYn = 'Y', 'O', 'X') leaveYn
+        , IF(m.banYn = 'Y', 'O', 'X') banYn
+        , m.joinDt
+        , m.leaveDt
+        , m.banDt
+        , m.updateReason
+        , m.dormancyReason
+        , m.leaveReason
+        , m.banReason
     FROM
         member m
         JOIN level l ON m.levelFk = l.id
         JOIN degree d ON m.degreeFk = d.id
+        LEFT JOIN winwinSubscribe w ON m.id = w.memberFk
+        LEFT JOIN admin a ON m.id = a.memberFk
     WHERE
         1 = 1
         <if test="name != null and name != ''">AND m.name LIKE CONCAT('%', #{name}, '%')</if>
-        <if test="birthDt != null and birthDt != ''">AND m.birthDt LIKE CONCAT('%', #{birthDt}, '%')</if>
         <if test="levelFk != null and levelFk != ''">AND m.levelFk = #{levelFk}</if>
         <if test="degreeFk != null and degreeFk != ''">AND m.degreeFk = #{degreeFk}</if>
         <if test="phoneNo != null and phoneNo != ''">AND m.phoneNo LIKE CONCAT('%', #{phoneNo}, '%')</if>
@@ -27,6 +42,16 @@
         <if test="dormancyYn != null and dormancyYn != ''">AND m.dormancyYn = #{dormancyYn}</if>
         <if test="leaveYn != null and leaveYn != ''">AND m.leaveYn = #{leaveYn}</if>
         <if test="banYn != null and banYn != ''">AND m.banYn = #{banYn}</if>
+        <if test="startBirthDt != null and startBirthDt != ''">
+          <![CDATA[
+            AND m.birthDt >= #{startBirthDt}
+          ]]>
+        </if>
+        <if test="endBirthDt != null and endBirthDt != ''">
+          <![CDATA[
+            AND m.birthDt <= #{endBirthDt}
+          ]]>
+        </if>
         <if test="startJoinDt != null and startJoinDt != ''">
           <![CDATA[
             AND m.joinDt >= #{startJoinDt}
@@ -61,36 +86,31 @@
 
   <select id="getMemberInfo" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.admin.vo.GetMemberInfoVo">
     SELECT
-        m.id
-        , m.name
-        , m.birthDt
-        , l.level
-        , l.color
-        , d.degree
-        , m.phoneNo
-        , m.winwinYn
-        , m.sex
-        , m.blackCnt
-        , m.dormancyYn
-        , m.leaveYn
-        , m.banYn
-        , m.joinDt
-        , m.leaveDt
-        , m.banDt
-        , m.image
-        , m.updateReason
-        , m.dormancyReason
-        , m.leaveReason
-        , m.banReason
+        id
+        , name
+        , birthDt
+        , levelFk
+        , degreeFk
+        , phoneNo
+        , winwinYn
+        , sex
+        , blackCnt
+        , dormancyYn
+        , leaveYn
+        , banYn
+        , joinDt
+        , leaveDt
+        , banDt
+        , image
+        , updateReason
+        , dormancyReason
+        , leaveReason
+        , banReason
     FROM
-        member m
-        JOIN level l ON m.levelFk = l.id
-        JOIN degree d ON m.degreeFk = d.id
-        LEFT JOIN winwinSubscribe w ON m.id = w.memberFk
-        LEFT JOIN admin a ON m.id = a.memberFk
+        member
     WHERE
         1 = 1
-        AND m.id = #{id}
+        AND id = #{id}
   </select>
 
   <select id="getAdmins" parameterType="com.admin.the_climbing_night.admin.domain.req.GetAdminsRequest" resultType="com.admin.the_climbing_night.admin.vo.GetAdminVo">
@@ -222,7 +242,7 @@
         <if test="name != null and name != ''">name = #{name}</if>
         <if test="birthDt != null and birthDt != ''">, birthDt = #{birthDt}</if>
         <if test="levelFk != null and levelFk != ''">, levelFk = #{levelFk}</if>
-        <if test="degree != null and degree != ''">, degreeFk = #{degree}</if>
+        <if test="degreeFk != null and degreeFk != ''">, degreeFk = #{degreeFk}</if>
         <if test="phoneNo != null and phoneNo != ''">, phoneNo = #{phoneNo}</if>
         <if test="winwinYn != null and winwinYn != ''">, winwinYn = #{winwinYn}</if>
         <if test="sex != null and sex != ''">, sex = #{sex}</if>

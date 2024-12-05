@@ -2,11 +2,13 @@ import React, { useMemo } from 'react';
 import { AgGridReact } from 'ag-grid-react'; // https://www.ag-grid.com/
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { TypeKeyValueForm } from 'modules/types';
 import styles from './GridTable.module.scss';
 
 function GridTable({
   columns,
   lists,
+  activeDefaultColDef,
   disableCheckbox,
   paginationPageSize,
   paginationPageSizeSelector,
@@ -28,7 +30,7 @@ function GridTable({
         <AgGridReact
           columnDefs={columns}
           rowData={lists}
-          defaultColDef={{ flex: 1 }}
+          defaultColDef={activeDefaultColDef ? { flex: 1 } : undefined}
           rowSelection={disableCheckbox && rowSelection}
           pagination
           paginationPageSize={paginationPageSize || 10}
@@ -47,6 +49,7 @@ function GridTable({
 interface TypeGridTable {
   columns: any[];
   lists: any[];
+  activeDefaultColDef?: boolean;
   disableCheckbox?: boolean;
   paginationPageSize?: number;
   paginationPageSizeSelector?: number[];

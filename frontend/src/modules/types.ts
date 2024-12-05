@@ -1,5 +1,5 @@
 export interface TypeKeyValueForm {
-  [key: string]: number | string | boolean;
+  [key: string]: number | string | boolean | null | undefined;
 }
 
 /**

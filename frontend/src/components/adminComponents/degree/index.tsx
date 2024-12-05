@@ -232,6 +232,7 @@ function Degree({}: TypeDegree) {
                   기수: degree,
                   설명: description,
                 }))}
+                activeDefaultColDef
                 onClickRow={handleClickRow}
               />
             </div>

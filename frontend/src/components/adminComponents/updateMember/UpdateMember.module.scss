@@ -26,6 +26,17 @@
   transform: translateX(-50%) translateY(-50%);
   z-index: 300;
 
+  .updateInputs {
+    width: 100%;
+    display: flex;
+
+    > div {
+      &:nth-child(2) {
+        margin-left: 20px;
+      }
+    }
+  }
+
   > button {
     width: 40%;
     height: 30px;
@@ -38,7 +49,7 @@
 
 .wrap {
   width: 100%;
-  padding: 50px 100px;
+  padding: 50px 50px 0 50px;
 
   .innerWrap {
     width: 100%;

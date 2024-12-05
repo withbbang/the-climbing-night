@@ -1,14 +1,12 @@
 import React from 'react';
-import styles from './CommonInput.module.scss';
+import styles from './UpdateInput.module.scss';
 
-function CommonInput({
+function UpdateInput({
   title,
   tagType,
   name,
   type,
   value,
-  subName,
-  subValue,
   options,
   max,
   min,
@@ -17,7 +15,7 @@ function CommonInput({
   onChange,
   onKeyDown,
   onBlur,
-}: TypeCommonInput): React.JSX.Element {
+}: TypeUpdateInput): React.JSX.Element {
   return (
     <div className={styles.wrap}>
       <div className={styles.title}>
@@ -25,35 +23,17 @@ function CommonInput({
       </div>
       <div className={styles.input}>
         {tagType === 'input' ? (
-          <>
-            <input
-              name={name}
-              type={type}
-              value={value}
-              max={max}
-              min={min}
-              disabled={disabled}
-              onChange={onChange}
-              onKeyDown={onKeyDown}
-              onBlur={onBlur}
-            />
-            {subName !== null &&
-              subName !== undefined &&
-              subValue !== null &&
-              subName !== undefined && (
-                <input
-                  name={subName}
-                  type={type}
-                  value={subValue}
-                  max={max}
-                  min={min}
-                  disabled={disabled}
-                  onChange={onChange}
-                  onKeyDown={onKeyDown}
-                  onBlur={onBlur}
-                />
-              )}
-          </>
+          <input
+            name={name}
+            type={type}
+            value={value}
+            max={max}
+            min={min}
+            disabled={disabled}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            onBlur={onBlur}
+          />
         ) : tagType === 'select' ? (
           <select name={name} value={value} onChange={onChange}>
             {options &&
@@ -71,14 +51,12 @@ function CommonInput({
   );
 }
 
-interface TypeCommonInput {
+interface TypeUpdateInput {
   title: string;
   name: string;
   tagType: string;
   type?: string;
   value: string;
-  subName?: string;
-  subValue?: string;
   options?: any[];
   max?: number | string;
   min?: number | string;
@@ -94,4 +72,4 @@ interface TypeCommonInput {
   onBlur?: (e: React.FocusEvent<HTMLInputElement, Element>) => void;
 }
 
-export default CommonInput;
+export default UpdateInput;

@@ -87,10 +87,15 @@ function InsertMember({ handleSetSelectedSidebar }: TypeInsertMember) {
   });
 
   // blackCnt input onBlur
-  const handleBlur = () => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
+    let blackCnt = 0;
+
+    if (+e.target.value > 3) blackCnt = 3;
+    else blackCnt = +e.target.value;
+
     setForm((prevState) => ({
       ...prevState,
-      blackCnt: 3,
+      blackCnt,
     }));
   };
 
@@ -223,7 +228,7 @@ function InsertMember({ handleSetSelectedSidebar }: TypeInsertMember) {
                 max={3}
                 min={0}
                 onChange={useChange}
-                onBlur={handleBlur}
+                onBlur={(e) => handleBlur(e)}
               />
             </div>
           </div>

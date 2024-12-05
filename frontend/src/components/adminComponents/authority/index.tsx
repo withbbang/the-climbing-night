@@ -62,11 +62,7 @@ function Authority({}: TypeAuthority) {
 
   useEffect(() => {
     useGetDegrees();
-    usePostAdmins({
-      ...form,
-      name: encrypt(`${form.name}`),
-      phoneNo: encrypt(`${form.phoneNo}`),
-    });
+    usePostAdmins();
   }, []);
 
   // FIXME: usePostUpdateAuthority의 successCb에서 usePostAdmins 요청시 이전 accessToken으로 요청하여 대안으로 useEffect 사용
@@ -287,6 +283,7 @@ function Authority({}: TypeAuthority) {
                   레벨: `${admin.level}&nbsp<span style="background-color: ${admin.color}; padding: 0 10px;"/>`,
                   권한: grade.find(({ value }) => value === admin.grade)?.label, // TODO: DB 테이블 만들까 고민
                 }))}
+                activeDefaultColDef
                 onClickRow={handleClickRow}
               />
             </div>

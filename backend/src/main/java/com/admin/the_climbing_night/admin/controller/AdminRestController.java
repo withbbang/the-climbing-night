@@ -1,6 +1,7 @@
 package com.admin.the_climbing_night.admin.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,14 +75,14 @@ public class AdminRestController {
      * @param id
      * @return
      */
-    @GetMapping(value = "get-member-info/{id}")
-    public SingleResponse<GetMemberInfoVo> getMemberInfo(@PathVariable String id) {
+    @PostMapping(value = "get-member-info")
+    public SingleResponse<GetMemberInfoVo> getMemberInfo(@RequestBody Map<String, String> req) {
         SingleResponse<GetMemberInfoVo> response = new SingleResponse<GetMemberInfoVo>();
 
         GetMemberInfoVo getMemberInfo = null;
 
         try {
-            getMemberInfo = adminService.getMemberInfo(id);
+            getMemberInfo = adminService.getMemberInfo(req.get("id"));
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));
@@ -278,6 +279,8 @@ public class AdminRestController {
         }
 
         int updateMember = 0;
+
+        req.setUpdateDt(CommonUtil.getCurrentTimestamp("yyyy-MM-dd HH:mm:ss"));
 
         try {
             updateMember = adminService.updateMember(req);

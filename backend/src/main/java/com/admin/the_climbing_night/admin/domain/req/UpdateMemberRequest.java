@@ -1,6 +1,7 @@
 package com.admin.the_climbing_night.admin.domain.req;
 
 import com.admin.the_climbing_night.annotations.RequiredAnnotation;
+import com.admin.the_climbing_night.annotations.SectionDecryptFieldAnnotation;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,15 +15,18 @@ public class UpdateMemberRequest {
     private String id;
 
     @RequiredAnnotation
+    @SectionDecryptFieldAnnotation
     private String name;
 
     @RequiredAnnotation
+    @SectionDecryptFieldAnnotation
     private String birthDt;
 
     private String levelFk;
 
-    private String degree;
+    private String degreeFk;
 
+    @SectionDecryptFieldAnnotation
     private String phoneNo;
 
     private String winwinYn;

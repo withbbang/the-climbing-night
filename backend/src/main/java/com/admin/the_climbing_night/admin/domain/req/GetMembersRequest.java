@@ -1,5 +1,7 @@
 package com.admin.the_climbing_night.admin.domain.req;
 
+import com.admin.the_climbing_night.annotations.SectionDecryptFieldAnnotation;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -8,14 +10,18 @@ import lombok.ToString;
 @Setter
 @ToString
 public class GetMembersRequest {
+    @SectionDecryptFieldAnnotation
     private String name;
 
-    private String birthDt;
+    private String startBirthDt;
+
+    private String endBirthDt;
 
     private String levelFk;
 
     private String degreeFk;
 
+    @SectionDecryptFieldAnnotation
     private String phoneNo;
 
     private String winwinYn;

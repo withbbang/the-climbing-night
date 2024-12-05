@@ -35,5 +35,11 @@
     > textarea {
       resize: none;
     }
+
+    > input {
+      &:nth-child(2) {
+        margin-left: 15px;
+      }
+    }
   }
 }

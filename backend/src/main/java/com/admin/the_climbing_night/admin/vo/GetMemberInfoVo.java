@@ -1,5 +1,7 @@
 package com.admin.the_climbing_night.admin.vo;
 
+import com.admin.the_climbing_night.annotations.SectionEncryptFieldAnnotation;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,16 +12,17 @@ import lombok.ToString;
 public class GetMemberInfoVo {
     private String id;
 
+    @SectionEncryptFieldAnnotation
     private String name;
 
+    @SectionEncryptFieldAnnotation
     private String birthDt;
 
-    private String level;
+    private String levelFk;
 
-    private String color;
+    private String degreeFk;
 
-    private String degree;
-
+    @SectionEncryptFieldAnnotation
     private String phoneNo;
 
     private String winwinYn;
@@ -35,6 +38,8 @@ public class GetMemberInfoVo {
     private String banYn;
 
     private String joinDt;
+
+    private String updateDt;
 
     private String leaveDt;
 
