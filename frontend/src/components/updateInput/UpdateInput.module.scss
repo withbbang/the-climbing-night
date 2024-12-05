@@ -2,10 +2,15 @@
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
 
   .title {
+    width: 30%;
+    display: flex;
+    justify-content: end;
     margin-right: 10px;
+    white-space: nowrap;
 
     .required {
       color: $required;
@@ -13,6 +18,10 @@
   }
 
   .input {
+    width: 70%;
+    display: flex;
+    flex: 1;
+
     > input {
       flex: 1;
     }
