@@ -307,7 +307,7 @@ public class AdminRestController {
      */
     @PostMapping(value = "get-climbing-areas")
     public SingleResponse<List<GetClimbingAreaVo>> getClimbingAreas(@RequestBody GetClimbingAreasRequest req) {
-        SingleResponse response = new SingleResponse();
+        SingleResponse<List<GetClimbingAreaVo>> response = new SingleResponse<List<GetClimbingAreaVo>>();
 
         List<GetClimbingAreaVo> getClimbingAreas = null;
 
@@ -331,14 +331,14 @@ public class AdminRestController {
      * @param id
      * @return
      */
-    @GetMapping(value = "get-climbing-area-info/{id}")
-    public SingleResponse<GetClimbingAreaInfoVo> getClimbingAreaInfo(@PathVariable String id) {
-        SingleResponse response = new SingleResponse();
+    @PostMapping(value = "get-climbing-area-info")
+    public SingleResponse<GetClimbingAreaInfoVo> getClimbingAreaInfo(@RequestBody Map<String, String> req) {
+        SingleResponse<GetClimbingAreaInfoVo> response = new SingleResponse<GetClimbingAreaInfoVo>();
 
         GetClimbingAreaInfoVo getClimbingAreaInfo = null;
 
         try {
-            getClimbingAreaInfo = adminService.getClimbingAreaInfo(id);
+            getClimbingAreaInfo = adminService.getClimbingAreaInfo(req.get("id"));
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));

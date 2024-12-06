@@ -12,7 +12,13 @@ public class GetClimbingAreaVo {
 
     private String name;
 
-    private String address;
+    private String price;
 
     private String winwinYn;
+
+    private String winPrice;
+
+    private String address;
+
+    private String closeYn;
 }

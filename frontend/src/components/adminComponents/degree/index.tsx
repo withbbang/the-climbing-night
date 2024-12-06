@@ -12,6 +12,7 @@ import { DOMAIN } from 'modules/constants';
 import PageTitle from 'components/pageTitle';
 import GridTable from 'components/gridTable';
 import CommonInput from 'components/commonInput';
+import UpdateInput from 'components/updateInput';
 import styles from './Degree.module.scss';
 
 function mapStateToProps(state: PropState) {
@@ -171,23 +172,21 @@ function Degree({}: TypeDegree) {
           <div className={styles.modalBody}>
             <h3>기수 수정</h3>
             <div className={styles.modalInputBox}>
-              <div className={styles.updateInput}>
-                <span>기수</span>
-                <input
-                  name="newDegree"
-                  type="text"
-                  value={`${form.newDegree}`}
-                  onChange={useChange}
-                />
-              </div>
-              <div className={styles.updateInput}>
-                <span>설명</span>
-                <textarea
-                  name="newDescription"
-                  value={`${form.newDescription}`}
-                  onChange={useChange}
-                />
-              </div>
+              <UpdateInput
+                title="기수"
+                tagType="input"
+                name="newDegree"
+                type="text"
+                value={`${form.newDegree}`}
+                onChange={useChange}
+              />
+              <UpdateInput
+                title="설명"
+                tagType="textarea"
+                name="newDescription"
+                value={`${form.newDescription}`}
+                onChange={useChange}
+              />
             </div>
             <button onClick={handleSubmit}>수정</button>
           </div>

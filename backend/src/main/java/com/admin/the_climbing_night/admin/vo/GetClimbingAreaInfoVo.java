@@ -22,9 +22,5 @@ public class GetClimbingAreaInfoVo {
 
     private String closeYn;
 
-    private String createDt;
-
-    private String updateDt;
-
     private String description;
 }

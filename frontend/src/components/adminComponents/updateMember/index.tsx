@@ -208,6 +208,7 @@ function UpdateMember({}: TypeUpdateMember) {
   const { usePostData: usePostUpdateMember } = usePostDataHook({
     url: `${DOMAIN}/api/update-member`,
     beforeCb: () => {
+      if (!form.selectedName) throw new Error('회원 이름을<br/>입력해주세요.');
       if (!form.selectedUpdateReason)
         throw new Error('갱신 사유를<br/>입력해주세요.');
     },

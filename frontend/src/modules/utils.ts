@@ -364,7 +364,22 @@ export function handleSetUpperCaseFirstCharacter(value: string): string {
   return value.replace(/^[a-z]/, (char) => char.toUpperCase());
 }
 
+/**
+ * 이메일 포맷 검증 함수
+ * @param {string} email 이메일
+ * @returns {boolean}
+ */
 export function handleCheckEmail(email: string): boolean {
   // eslint-disable-next-line
   return /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/.test(email);
+}
+
+/**
+ * 천의 자리마다 컴마 찍힌 숫자 문자열 만들기 함수
+ *
+ * @param {string} numStr 문자열 숫자
+ * @returns {string} 천의자리 컴마 찍힌 숫자 문자열
+ */
+export function handleReturnNumberWithCommas(numStr: string) {
+  return numStr.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }

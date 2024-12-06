@@ -269,17 +269,20 @@
     SELECT
         id
         , name
-        , address
+        , price
         , winwinYn
+        , winPrice
+        , address
+        , closeYn
     FROM
         climbingArea
     WHERE
         1 = 1
         <if test="name != null and name != ''">AND name LIKE CONCAT('%', #{name}, '%')</if>
         <if test="price != null and price != ''">AND price = #{price}</if>
-        <if test="winPrice != null and winPrice != ''">AND winPrice = #{winPrice}</if>
-        <if test="address != null and address != ''">AND address = #{address}</if>
         <if test="winwinYn != null and winwinYn != ''">AND winwinYn = #{winwinYn}</if>
+        <if test="winPrice != null and winPrice != ''">AND winPrice = #{winPrice}</if>
+        <if test="address != null and address != ''">AND address LIKE CONCAT('%', #{address}, '%')</if>
         <if test="closeYn != null and closeYn != ''">AND closeYn = #{closeYn}</if>
   </select>
 
@@ -292,8 +295,6 @@
         , address
         , winwinYn
         , closeYn
-        , createDt
-        , updateDt
         , description
     FROM
         climbingArea
