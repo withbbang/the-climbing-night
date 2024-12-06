@@ -100,6 +100,7 @@ function Degree({}: TypeDegree) {
         (degree: GetDegreesType) => degree.id === form.selectedId,
       )[0];
 
+      if (!form.newDegree) throw new Error('기수를<br/>입력해주세요.');
       if (degree === form.newDegree && description === form.newDescription)
         throw new Error('변경된 내용이<br/>없습니다.');
     },
