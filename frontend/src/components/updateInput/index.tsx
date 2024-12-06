@@ -56,7 +56,7 @@ interface TypeUpdateInput {
   name: string;
   tagType: string;
   type?: string;
-  value: string;
+  value: string | number;
   options?: any[];
   max?: number | string;
   min?: number | string;

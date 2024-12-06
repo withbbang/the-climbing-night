@@ -192,6 +192,7 @@ function UpdateMember({}: TypeUpdateMember) {
         selectedDormancyReason: dormancyReason || '',
         selectedLeaveReason: leaveReason || '',
         selectedBanReason: banReason || '',
+        isActive: 'Y',
       }));
     },
     failCb: () => {
@@ -222,15 +223,18 @@ function UpdateMember({}: TypeUpdateMember) {
 
   // blackCnt input onBlur
   const handleBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
+    const { value, name } = e.target;
     let blackCnt: number | string = 0;
 
-    if (+e.target.value > 3) blackCnt = 3;
-    else if (e.target.value === '') blackCnt = '';
-    else blackCnt = +e.target.value;
+    if (+value > 3) blackCnt = 3;
+    else if (value === '') {
+      if (name === 'blackCnt') blackCnt = '';
+      else if (name === 'selectedBlackCnt') blackCnt = 0;
+    } else blackCnt = +value;
 
     setForm((prevState) => ({
       ...prevState,
-      blackCnt,
+      [name]: blackCnt,
     }));
   };
 
@@ -251,10 +255,6 @@ function UpdateMember({}: TypeUpdateMember) {
     useGetMemberInfo({
       id: data.id,
     });
-    setForm((prevState) => ({
-      ...prevState,
-      isActive: 'Y',
-    }));
   };
 
   // 수정 팝업 필드 초기화
@@ -334,10 +334,10 @@ function UpdateMember({}: TypeUpdateMember) {
                   name="selectedLevelFk"
                   value={`${form.selectedLevelFk}`}
                   options={levelOptions
-                    .map(({ id, level, color }) => ({
+                    .map(({ id, level }) => ({
                       id: `selectedLevelFk${id}`,
                       value: id,
-                      label: `${level} ${color}`,
+                      label: level,
                     }))
                     .filter((_, idx) => idx !== 0)}
                   onChange={useChange}
@@ -405,11 +405,14 @@ function UpdateMember({}: TypeUpdateMember) {
                 />
                 <UpdateInput
                   title="블랙 카운트"
-                  tagType="select"
-                  name="selectedBlackcnt"
-                  type="input"
-                  value={`${form.selectedBlackcnt}`}
+                  tagType="input"
+                  name="selectedBlackCnt"
+                  type="number"
+                  value={`${form.selectedBlackCnt}`}
+                  max={3}
+                  min={0}
                   onChange={useChange}
+                  onBlur={handleBlur}
                 />
               </div>
               <div className={styles.updateInputs}>
@@ -540,10 +543,10 @@ function UpdateMember({}: TypeUpdateMember) {
                     name="levelFk"
                     value={`${form.levelFk}`}
                     options={levelOptions.map(
-                      ({ id, level, color }: GetLevelsType) => ({
+                      ({ id, level }: GetLevelsType) => ({
                         id,
                         value: id,
-                        label: `${level} ${color}`,
+                        label: level,
                       }),
                     )}
                     onChange={useChange}

@@ -8,6 +8,7 @@ import Authority from 'components/adminComponents/authority';
 import InsertMember from 'components/adminComponents/insertMember';
 import UpdateMember from 'components/adminComponents/updateMember';
 import Degree from 'components/adminComponents/degree';
+import InsertClimbingArea from 'components/adminComponents/insertClimbingArea';
 import styles from './Admin.module.scss';
 
 function AdminPT({
@@ -27,7 +28,7 @@ function AdminPT({
         ) : selectedSidebar === 'update-memeber' ? (
           <UpdateMember />
         ) : selectedSidebar === 'insert-climbing-area' ? (
-          <InsertMember />
+          <InsertClimbingArea />
         ) : selectedSidebar === 'update-climbing-area' ? (
           <InsertMember />
         ) : selectedSidebar === 'degree' ? (

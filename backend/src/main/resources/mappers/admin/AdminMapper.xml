@@ -318,7 +318,6 @@
         , address
         , winwinYn
         , createDt
-        , updateDt
         , description
     ) VALUES (
         #{id}
@@ -328,7 +327,6 @@
         , #{address}
         , #{winwinYn}
         , #{createDt}
-        , #{updateDt}
         , #{description}
     )
   </insert>

@@ -28,7 +28,5 @@ public class InsertClimbingAreaRequest {
 
     private String createDt;
 
-    private String updateDt;
-
     private String description;
 }
