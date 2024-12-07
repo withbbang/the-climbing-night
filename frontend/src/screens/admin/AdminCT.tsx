@@ -1,18 +1,8 @@
 import React, { useEffect } from 'react';
-import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
-import { CustomWindow, TypeSidebarItem } from 'modules/types';
-import {
-  usePostDataByConfirmPopupHook,
-  usePostDataHook,
-} from 'modules/customHooks';
-import { handleParseDataFromJSInterface } from 'modules/utils';
-import { ToastError } from 'modules/customErrorClasses';
+import { TypeSidebarItem } from 'modules/types';
 import AdminPT from './AdminPT';
 
-function AdminCT({
-  selectedSidebar,
-  handleSetSelectedSidebar,
-}: AdminCTProps): React.JSX.Element {
+function AdminCT({ selectedSidebar }: AdminCTProps): React.JSX.Element {
   const [isAdmin, setIsAdmin] = React.useState(true);
   const sidebarItems: TypeSidebarItem[] = [
     { title: '권한 관리', nick: 'authority' },
@@ -38,7 +28,6 @@ function AdminCT({
 
 interface AdminCTProps {
   selectedSidebar: string;
-  handleSetSelectedSidebar: (selectedSidebar: string) => void;
 }
 
 export default AdminCT;

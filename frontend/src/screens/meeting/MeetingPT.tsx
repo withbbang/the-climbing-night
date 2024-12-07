@@ -2,17 +2,36 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import Header from 'components/header';
+import Sidebar from 'components/sidebar';
+import { TypeSidebarItem } from 'modules/types';
+import InsertMeeting from 'components/meetingComponents/insertMeeting';
+import UpdateMeeting from 'components/meetingComponents/updateMeeting';
 import styles from './Meeting.module.scss';
 
-function MeetingPT({}: MeetingPTProps): React.JSX.Element {
+function MeetingPT({
+  selectedSidebar,
+  isManager,
+  sidebarItems,
+}: MeetingPTProps): React.JSX.Element {
   return (
     <div className={styles.wrap}>
       <Header />
-      <h1>Meeting Page</h1>
+      <div className={styles.innerWrap}>
+        <Sidebar sidebarItems={sidebarItems} />
+        {!isManager ? null : selectedSidebar === 'insert-meeting' ? (
+          <InsertMeeting />
+        ) : selectedSidebar === 'update-meeting' ? (
+          <UpdateMeeting />
+        ) : null}
+      </div>
     </div>
   );
 }
 
-interface MeetingPTProps {}
+interface MeetingPTProps {
+  selectedSidebar: string;
+  isManager: boolean;
+  sidebarItems: TypeSidebarItem[];
+}
 
 export default MeetingPT;
