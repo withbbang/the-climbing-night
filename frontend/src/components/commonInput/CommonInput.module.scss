@@ -24,6 +24,7 @@
   }
 
   .input {
+    position: relative;
     width: 80%;
 
     > input,
@@ -41,6 +42,14 @@
       &:nth-child(2) {
         margin-left: 15px;
       }
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      right: 10px;
+      cursor: pointer;
     }
   }
 }

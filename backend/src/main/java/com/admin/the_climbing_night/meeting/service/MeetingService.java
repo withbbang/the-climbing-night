@@ -10,8 +10,11 @@ import com.admin.the_climbing_night.meeting.domain.req.GetMeetingsRequest;
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.UpdateMeetingRequest;
 import com.admin.the_climbing_night.meeting.mapper.MeetingMapper;
+import com.admin.the_climbing_night.meeting.vo.GetAdminsForInsertMeeting;
 import com.admin.the_climbing_night.meeting.vo.GetAttendVo;
+import com.admin.the_climbing_night.meeting.vo.GetClimbingAreaForInsertMeeting;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo;
+import com.admin.the_climbing_night.meeting.vo.GetMeetingStatus;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
 import com.admin.the_climbing_night.meeting.vo.InsertAttendVo;
 
@@ -23,12 +26,16 @@ public class MeetingService {
     @Autowired
     MeetingMapper meetingMapper;
 
-    public List<GetMeetingVo> getMeetings(GetMeetingsRequest req) {
-        return meetingMapper.getMeetings(req);
+    public List<GetMeetingStatus> getMeetingStatuses() {
+        return meetingMapper.getMeetingStatuses();
     }
 
-    public List<GetMeetingInfoVo> getMeetingInfo(String id) {
-        return meetingMapper.getMeetingInfo(id);
+    public List<GetAdminsForInsertMeeting> getAdminsForInsertMeeting(String name) {
+        return meetingMapper.getAdminsForInsertMeeting(name);
+    }
+
+    public List<GetClimbingAreaForInsertMeeting> getClimbingAreasForInsertMeeting(String name) {
+        return meetingMapper.getClimbingAreasForInsertMeeting(name);
     }
 
     public String hasMeeting(InsertMeetingRequest req) {
@@ -43,6 +50,14 @@ public class MeetingService {
     public int insertMeeting(InsertMeetingRequest req, InsertAttendVo insertAttendVo) {
         meetingMapper.insertMeeting(req);
         return meetingMapper.insertAttend(insertAttendVo);
+    }
+
+    public List<GetMeetingVo> getMeetings(GetMeetingsRequest req) {
+        return meetingMapper.getMeetings(req);
+    }
+
+    public List<GetMeetingInfoVo> getMeetingInfo(String id) {
+        return meetingMapper.getMeetingInfo(id);
     }
 
     public List<GetAttendVo> getAttends(String meetingFk) {

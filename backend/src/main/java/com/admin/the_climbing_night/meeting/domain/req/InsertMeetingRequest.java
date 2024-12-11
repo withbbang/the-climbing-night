@@ -16,6 +16,9 @@ public class InsertMeetingRequest {
     private String name;
 
     @RequiredAnnotation
+    private String adminFk;
+
+    @RequiredAnnotation
     private String memberFk;
 
     @RequiredAnnotation

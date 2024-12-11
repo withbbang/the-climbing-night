@@ -30,37 +30,213 @@ function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
   };
 }
 
-function InsertMeeting({}: TypeInsertMeeting) {
+function InsertMeeting({ handleSetSelectedSidebar }: TypeInsertMeeting) {
+  const [getStatuses, setGetStatuses] = useState<any[]>([]);
+  const [getAdmins, setGetAdmins] = useState<any[]>([]);
+  const [getClimbingAreas, setGetClimbingAreas] = useState<any[]>([]);
   const { form, setForm, useChange } = useChangeHook({
     name: '',
+    adminName: '',
+    searchedAdminName: '',
+    adminFk: '',
     memberFk: '',
+    climbingAreaName: '',
+    searchedClimbingAreaName: '',
     climbingAreaFk: '',
     hostDt: '',
     time: '',
-    criticalMeetingYn: '',
+    criticalMeetingYn: 'N',
     meetingStatusFk: '',
-    isActive: 'N',
-    isUpdated: false,
+    isAdminModalActive: 'N',
+    isClimbingAreaModalActive: 'N',
   });
+
+  useEffect(() => {
+    useGetStatuses();
+  }, []);
+
+  // 벙 상태 가져오기
+  const { useGetData: useGetStatuses } = useGetDataHook({
+    url: `${DOMAIN}/api/get-meeting-statuses`,
+    successCb: (response) => {
+      setGetStatuses(response);
+      setForm((prevState) => ({
+        ...prevState,
+        meetingStatusFk: response[0].id,
+      }));
+    },
+  });
+
+  // 주최자 정보 가져오기
+  const { usePostData: usePostAdmins } = usePostDataHook({
+    url: `${DOMAIN}/api/get-admins-for-meeting`,
+    successCb: (response) => {
+      if (response.length === 1) {
+        const [{ id, memberFk, name }] = response;
+
+        const decryptedName = decrypt(name) || '';
+
+        setForm((prevState) => ({
+          ...prevState,
+          adminFk: id,
+          memberFk,
+          adminName: decryptedName,
+          searchedAdminName: decryptedName,
+        }));
+      } else if (response.length > 1) {
+        handleSetAdmins(response);
+      }
+    },
+  });
+
+  // 암장 정보 가져오기
+  const { usePostData: usePostClimbingAreas } = usePostDataHook({
+    url: `${DOMAIN}/api/get-climbing-areas-for-meeting`,
+    successCb: (response) => {
+      if (response.length === 1) {
+        const [{ id, name }] = response;
+
+        setForm((prevState) => ({
+          ...prevState,
+          climbingAreaFk: id,
+          climbingAreaName: name,
+          searchedClimbingAreaName: name,
+        }));
+      } else if (response.length > 1) {
+        handleSetClimbingAreas(response);
+      }
+    },
+  });
+
+  // 암장 정보 가져오기
+  const { usePostData: usePostInsertMeeting } = usePostDataHook({
+    url: `${DOMAIN}/api/insert-meeting`,
+    beforeCb: () => {
+      if (!form.name) throw new Error('벙 이름을<br/>입력해주세요.');
+      if (!form.adminFk) throw new Error('주최자를<br/>입력해주세요.');
+      if (!form.climbingAreaFk) throw new Error('암장을<br/>입력해주세요.');
+      if (!form.hostDt) throw new Error('주최 날짜를<br/>입력해주세요.');
+      if (!form.time) throw new Error('주최 시간을<br/>입력해주세요.');
+    },
+    successCb: () => handleSetSelectedSidebar('update-meeting'),
+  });
+
+  // 주최자 정보 조회 콜백
+  const handleSetAdmins = (response: Array<any>) => {
+    const decryptedAdmins = response.map(({ id, name }) => ({
+      id,
+      name: decrypt(name),
+    }));
+
+    setGetAdmins(decryptedAdmins);
+    setForm((prevState) => ({
+      ...prevState,
+      isAdminModalActive: 'Y',
+    }));
+  };
+
+  // 암장 정보 조회 콜백
+  const handleSetClimbingAreas = (response: Array<any>) => {
+    setGetClimbingAreas(response);
+    setForm((prevState) => ({
+      ...prevState,
+      isClimbingAreaModalActive: 'Y',
+    }));
+  };
+
+  // 주최자 입력 후 엔터 콜백
+  const useFindAdmin = useEnterKeyDownHook(form, () =>
+    usePostAdmins({ name: form.adminName }),
+  );
+
+  // 암장 입력 후 엔터 콜백
+  const useFindClimbingArea = useEnterKeyDownHook(form, () =>
+    usePostClimbingAreas({ name: form.climbingAreaName }),
+  );
+
+  // 주최자 리스트 클릭 콜백
+  const handleClickAdminInfo = (adminInfo: any) => {
+    const { id, memberFk, name } = adminInfo;
+
+    setForm((prevState) => ({
+      ...prevState,
+      adminFk: id,
+      memberFk,
+      adminName: name,
+      searchedAdminName: name,
+      isAdminModalActive: 'N',
+    }));
+    setGetAdmins([]);
+  };
+
+  // 암장 리스트 클릭 콜백
+  const handleClickClimbingAreaInfo = (climbingAreaInfo: any) => {
+    const { id, name } = climbingAreaInfo;
+
+    setForm((prevState) => ({
+      ...prevState,
+      climbingAreaFk: id,
+      climbingAreaName: name,
+      searchedClimbingAreaName: name,
+      isClimbingAreaModalActive: 'N',
+    }));
+    setGetAdmins([]);
+  };
+
+  // 모달창 끄기
+  const handleOffModal = () => {
+    setForm((prevState) => ({
+      ...prevState,
+      isAdminModalActive: 'N',
+      isClimbingAreaModalActive: 'N',
+    }));
+    setGetAdmins([]);
+    setGetClimbingAreas([]);
+  };
+
+  // 확인 버튼 콜백
+  const useInsertMeeting = () =>
+    usePostInsertMeeting({
+      name: form.name,
+      adminFk: form.adminFk,
+      memberFk: form.memberFk,
+      climbingAreaFk: form.climbingAreaFk,
+      hostDt: form.hostDt,
+      time: form.time,
+      criticalMeetingYn: form.criticalMeetingYn,
+      meetingStatusFk: form.meetingStatusFk,
+    });
 
   return (
     <>
-      {form.isActive === 'Y' && (
+      {form.isAdminModalActive === 'Y' && (
         <>
-          <div
-            className={styles.background}
-            onClick={() =>
-              setForm((prevState) => ({
-                ...prevState,
-                isActive: 'N',
-                selectedId: '',
-                selectedGrade: '',
-              }))
-            }
-          />
-          <div className={styles.modalBody}>
-            <button>수정</button>
-          </div>
+          <div className={styles.background} onClick={handleOffModal} />
+          <ul className={styles.modalBody}>
+            {getAdmins.map(({ id, memberFk, name }) => (
+              <li
+                key={id}
+                onClick={() => handleClickAdminInfo({ id, memberFk, name })}
+              >
+                {name}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {form.isClimbingAreaModalActive === 'Y' && (
+        <>
+          <div className={styles.background} onClick={handleOffModal} />
+          <ul className={styles.modalBody}>
+            {getClimbingAreas.map(({ id, name }) => (
+              <li
+                key={id}
+                onClick={() => handleClickClimbingAreaInfo({ id, name })}
+              >
+                {name}
+              </li>
+            ))}
+          </ul>
         </>
       )}
       <div className={styles.wrap}>
@@ -83,11 +259,15 @@ function InsertMeeting({}: TypeInsertMeeting) {
                 <CommonInput
                   title="벙 주최자"
                   tagType="input"
-                  name="memberFk"
+                  name="adminName"
                   type="text"
-                  value={`${form.memberFk}`}
+                  value={`${form.adminName}`}
                   required
+                  isSearch
+                  searchedName={`${form.searchedAdminName}`}
                   onChange={useChange}
+                  onKeyDown={useFindAdmin}
+                  onSearch={useInsertMeeting}
                 />
               </div>
             </div>
@@ -96,11 +276,15 @@ function InsertMeeting({}: TypeInsertMeeting) {
                 <CommonInput
                   title="암장"
                   tagType="input"
-                  name="climbingAreaFk"
+                  name="climbingAreaName"
                   type="text"
-                  value={`${form.climbingAreaFk}`}
+                  value={`${form.climbingAreaName}`}
                   required
+                  isSearch
+                  searchedName={`${form.searchedClimbingAreaName}`}
                   onChange={useChange}
+                  onKeyDown={useFindClimbingArea}
+                  onSearch={useInsertMeeting}
                 />
               </div>
               <div className={styles.input}>
@@ -148,25 +332,27 @@ function InsertMeeting({}: TypeInsertMeeting) {
                   tagType="select"
                   name="meetingStatusFk"
                   value={`${form.meetingStatusFk}`}
-                  options={[
-                    { id: 'N', value: 'N', label: 'X' },
-                    { id: 'Y', value: 'Y', label: 'O' },
-                  ]}
+                  options={getStatuses.map(({ id, status }) => ({
+                    id,
+                    value: id,
+                    label: status,
+                  }))}
                   onChange={useChange}
                 />
               </div>
             </div>
           </div>
           <div className={styles.btnBox}>
-            <button>확인</button>
+            <button onClick={useInsertMeeting}>확인</button>
           </div>
-          <div className={styles.listBox}></div>
         </div>
       </div>
     </>
   );
 }
 
-interface TypeInsertMeeting {}
+interface TypeInsertMeeting {
+  handleSetSelectedSidebar: (selectedSidebar: string) => void;
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(InsertMeeting);

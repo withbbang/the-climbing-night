@@ -91,6 +91,7 @@ function InsertMember({ handleSetSelectedSidebar }: TypeInsertMember) {
     let blackCnt = 0;
 
     if (+e.target.value > 3) blackCnt = 3;
+    else if (Number.isNaN(+e.target.value)) blackCnt = 0;
     else blackCnt = +e.target.value;
 
     setForm((prevState) => ({

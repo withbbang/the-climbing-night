@@ -79,8 +79,8 @@ function UpdateMember({}: TypeUpdateMember) {
   const columns = [
     { field: '이름' },
     { field: '기수' },
-    { field: '생년월일', flex: 2 },
-    { field: '휴대폰 번호', flex: 2 },
+    { field: '생년월일' },
+    { field: '휴대폰 번호' },
     { field: '레벨', cellRenderer: levelCellRenderer },
     { field: '상생 여부' },
     { field: '성별' },
@@ -231,7 +231,8 @@ function UpdateMember({}: TypeUpdateMember) {
     else if (value === '') {
       if (name === 'blackCnt') blackCnt = '';
       else if (name === 'selectedBlackCnt') blackCnt = 0;
-    } else blackCnt = +value;
+    } else if (Number.isNaN(+e.target.value)) blackCnt = 0;
+    else blackCnt = +value;
 
     setForm((prevState) => ({
       ...prevState,
@@ -745,7 +746,6 @@ function UpdateMember({}: TypeUpdateMember) {
                   '탈퇴 여부': member.leaveYn,
                   '강퇴 여부': member.banYn,
                 }))}
-                activeDefaultColDef
                 onClickRow={handleClickRow}
               />
             </div>

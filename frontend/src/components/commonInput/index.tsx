@@ -1,3 +1,5 @@
+import { is } from 'immer/dist/internal';
+import SVG from 'modules/SVG';
 import React from 'react';
 import styles from './CommonInput.module.scss';
 
@@ -14,9 +16,12 @@ function CommonInput({
   min,
   required,
   disabled,
+  isSearch,
+  searchedName,
   onChange,
   onKeyDown,
   onBlur,
+  onSearch,
 }: TypeCommonInput): React.JSX.Element {
   return (
     <div className={styles.wrap}>
@@ -26,6 +31,7 @@ function CommonInput({
       <div className={styles.input}>
         {tagType === 'input' ? (
           <>
+            {isSearch && searchedName && <span>{searchedName}</span>}
             <input
               name={name}
               type={type}
@@ -66,6 +72,11 @@ function CommonInput({
         ) : tagType === 'textarea' ? (
           <textarea name={name} value={value} onChange={onChange} />
         ) : null}
+        {isSearch && (
+          <div className={styles.search} onClick={onSearch}>
+            <SVG type="search" width="15px" height="15px" />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -84,6 +95,8 @@ interface TypeCommonInput {
   min?: number | string;
   required?: boolean;
   disabled?: boolean;
+  isSearch?: boolean;
+  searchedName?: string;
   onChange?: (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -92,6 +105,7 @@ interface TypeCommonInput {
   ) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement, Element>) => void;
+  onSearch?: () => void;
 }
 
 export default CommonInput;

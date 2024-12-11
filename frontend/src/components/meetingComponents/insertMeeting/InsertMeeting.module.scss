@@ -13,18 +13,25 @@
 
 .modalBody {
   display: flex;
-  align-items: center;
-  justify-content: space-around;
   flex-direction: column;
   position: absolute;
   top: 50%;
   left: 50%;
-  padding: 40px;
-  text-align: center;
+  padding: 20px;
   background-color: $more-light;
   border-radius: 10px;
   transform: translateX(-50%) translateY(-50%);
+  list-style: none;
   z-index: 300;
+
+  > li {
+    padding: 5px 0;
+    cursor: pointer;
+  }
+
+  > li:hover {
+    background-color: $less-light;
+  }
 
   > button {
     width: 40%;
