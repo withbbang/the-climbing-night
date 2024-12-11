@@ -1,0 +1,97 @@
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+.modalBody {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 40px;
+  text-align: center;
+  background-color: $more-light;
+  border-radius: 10px;
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 300;
+
+  > button {
+    width: 40%;
+    height: 30px;
+    background-color: $less-light;
+    border: none;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+}
+
+.wrap {
+  width: 100%;
+  padding: 50px 50px 0 50px;
+
+  .innerWrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+
+    .inputBox {
+      width: 100%;
+      border-top: solid 1px $less-dark;
+      border-bottom: none;
+      box-sizing: border-box;
+
+      .inputs {
+        width: 100%;
+        display: flex;
+        align-items: center;
+
+        .input {
+          width: 50%;
+          border-left: solid 1px $less-dark;
+          border-right: solid 1px $less-dark;
+          box-sizing: border-box;
+
+          &:nth-child(2) {
+            border-left: none;
+          }
+        }
+      }
+    }
+
+    .btnBox {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      margin-top: 20px;
+
+      > button {
+        width: 10%;
+        height: 30px;
+        background-color: $less-light;
+        border: none;
+        box-sizing: border-box;
+        cursor: pointer;
+      }
+    }
+
+    .listBox {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      margin-top: 20px;
+    }
+  }
+}

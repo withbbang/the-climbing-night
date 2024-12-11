@@ -81,7 +81,7 @@ function Header({
     }
 
     if (url === '/meeting') {
-      handleSetSelectedSidebar('');
+      handleSetSelectedSidebar('insert-meeting');
       useMeetingPageRedirect();
       return;
     }

@@ -8,7 +8,7 @@
 
     .inputBox {
       width: 100%;
-      border: solid 1px $less-dark;
+      border-top: solid 1px $less-dark;
       border-bottom: none;
       box-sizing: border-box;
 
@@ -19,9 +19,12 @@
 
         .input {
           width: 50%;
+          border-left: solid 1px $less-dark;
+          border-right: solid 1px $less-dark;
+          box-sizing: border-box;
 
-          &:first-child {
-            border-right: solid 1px $less-dark;
+          &:nth-child(2) {
+            border-left: none;
           }
         }
       }
