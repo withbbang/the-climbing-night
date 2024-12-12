@@ -84,82 +84,81 @@
     SELECT
         mee.id id
         , mee.name meetingName
-        , mem.name hostName
+        , mem1.name hostName
         , ca.name climbingAreaName
         , ca.address address
         , ca.price price
         , ca.winPrice winPrice
-        , ca.winwinYn winwinYn
+        , IF(ca.winwinYn = 'Y', 'O', 'X') winwinYn
         , mee.hostDt hostDt
-        , mee.time time
+        , LEFT(mee.time, 5) time
+        , IF(mee.criticalMeetingYn = 'Y', 'O', 'X') criticalMeetingYn
         , ms.status status
+        , IFNULL(mem2.name, '-') updater
     FROM
         meeting mee
-        JOIN member mem ON mee.memberFk = mem.id
+        JOIN admin a1 ON mee.adminFk = a1.id
+        JOIN member mem1 ON a1.memberFk = mem1.id
         JOIN meetingStatus ms ON mee.meetingStatusFk = ms.id
         JOIN climbingArea ca ON mee.climbingAreaFk = ca.id
+        LEFT JOIN admin a2 ON mee.updaterFk = a2.id
+        LEFT JOIN member mem2 ON a2.memberFk = mem2.id
     WHERE
         1 = 1
         <if test="meetingName != null and meetingName != ''">AND mee.name LIKE CONCAT('%', #{meetingName}, '%')</if>
-        <if test="hostName != null and hostName != ''">AND mem.name LIKE CONCAT('%', #{hostName}, '%')</if>
+        <if test="hostName != null and hostName != ''">AND mem1.name LIKE CONCAT('%', #{hostName}, '%')</if>
         <if test="climbingAreaName != null and climbingAreaName != ''">AND ca.name LIKE CONCAT('%', #{climbingAreaName}, '%')</if>
         <if test="winwinYn != null and winwinYn != ''">AND ca.winwinYn = #{winwinYn}</if>
-        <if test="startDt != null and startDt != ''">
+        <if test="criticalMeetingYn != null and criticalMeetingYn != ''">AND mee.criticalMeetingYn = #{criticalMeetingYn}</if>
+        <if test="meetingStatusFk != null and meetingStatusFk != ''">AND mee.meetingStatusFk = #{meetingStatusFk}</if>
+        <if test="startHostDt != null and startHostDt != ''">
           <![CDATA[
-            AND mee.hostDt >= #{startDt}
+            AND mee.hostDt >= #{startHostDt}
           ]]>
         </if>
-        <if test="endDt != null and endDt != ''">
+        <if test="endHostDt != null and endHostDt != ''">
           <![CDATA[
-            AND mee.hostDt <= #{endDt}
+            AND mee.hostDt <= #{endHostDt}
           ]]>
         </if>
   </select>
 
   <select id="getMeetingInfo" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo">
     SELECT
-        mee.id id
+        mee.id meetingId
         , mee.name meetingName
-        , mem1.name hostName
-        , ca.name climbingAreaName
-        , ca.address address
-        , ca.price price
-        , ca.winPrice winPrice
-        , ca.winwinYn winwinYn
-        , ca.closeYn closeYn
-        , ca.description description
+        , mem.name hostName
         , mee.hostDt hostDt
         , mee.time time
         , mee.criticalMeetingYn criticalMeetingYn
-        , ms.status status
-        , mem2.name participantName
-        , mem2.birthDt participantbirthDt
-        , l.level level
-        , l.color color
-        , d.degree degree
+        , mee.meetingStatusFk meetingStatusFk
+        , mee.id climbingAreaFk
+        , ca.name climbingAreaName
+        , a.id adminId
     FROM
-        (
-          SELECT
-            id
-            , name
-            , memberFk
-            , climbingAreaFk
-            , hostDt
-            , time
-            , criticalMeetingYn
-            , meetingStatusFk
-          FROM
-            meeting
-          WHERE
-            id = #{id}
-        ) mee
-        JOIN member mem1 ON mee.memberFk = mem1.id
-        JOIN meetingStatus ms ON mee.meetingStatusFk = ms.id
-        JOIN climbingArea ca ON mee.climbingAreaFk = ca.id
-        JOIN attend a ON mee.id = a.meetingFk
-        JOIN member mem2 ON mem2.id = a.memberFk
-        JOIN level l ON l.id = mem2.levelFk
-        JOIN degree d ON d.id = mem2.degreeFk
+        meeting mee
+        JOIN admin a ON mee.adminFK = a.id
+        JOIN member mem ON a.memberFK = mem.id
+        JOIN climbingArea ca ON mee.climbingAreaFK = ca.id
+    WHERE
+        1 = 1
+      <if test="id != null and id != ''">AND mee.id = #{id}</if>
+  </select>
+
+  <select id="getParticipants" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.meeting.vo.GetParticipantsVo">
+    SELECT
+        m.id
+        , CONCAT(d.degree, ' ', m.name, ' ', IFNULL(SUBSTRING(m.birthDt, 3, 2), '')) name
+        , l.level
+        , l.color
+    FROM
+        attend a
+        JOIN member m ON a.memberFK = m.id
+        JOIN degree d ON m.degreeFK = d.id
+        JOIN level l ON m.levelFK = l.id
+    WHERE
+        1 = 1
+        <if test="id != null and id != ''">AND a.meetingFK = #{id}</if>
   </select>
 
   <insert id="insertAttend" parameterType="com.admin.the_climbing_night.meeting.vo.InsertAttendVo">
@@ -216,7 +215,7 @@
         meeting
     <set>
         <if test="name != null and name != ''">name = #{name}</if>
-        <if test="memberFk != null and memberFk != ''">, memberFk = #{memberFk}</if>
+        <if test="adminFk != null and adminFk != ''">, adminFk = #{adminFk}</if>
         <if test="climbingAreaFk != null and climbingAreaFk != ''">, climbingAreaFk = #{climbingAreaFk}</if>
         <if test="hostDt != null and hostDt != ''">, hostDt = #{hostDt}</if>
         <if test="time != null and time != ''">, time = #{time}</if>

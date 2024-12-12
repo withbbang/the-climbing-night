@@ -15,6 +15,7 @@ import com.admin.the_climbing_night.meeting.vo.GetClimbingAreaForInsertMeeting;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingStatus;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
+import com.admin.the_climbing_night.meeting.vo.GetParticipantsVo;
 import com.admin.the_climbing_night.meeting.vo.InsertAttendVo;
 
 @Mapper
@@ -37,6 +38,8 @@ public interface MeetingMapper {
 
     @DatabaseCryptoAdviceAnnotation
     List<GetMeetingInfoVo> getMeetingInfo(String id);
+
+    List<GetParticipantsVo> getParticipants(String id);
 
     int insertAttend(InsertAttendVo vo);
 

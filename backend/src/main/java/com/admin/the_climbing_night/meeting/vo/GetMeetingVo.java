@@ -1,5 +1,7 @@
 package com.admin.the_climbing_night.meeting.vo;
 
+import com.admin.the_climbing_night.annotations.SectionEncryptFieldAnnotation;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,6 +14,7 @@ public class GetMeetingVo {
 
     private String meetingName;
 
+    @SectionEncryptFieldAnnotation
     private String hostName;
 
     private String climbingAreaName;
@@ -28,5 +31,10 @@ public class GetMeetingVo {
 
     private String time;
 
+    private String criticalMeetingYn;
+
     private String status;
+
+    @SectionEncryptFieldAnnotation
+    private String updater;
 }

@@ -17,7 +17,7 @@ public class UpdateMeetingRequest {
 
     private String name;
 
-    private String memberFk;
+    private String adminFk;
 
     private String climbingAreaFk;
 

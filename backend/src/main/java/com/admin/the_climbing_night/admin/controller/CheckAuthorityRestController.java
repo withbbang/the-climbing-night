@@ -5,6 +5,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -63,7 +66,7 @@ public class CheckAuthorityRestController {
         GetIsLoggedInVo adminVo = jwtTokenProvider
                 .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
 
-        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+        if (Integer.parseInt(adminVo.getGrade()) > 40) {
             log.info("권한이 없습니다.");
             return response;
         }
@@ -71,6 +74,34 @@ public class CheckAuthorityRestController {
         CheckAuthorityVo path = new CheckAuthorityVo();
 
         path.setPath("/meeting");
+
+        response.setData(path);
+
+        return response;
+    }
+
+    /**
+     * 벙 수정 상세 페이지로 리다이렉트
+     * 
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "meeting-detail-page-redirect")
+    public SingleResponse<CheckAuthorityVo> meetingDetailPageRedirect(@RequestBody Map<String, String> req,
+            HttpServletRequest request) {
+        SingleResponse<CheckAuthorityVo> response = new SingleResponse<CheckAuthorityVo>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 40) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
+
+        CheckAuthorityVo path = new CheckAuthorityVo();
+
+        path.setPath("/meeting/" + req.get("id"));
 
         response.setData(path);
 

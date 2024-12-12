@@ -3,6 +3,7 @@ import Index from 'screens/index';
 import FindMember from 'screens/findMember';
 import Admin from 'screens/admin';
 import Meeting from 'screens/meeting';
+import MeetingDetail from 'screens/meetingDetail';
 import Login from 'screens/login';
 import Join from 'screens/join';
 import NotFound from 'screens/notFound';
@@ -16,6 +17,7 @@ function App(): React.JSX.Element {
         <Route path="/find-member" element={<FindMember />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/meeting" element={<Meeting />} />
+        <Route path="/meeting/:id" element={<MeetingDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
         <Route path="*" element={<NotFound />} />

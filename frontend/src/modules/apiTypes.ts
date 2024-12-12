@@ -40,3 +40,32 @@ export interface GetAdminsType {
   phoneNo: string;
   grade: string;
 }
+
+/**
+ * 벙 조회 api 타입
+ */
+export interface GetMeetingType {
+  id: string;
+  meetingName: string;
+  hostName: string;
+  climbingAreaName: string;
+  address: string;
+  winwinYn: string;
+  price: string;
+  winPrice: string;
+  hostDt: string;
+  time: string;
+  criticalMeetingYn: string;
+  status: string;
+  updater: string;
+}
+
+/**
+ * 참가자 조회 api 타입
+ */
+export interface GetParticipantType {
+  id: string;
+  name: string;
+  level: string;
+  color: string;
+}

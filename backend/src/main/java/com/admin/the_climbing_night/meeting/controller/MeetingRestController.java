@@ -26,6 +26,7 @@ import com.admin.the_climbing_night.meeting.vo.GetClimbingAreaForInsertMeeting;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingStatus;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
+import com.admin.the_climbing_night.meeting.vo.GetParticipantsVo;
 import com.admin.the_climbing_night.meeting.vo.InsertAttendVo;
 import com.admin.the_climbing_night.utils.CommonUtil;
 
@@ -201,7 +202,7 @@ public class MeetingRestController {
      */
     @PostMapping(value = "get-meetings")
     public SingleResponse<List<GetMeetingVo>> getMeetings(@RequestBody GetMeetingsRequest req) {
-        SingleResponse response = new SingleResponse();
+        SingleResponse<List<GetMeetingVo>> response = new SingleResponse<List<GetMeetingVo>>();
 
         List<GetMeetingVo> getMeetings = null;
 
@@ -227,7 +228,7 @@ public class MeetingRestController {
      */
     @GetMapping(value = "get-meeting-info/{id}")
     public SingleResponse<GetMeetingInfoVo> getMeetingInfo(@PathVariable String id) {
-        SingleResponse response = new SingleResponse();
+        SingleResponse<GetMeetingInfoVo> response = new SingleResponse<GetMeetingInfoVo>();
 
         List<GetMeetingInfoVo> getMeetingInfo = null;
 
@@ -247,7 +248,33 @@ public class MeetingRestController {
             return response;
         }
 
-        response.setData(getMeetingInfo);
+        response.setData(getMeetingInfo.get(0));
+
+        return response;
+    }
+
+    /**
+     * 참가자 리스트 가져오기
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "get-participants/{id}")
+    public SingleResponse<List<GetParticipantsVo>> getParticipants(@PathVariable String id) {
+        SingleResponse<List<GetParticipantsVo>> response = new SingleResponse<List<GetParticipantsVo>>();
+
+        List<GetParticipantsVo> getParticipants = null;
+
+        try {
+            getParticipants = meetingService.getParticipants(id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        response.setData(getParticipants);
 
         return response;
     }

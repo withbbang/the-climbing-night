@@ -16,6 +16,7 @@ import com.admin.the_climbing_night.meeting.vo.GetClimbingAreaForInsertMeeting;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingStatus;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
+import com.admin.the_climbing_night.meeting.vo.GetParticipantsVo;
 import com.admin.the_climbing_night.meeting.vo.InsertAttendVo;
 
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,10 @@ public class MeetingService {
 
     public List<GetMeetingInfoVo> getMeetingInfo(String id) {
         return meetingMapper.getMeetingInfo(id);
+    }
+
+    public List<GetParticipantsVo> getParticipants(String id) {
+        return meetingMapper.getParticipants(id);
     }
 
     public List<GetAttendVo> getAttends(String meetingFk) {

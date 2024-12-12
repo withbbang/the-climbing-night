@@ -85,6 +85,8 @@ export function handleThrowCustomErrorInAPI({
  * @returns
  */
 export const encrypt = (plainText: string) => {
+  if (!plainText) return '';
+
   try {
     const keyUtf8 = CryptoJS.enc.Utf8.parse(KEY);
     const cipherText = CryptoJS.AES.encrypt(

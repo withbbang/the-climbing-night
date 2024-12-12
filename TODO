@@ -1,0 +1,9 @@
+[ TODO ]
+
+- 각 API마다 권한 체크
+- 인가 필요한 페이지에서 API로 체크
+- JWT Filter 리팩터링
+
+[ FIX ]
+
+- 엔터로 연속 조회시 이전 access token로 조회

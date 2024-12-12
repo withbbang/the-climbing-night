@@ -8,6 +8,7 @@ function MeetingCT({ selectedSidebar }: MeetingCTProps): React.JSX.Element {
     { title: '벙 추가', nick: 'insert-meeting' },
     { title: '벙 수정', nick: 'update-meeting' },
   ];
+
   return (
     <MeetingPT
       selectedSidebar={selectedSidebar}
