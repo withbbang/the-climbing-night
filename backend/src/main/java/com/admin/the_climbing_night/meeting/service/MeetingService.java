@@ -6,16 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.admin.the_climbing_night.meeting.domain.req.GetAdminsForInsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.GetMeetingsRequest;
+import com.admin.the_climbing_night.meeting.domain.req.GetMembersForUpdateMettingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.UpdateMeetingRequest;
 import com.admin.the_climbing_night.meeting.mapper.MeetingMapper;
-import com.admin.the_climbing_night.meeting.vo.GetAdminsForInsertMeeting;
+import com.admin.the_climbing_night.meeting.vo.GetAdminForInsertMeeting;
 import com.admin.the_climbing_night.meeting.vo.GetAttendVo;
 import com.admin.the_climbing_night.meeting.vo.GetClimbingAreaForInsertMeeting;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingStatus;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
+import com.admin.the_climbing_night.meeting.vo.GetMemberForUpdateMeetingVo;
 import com.admin.the_climbing_night.meeting.vo.GetParticipantsVo;
 import com.admin.the_climbing_night.meeting.vo.InsertAttendVo;
 
@@ -31,8 +34,8 @@ public class MeetingService {
         return meetingMapper.getMeetingStatuses();
     }
 
-    public List<GetAdminsForInsertMeeting> getAdminsForInsertMeeting(String name) {
-        return meetingMapper.getAdminsForInsertMeeting(name);
+    public List<GetAdminForInsertMeeting> getAdminsForInsertMeeting(GetAdminsForInsertMeetingRequest req) {
+        return meetingMapper.getAdminsForInsertMeeting(req);
     }
 
     public List<GetClimbingAreaForInsertMeeting> getClimbingAreasForInsertMeeting(String name) {
@@ -57,12 +60,16 @@ public class MeetingService {
         return meetingMapper.getMeetings(req);
     }
 
-    public List<GetMeetingInfoVo> getMeetingInfo(String id) {
+    public GetMeetingInfoVo getMeetingInfo(String id) {
         return meetingMapper.getMeetingInfo(id);
     }
 
     public List<GetParticipantsVo> getParticipants(String id) {
         return meetingMapper.getParticipants(id);
+    }
+
+    public List<GetMemberForUpdateMeetingVo> getMembers(GetMembersForUpdateMettingRequest req) {
+        return meetingMapper.getMembers(req);
     }
 
     public List<GetAttendVo> getAttends(String meetingFk) {
@@ -72,8 +79,11 @@ public class MeetingService {
     @Transactional
     public int updateMeeting(List<String> deleteAttends, List<InsertAttendVo> insertAttendsVo,
             UpdateMeetingRequest req) {
-        meetingMapper.deleteAttends(deleteAttends);
-        meetingMapper.insertAttends(insertAttendsVo);
+        if (deleteAttends.size() > 0)
+            meetingMapper.deleteAttends(deleteAttends);
+        if (insertAttendsVo.size() > 0)
+            meetingMapper.insertAttends(insertAttendsVo);
+
         return meetingMapper.updateMeeting(req);
     }
 }

@@ -273,7 +273,7 @@ function Authority({}: TypeAuthority) {
             <div className={styles.listBox}>
               <GridTable
                 columns={columns}
-                lists={admins.map((admin) => ({
+                list={admins.map((admin) => ({
                   ...admin,
                   이름: admin.name,
                   기수: admin.degree,

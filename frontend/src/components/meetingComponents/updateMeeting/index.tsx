@@ -233,7 +233,7 @@ function UpdateMeeting({}: TypeUpdateMeeting) {
           <div className={styles.listBox}>
             <GridTable
               columns={columns}
-              lists={meetings.map(
+              list={meetings.map(
                 ({
                   id,
                   meetingName,

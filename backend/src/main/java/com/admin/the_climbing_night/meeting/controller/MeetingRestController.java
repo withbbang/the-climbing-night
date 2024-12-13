@@ -13,29 +13,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo;
 import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
+import com.admin.the_climbing_night.jwt.JwtTokenProvider;
+import com.admin.the_climbing_night.meeting.domain.req.GetAdminsForInsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.GetMeetingsRequest;
+import com.admin.the_climbing_night.meeting.domain.req.GetMembersForUpdateMettingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.UpdateMeetingRequest;
 import com.admin.the_climbing_night.meeting.service.MeetingService;
-import com.admin.the_climbing_night.meeting.vo.GetAdminsForInsertMeeting;
+import com.admin.the_climbing_night.meeting.vo.GetAdminForInsertMeeting;
 import com.admin.the_climbing_night.meeting.vo.GetAttendVo;
 import com.admin.the_climbing_night.meeting.vo.GetClimbingAreaForInsertMeeting;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingStatus;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
+import com.admin.the_climbing_night.meeting.vo.GetMemberForUpdateMeetingVo;
 import com.admin.the_climbing_night.meeting.vo.GetParticipantsVo;
 import com.admin.the_climbing_night.meeting.vo.InsertAttendVo;
 import com.admin.the_climbing_night.utils.CommonUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("/api")
 public class MeetingRestController {
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     @Autowired
     private MeetingService meetingService;
 
@@ -78,14 +87,14 @@ public class MeetingRestController {
      * @return
      */
     @PostMapping(value = "get-admins-for-meeting")
-    public SingleResponse<List<GetAdminsForInsertMeeting>> getAdminsForInsertMeeting(
-            @RequestBody Map<String, String> req) {
-        SingleResponse<List<GetAdminsForInsertMeeting>> response = new SingleResponse<List<GetAdminsForInsertMeeting>>();
+    public SingleResponse<List<GetAdminForInsertMeeting>> getAdminsForInsertMeeting(
+            @RequestBody GetAdminsForInsertMeetingRequest req) {
+        SingleResponse<List<GetAdminForInsertMeeting>> response = new SingleResponse<List<GetAdminForInsertMeeting>>();
 
-        List<GetAdminsForInsertMeeting> getAdminsForInsertMeeting = null;
+        List<GetAdminForInsertMeeting> getAdminsForInsertMeeting = null;
 
         try {
-            getAdminsForInsertMeeting = meetingService.getAdminsForInsertMeeting(req.get("name"));
+            getAdminsForInsertMeeting = meetingService.getAdminsForInsertMeeting(req);
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));
@@ -230,7 +239,7 @@ public class MeetingRestController {
     public SingleResponse<GetMeetingInfoVo> getMeetingInfo(@PathVariable String id) {
         SingleResponse<GetMeetingInfoVo> response = new SingleResponse<GetMeetingInfoVo>();
 
-        List<GetMeetingInfoVo> getMeetingInfo = null;
+        GetMeetingInfoVo getMeetingInfo = null;
 
         try {
             getMeetingInfo = meetingService.getMeetingInfo(id);
@@ -248,7 +257,7 @@ public class MeetingRestController {
             return response;
         }
 
-        response.setData(getMeetingInfo.get(0));
+        response.setData(getMeetingInfo);
 
         return response;
     }
@@ -280,13 +289,40 @@ public class MeetingRestController {
     }
 
     /**
+     * 참가자 찾기 리스트 조회
+     * 
+     * @param req
+     * @return
+     */
+    @PostMapping(value = "get-members-for-update-meeting")
+    public SingleResponse<List<GetMemberForUpdateMeetingVo>> getMembersForUpdateMeeting(
+            @RequestBody GetMembersForUpdateMettingRequest req) {
+        SingleResponse<List<GetMemberForUpdateMeetingVo>> response = new SingleResponse<List<GetMemberForUpdateMeetingVo>>();
+
+        List<GetMemberForUpdateMeetingVo> getMembersForUpdateMeeting = null;
+
+        try {
+            getMembersForUpdateMeeting = meetingService.getMembers(req);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        response.setData(getMembersForUpdateMeeting);
+
+        return response;
+    }
+
+    /**
      * 벙 수정
      * 
      * @param req
      * @return
      */
     @PostMapping(value = "update-meeting")
-    public SingleResponse updateMeeting(@RequestBody UpdateMeetingRequest req) {
+    public SingleResponse updateMeeting(@RequestBody UpdateMeetingRequest req, HttpServletRequest request) {
         SingleResponse response = new SingleResponse();
 
         List<GetAttendVo> getAttends = null;
@@ -336,6 +372,12 @@ public class MeetingRestController {
         }
 
         int updateMeeting = 0;
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        req.setUpdateDt(CommonUtil.getCurrentTimestamp("yyyy-MM-dd HH:mm:ss"));
+        req.setUpdaterId(adminVo.getMemberId());
 
         try {
             updateMeeting = meetingService.updateMeeting(deleteAttends, insertAttendsVo, req);

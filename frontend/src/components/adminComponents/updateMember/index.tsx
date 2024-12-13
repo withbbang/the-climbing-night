@@ -732,7 +732,7 @@ function UpdateMember({}: TypeUpdateMember) {
             <div className={styles.listBox}>
               <GridTable
                 columns={columns}
-                lists={members.map((member) => ({
+                list={members.map((member) => ({
                   ...member,
                   이름: member.name,
                   기수: member.degree,

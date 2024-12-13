@@ -341,7 +341,7 @@ function UpdateClimbingArea({}: TypeUpdateClimbingArea) {
             <div className={styles.listBox}>
               <GridTable
                 columns={columns}
-                lists={climbingAreas.map(
+                list={climbingAreas.map(
                   ({
                     id,
                     name,

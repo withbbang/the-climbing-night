@@ -263,7 +263,7 @@ function InsertMeeting({ handleSetSelectedSidebar }: TypeInsertMeeting) {
                   searchedName={`${form.searchedAdminName}`}
                   onChange={useChange}
                   onKeyDown={useFindAdmin}
-                  onSearch={useInsertMeeting}
+                  onSearch={() => usePostAdmins({ name: form.adminName })}
                 />
               </div>
             </div>
@@ -280,7 +280,9 @@ function InsertMeeting({ handleSetSelectedSidebar }: TypeInsertMeeting) {
                   searchedName={`${form.searchedClimbingAreaName}`}
                   onChange={useChange}
                   onKeyDown={useFindClimbingArea}
-                  onSearch={useInsertMeeting}
+                  onSearch={() =>
+                    usePostClimbingAreas({ name: form.climbingAreaName })
+                  }
                 />
               </div>
               <div className={styles.input}>

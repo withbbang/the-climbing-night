@@ -6,15 +6,18 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.admin.the_climbing_night.annotations.DatabaseCryptoAdviceAnnotation;
+import com.admin.the_climbing_night.meeting.domain.req.GetAdminsForInsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.GetMeetingsRequest;
+import com.admin.the_climbing_night.meeting.domain.req.GetMembersForUpdateMettingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.InsertMeetingRequest;
 import com.admin.the_climbing_night.meeting.domain.req.UpdateMeetingRequest;
-import com.admin.the_climbing_night.meeting.vo.GetAdminsForInsertMeeting;
+import com.admin.the_climbing_night.meeting.vo.GetAdminForInsertMeeting;
 import com.admin.the_climbing_night.meeting.vo.GetAttendVo;
 import com.admin.the_climbing_night.meeting.vo.GetClimbingAreaForInsertMeeting;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingInfoVo;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingStatus;
 import com.admin.the_climbing_night.meeting.vo.GetMeetingVo;
+import com.admin.the_climbing_night.meeting.vo.GetMemberForUpdateMeetingVo;
 import com.admin.the_climbing_night.meeting.vo.GetParticipantsVo;
 import com.admin.the_climbing_night.meeting.vo.InsertAttendVo;
 
@@ -23,7 +26,7 @@ import com.admin.the_climbing_night.meeting.vo.InsertAttendVo;
 public interface MeetingMapper {
     List<GetMeetingStatus> getMeetingStatuses();
 
-    List<GetAdminsForInsertMeeting> getAdminsForInsertMeeting(String name);
+    List<GetAdminForInsertMeeting> getAdminsForInsertMeeting(GetAdminsForInsertMeetingRequest req);
 
     List<GetClimbingAreaForInsertMeeting> getClimbingAreasForInsertMeeting(String name);
 
@@ -37,9 +40,11 @@ public interface MeetingMapper {
     List<GetMeetingVo> getMeetings(GetMeetingsRequest req);
 
     @DatabaseCryptoAdviceAnnotation
-    List<GetMeetingInfoVo> getMeetingInfo(String id);
+    GetMeetingInfoVo getMeetingInfo(String id);
 
     List<GetParticipantsVo> getParticipants(String id);
+
+    List<GetMemberForUpdateMeetingVo> getMembers(GetMembersForUpdateMettingRequest req);
 
     int insertAttend(InsertAttendVo vo);
 

@@ -12,14 +12,18 @@
       id DESC
   </select>
 
-  <select id="getAdminsForInsertMeeting" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.meeting.vo.GetAdminsForInsertMeeting">
+  <select id="getAdminsForInsertMeeting" parameterType="com.admin.the_climbing_night.meeting.domain.req.GetAdminsForInsertMeetingRequest" resultType="com.admin.the_climbing_night.meeting.vo.GetAdminForInsertMeeting">
     SELECT
       a.id
       , a.memberFk
-      , CONCAT(m.name, IFNULL(SUBSTRING(m.birthDt, 3, 2), '')) name
+      , CONCAT(d.degree, ' ', m.name, ' ', IFNULL(SUBSTRING(m.birthDt, 3, 2), '')) name
+      , l.level
+      , l.color
     FROM
       admin a
-      JOIN member m ON a.memberFk = m.id
+      JOIN member m ON a.memberFK = m.id
+      JOIN degree d ON m.degreeFK = d.id
+      JOIN level l ON m.levelFK = l.id
     WHERE
       1 = 1
       <if test="name != null and name != ''">AND m.name LIKE CONCAT('%', #{name}, '%')</if>
@@ -127,18 +131,19 @@
     SELECT
         mee.id meetingId
         , mee.name meetingName
-        , mem.name hostName
+        , CONCAT(d.degree, ' ', mem.name, ' ', IFNULL(SUBSTRING(mem.birthDt, 3, 2), '')) hostName
         , mee.hostDt hostDt
         , mee.time time
         , mee.criticalMeetingYn criticalMeetingYn
         , mee.meetingStatusFk meetingStatusFk
-        , mee.id climbingAreaFk
+        , ca.id climbingAreaFk
         , ca.name climbingAreaName
         , a.id adminId
     FROM
         meeting mee
         JOIN admin a ON mee.adminFK = a.id
         JOIN member mem ON a.memberFK = mem.id
+        JOIN degree d ON mem.degreeFK = d.id
         JOIN climbingArea ca ON mee.climbingAreaFK = ca.id
     WHERE
         1 = 1
@@ -159,6 +164,22 @@
     WHERE
         1 = 1
         <if test="id != null and id != ''">AND a.meetingFK = #{id}</if>
+  </select>
+
+  <select id="getMembers" parameterType="com.admin.the_climbing_night.meeting.domain.req.GetMembersForUpdateMettingRequest" resultType="com.admin.the_climbing_night.meeting.vo.GetMemberForUpdateMeetingVo">
+    SELECT
+        m.id
+        , CONCAT(d.degree, ' ', m.name, ' ', IFNULL(SUBSTRING(m.birthDt, 3, 2), '')) name
+        , l.level
+        , l.color
+    FROM
+        member m
+        JOIN degree d ON m.degreeFK = d.id
+        JOIN level l ON m.levelFK = l.id
+    WHERE
+        1 = 1
+        <if test="name != null and name != ''">AND m.name LIKE CONCAT('%', #{name}, '%')</if>
+        <if test="degreeFk != null and degreeFk != ''">AND m.degreeFK = #{degreeFk}</if>
   </select>
 
   <insert id="insertAttend" parameterType="com.admin.the_climbing_night.meeting.vo.InsertAttendVo">
@@ -222,6 +243,7 @@
         <if test="updateDt != null and updateDt != ''">, updateDt = #{updateDt}</if>
         <if test="criticalMeetingYn != null and criticalMeetingYn != ''">, criticalMeetingYn = #{criticalMeetingYn}</if>
         <if test="meetingStatusFk != null and meetingStatusFk != ''">, meetingStatusFk = #{meetingStatusFk}</if>
+        <if test="updaterId != null and updaterId != ''">, updaterFk = (SELECT id FROM admin WHERE memberId = #{updaterId})</if>
     </set>
     WHERE
         1 = 1

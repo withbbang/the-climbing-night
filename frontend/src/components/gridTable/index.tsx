@@ -7,7 +7,7 @@ import styles from './GridTable.module.scss';
 
 function GridTable({
   columns,
-  lists,
+  list,
   activeDefaultColDef,
   disableCheckbox,
   paginationPageSize,
@@ -29,7 +29,7 @@ function GridTable({
       >
         <AgGridReact
           columnDefs={columns}
-          rowData={lists}
+          rowData={list}
           defaultColDef={activeDefaultColDef ? { flex: 1 } : undefined}
           rowSelection={disableCheckbox && rowSelection}
           pagination
@@ -48,7 +48,7 @@ function GridTable({
 
 interface TypeGridTable {
   columns: any[];
-  lists: any[];
+  list: any[];
   activeDefaultColDef?: boolean;
   disableCheckbox?: boolean;
   paginationPageSize?: number;

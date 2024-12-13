@@ -31,5 +31,7 @@ public class UpdateMeetingRequest {
 
     private String meetingStatusFk;
 
+    private String updaterId;
+
     private List<String> memberFks;
 }

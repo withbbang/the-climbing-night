@@ -227,7 +227,7 @@ function Degree({}: TypeDegree) {
             <div className={styles.listBox}>
               <GridTable
                 columns={columns}
-                lists={degrees.map(({ id, degree, description }) => ({
+                list={degrees.map(({ id, degree, description }) => ({
                   id,
                   기수: degree,
                   설명: description,

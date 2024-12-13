@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
 import { Action } from '@reduxjs/toolkit';
+import { useSetSelectedSidebarToken } from 'middlewares/reduxToolkits/sidebar';
 import MeetingDetailCT from './MeetingDetailCT';
 
 function mapStateToProps(state: PropState) {
@@ -8,7 +9,10 @@ function mapStateToProps(state: PropState) {
 }
 
 function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
-  return {};
+  return {
+    handleSetSelectedSidebar: (selectedSidebar: string): void =>
+      dispatch(useSetSelectedSidebarToken({ selectedSidebar })),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MeetingDetailCT);

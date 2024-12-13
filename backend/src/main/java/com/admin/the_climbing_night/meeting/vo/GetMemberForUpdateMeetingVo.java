@@ -9,11 +9,13 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class GetAdminsForInsertMeeting {
+public class GetMemberForUpdateMeetingVo {
     private String id;
-
-    private String memberFk;
 
     @SectionEncryptFieldAnnotation
     private String name;
+
+    private String level;
+
+    private String color;
 }
