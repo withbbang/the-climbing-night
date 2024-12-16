@@ -15,4 +15,61 @@
         1 = 1
         AND name LIKE CONCAT('%', #{name}, '%');
   </select>
+
+  <select id="getDegrees" resultType="com.admin.the_climbing_night.member.vo.GetDegreeForMemberVo">
+    SELECT
+      id
+      , degree
+    FROM
+      degree
+    ORDER BY
+      CAST(id AS UNSIGNED) DESC;
+  </select>
+
+  <select id="getMembers" parameterType="com.admin.the_climbing_night.member.domain.req.GetMembersForMemberRequest" resultType="com.admin.the_climbing_night.member.vo.GetMemberForMemberVo">
+    SELECT
+      m.id,
+      m.name,
+      CASE
+          WHEN ad.grade = 60 THEN '회원'
+          WHEN ad.grade = 50 THEN '회원'
+          WHEN ad.grade = 40 THEN '매니저'
+          WHEN ad.grade = 30 THEN '운영진'
+          WHEN ad.grade = 20 THEN '부회장'
+          WHEN ad.grade = 10 THEN '회장'
+          ELSE '회원'
+      END AS grade,
+      d.degree,
+      l.level,
+      l.color,
+      COUNT(m.id) AS count_last_1_year,
+      COUNT(
+          CASE
+              WHEN me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH) THEN 1 
+          END
+      ) AS count_last_3_months
+      , IFNULL(ad.grade, 70) unsignedGrade
+    FROM
+      member m
+      LEFT JOIN admin ad ON m.id = ad.memberFK
+      JOIN level l ON m.levelFK = l.id
+      JOIN degree d ON m.degreeFK = d.id
+      LEFT JOIN attend at ON m.id = at.memberFK
+      LEFT JOIN meeting me ON at.meetingFK = me.id AND me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 2 YEAR)
+    WHERE
+      me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 2 YEAR)
+      AND m.id != 'TCN0'
+      <if test="name != null and name != ''">AND m.name LIKE CONCAT('%', #{name}, '%')</if>
+      <if test="degreeFk != null and degreeFk != ''">AND m.degreeFK = #{degreeFk}</if>
+    GROUP BY
+      m.id,
+      m.name,
+      ad.grade,
+      d.degree,
+      l.level,
+      l.color
+    ORDER BY
+      unsignedGrade ASC,
+		  d.id ASC;
+  </select>
 </mapper>

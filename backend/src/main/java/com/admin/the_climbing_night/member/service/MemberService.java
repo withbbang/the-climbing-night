@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.admin.the_climbing_night.member.domain.req.GetMemberInfoByJoinRequest;
+import com.admin.the_climbing_night.member.domain.req.GetMembersForMemberRequest;
 import com.admin.the_climbing_night.member.mapper.MemberMapper;
+import com.admin.the_climbing_night.member.vo.GetDegreeForMemberVo;
+import com.admin.the_climbing_night.member.vo.GetMemberForMemberVo;
 import com.admin.the_climbing_night.member.vo.GetMemberInfoByJoinVo;
 
 import lombok.RequiredArgsConstructor;
@@ -19,5 +22,13 @@ public class MemberService {
 
     public List<GetMemberInfoByJoinVo> getMemberInfoByJoin(GetMemberInfoByJoinRequest req) {
         return memberMapper.getMemberInfoByJoin(req);
+    }
+
+    public List<GetDegreeForMemberVo> getDegrees() {
+        return memberMapper.getDegrees();
+    }
+
+    public List<GetMemberForMemberVo> getMembers(GetMembersForMemberRequest req) {
+        return memberMapper.getMembers(req);
     }
 }

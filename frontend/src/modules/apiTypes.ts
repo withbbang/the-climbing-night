@@ -69,3 +69,17 @@ export interface GetParticipantType {
   level: string;
   color: string;
 }
+
+/**
+ * 회원 조회 api 타입
+ */
+export interface GetMemberType {
+  id: string;
+  name: string;
+  grade: string;
+  degree: string;
+  level: string;
+  color: string;
+  count_last_1_year: string;
+  count_last_3_months: string;
+}

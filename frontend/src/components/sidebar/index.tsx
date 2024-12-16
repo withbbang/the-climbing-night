@@ -37,11 +37,11 @@ function Sidebar({
       }
 
       if (location.pathname === '/meeting') {
-        handleSetSelectedSidebar('test1');
+        handleSetSelectedSidebar('insert-meeting');
         return;
       }
 
-      if (location.pathname === '/find-member') {
+      if (location.pathname === '/member') {
         handleSetSelectedSidebar('test1');
         return;
       }

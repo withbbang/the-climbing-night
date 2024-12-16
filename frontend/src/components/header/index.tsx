@@ -99,13 +99,13 @@ function Header({
         <div className={styles.menus}>
           <div
             className={
-              location.pathname === '/find-member'
+              location.pathname === '/member'
                 ? [styles.menu, styles.selectedMenu].join(' ')
                 : styles.menu
             }
-            onClick={() => handleMovePage('/find-member')}
+            onClick={() => handleMovePage('/member')}
           >
-            회원 검색
+            회원 조회
           </div>
           <div
             className={
