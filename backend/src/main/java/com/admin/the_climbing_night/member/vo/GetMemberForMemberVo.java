@@ -23,6 +23,8 @@ public class GetMemberForMemberVo {
 
     private String color;
 
+    private String count_this_year;
+
     private String count_last_1_year;
 
     private String count_last_3_months;

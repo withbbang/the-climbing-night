@@ -80,6 +80,7 @@ export interface GetMemberType {
   degree: string;
   level: string;
   color: string;
+  count_this_year: string;
   count_last_1_year: string;
   count_last_3_months: string;
 }

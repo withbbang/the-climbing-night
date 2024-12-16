@@ -14,4 +14,8 @@ public class GetMembersForMemberRequest {
     private String name;
 
     private String degreeFk;
+
+    private String startJoinDt;
+
+    private String endJoinDt;
 }

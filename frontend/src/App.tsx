@@ -1,6 +1,7 @@
 import React from 'react';
 import Index from 'screens/index';
-import FindMember from 'screens/member';
+import Member from 'screens/member';
+import MemberDetail from 'screens/memberDetail';
 import Admin from 'screens/admin';
 import Meeting from 'screens/meeting';
 import MeetingDetail from 'screens/meetingDetail';
@@ -14,7 +15,8 @@ function App(): React.JSX.Element {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Index />} />
-        <Route path="/member" element={<FindMember />} />
+        <Route path="/member" element={<Member />} />
+        <Route path="/member/:id" element={<MemberDetail />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/meeting" element={<Meeting />} />
         <Route path="/meeting/:id" element={<MeetingDetail />} />

@@ -28,9 +28,9 @@
 
   <select id="getMembers" parameterType="com.admin.the_climbing_night.member.domain.req.GetMembersForMemberRequest" resultType="com.admin.the_climbing_night.member.vo.GetMemberForMemberVo">
     SELECT
-      m.id,
-      m.name,
-      CASE
+      m.id
+      , CONCAT(m.name, ' ', IFNULL(SUBSTRING(m.birthDt, 3, 2), '')) name
+      , CASE
           WHEN ad.grade = 60 THEN '회원'
           WHEN ad.grade = 50 THEN '회원'
           WHEN ad.grade = 40 THEN '매니저'
@@ -38,29 +38,48 @@
           WHEN ad.grade = 20 THEN '부회장'
           WHEN ad.grade = 10 THEN '회장'
           ELSE '회원'
-      END AS grade,
-      d.degree,
-      l.level,
-      l.color,
-      COUNT(m.id) AS count_last_1_year,
-      COUNT(
+        END AS grade
+      , d.degree
+      , l.level
+      , l.color
+      , COUNT(
           CASE
-              WHEN me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH) THEN 1 
+            WHEN YEAR(me.hostDt) = YEAR(CURDATE()) AND ms.id = '10' THEN 1
           END
-      ) AS count_last_3_months
+      ) count_this_year
+      , COUNT(
+          CASE
+            WHEN me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR) AND ms.id = '10' THEN 1
+          END
+      ) count_last_1_year
+      , COUNT(
+          CASE
+            WHEN me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH) AND ms.id = '10' THEN 1
+          END
+      ) count_last_3_months
       , IFNULL(ad.grade, 70) unsignedGrade
     FROM
       member m
-      LEFT JOIN admin ad ON m.id = ad.memberFK
       JOIN level l ON m.levelFK = l.id
       JOIN degree d ON m.degreeFK = d.id
+      LEFT JOIN admin ad ON m.id = ad.memberFK
       LEFT JOIN attend at ON m.id = at.memberFK
       LEFT JOIN meeting me ON at.meetingFK = me.id AND me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 2 YEAR)
+      LEFT JOIN meetingStatus ms ON me.meetingStatusFK = ms.id
     WHERE
-      me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 2 YEAR)
-      AND m.id != 'TCN0'
+      m.id != 'TCN0'
       <if test="name != null and name != ''">AND m.name LIKE CONCAT('%', #{name}, '%')</if>
       <if test="degreeFk != null and degreeFk != ''">AND m.degreeFK = #{degreeFk}</if>
+      <if test="startJoinDt != null and startJoinDt != ''">
+        <![CDATA[
+          AND m.joinDt >= #{startJoinDt}
+        ]]>
+      </if>
+      <if test="endJoinDt != null and endJoinDt != ''">
+        <![CDATA[
+          AND m.joinDt <= #{endJoinDt}
+        ]]>
+      </if>
     GROUP BY
       m.id,
       m.name,
@@ -69,7 +88,20 @@
       l.level,
       l.color
     ORDER BY
-      unsignedGrade ASC,
-		  d.id ASC;
+      unsignedGrade, d.id;
+  </select>
+
+  <select id="getDegrees" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.member.vo.GetDegreeForMemberVo">
+    SELECT
+      m.name
+    FROM
+      member m
+      JOIN level l ON m.levelFK = l.id
+      JOIN degree d ON m.degreeFK = d.id
+      LEFT JOIN admin a ON m.id = a.memberFK
+      LEFT JOIN attend at ON m.id = at.memberFK
+      LEFT JOIN meeting me ON at.meetingFK = me.id
+    WHERE
+      m.id = #{id}
   </select>
 </mapper>

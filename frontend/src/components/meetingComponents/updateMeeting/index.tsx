@@ -33,7 +33,7 @@ function UpdateMeeting({}: TypeUpdateMeeting) {
     { id: 'meetingStatusFk', value: '', label: '전체' },
   ]);
   const [meetings, setMeetings] = useState<GetMeetingType[]>([]);
-  const { form, setForm, useChange } = useChangeHook({
+  const { form, useChange } = useChangeHook({
     meetingName: '',
     hostName: '',
     climbingAreaName: '',

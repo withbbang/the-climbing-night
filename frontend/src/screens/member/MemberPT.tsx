@@ -15,6 +15,9 @@ function MemberPT({
   columns,
   members,
   onChange,
+  onClickRow,
+  onKeyDown,
+  onSearch,
 }: MemberPTProps): React.JSX.Element {
   return (
     <div className={styles.wrap}>
@@ -32,6 +35,7 @@ function MemberPT({
                   type="text"
                   value={`${form.name}`}
                   onChange={onChange}
+                  onKeyDown={onKeyDown}
                 />
               </div>
               <div className={styles.input}>
@@ -40,14 +44,32 @@ function MemberPT({
                   tagType="select"
                   name="degreeFk"
                   value={`${form.degreeFk}`}
-                  options={degrees}
+                  options={degrees.map(({ id, degree }: GetDegreesType) => ({
+                    id,
+                    value: id,
+                    label: degree,
+                  }))}
+                  onChange={onChange}
+                />
+              </div>
+            </div>
+            <div className={styles.inputs}>
+              <div className={styles.input}>
+                <CommonInput
+                  title="가입 날짜"
+                  tagType="input"
+                  name="startJoinDt"
+                  subName="endJoinDt"
+                  type="date"
+                  value={`${form.startJoinDt}`}
+                  subValue={`${form.endJoinDt}`}
                   onChange={onChange}
                 />
               </div>
             </div>
           </div>
           <div className={styles.btnBox}>
-            <button onClick={() => {}}>찾기</button>
+            <button onClick={onSearch}>찾기</button>
           </div>
           <div className={styles.listBox}>
             <GridTable
@@ -58,10 +80,12 @@ function MemberPT({
                 이름: member.name,
                 분류: member.grade,
                 레벨: `${member.level}&nbsp<span style="background-color: ${member.color}; padding: 0 10px;"/>`,
-                '금년 참석 횟수': '취소',
-                '분기 참석 횟수': '취소',
+                '올해 참여 횟수': member.count_this_year,
+                '최근 1년 참석 횟수': member.count_last_1_year,
+                '최근 3개월 참석 횟수': member.count_last_3_months,
               }))}
               activeDefaultColDef
+              onClickRow={onClickRow}
             />
           </div>
         </div>
@@ -81,6 +105,9 @@ interface MemberPTProps {
       | React.ChangeEvent<HTMLTextAreaElement>
       | React.ChangeEvent<HTMLSelectElement>,
   ) => void;
+  onClickRow: (data: any) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onSearch: () => void;
 }
 
 export default MemberPT;

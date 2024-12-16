@@ -31,7 +31,7 @@
         LEFT JOIN winwinSubscribe w ON m.id = w.memberFk
         LEFT JOIN admin a ON m.id = a.memberFk
     WHERE
-        1 = 1
+        m.id != 'TCN0'
         <if test="name != null and name != ''">AND m.name LIKE CONCAT('%', #{name}, '%')</if>
         <if test="levelFk != null and levelFk != ''">AND m.levelFk = #{levelFk}</if>
         <if test="degreeFk != null and degreeFk != ''">AND m.degreeFk = #{degreeFk}</if>
@@ -109,7 +109,7 @@
     FROM
         member
     WHERE
-        1 = 1
+        id != 'TCN0'
         AND id = #{id}
   </select>
 
@@ -130,7 +130,7 @@
         join degree d on d.id = m.degreeFk
         join level l on l.id = m.levelFk
     WHERE
-        1 = 1
+        m.id != 'TCN0'
         <if test="name != null and name != ''">AND m.name LIKE CONCAT('%', #{name}, '%')</if>
         <if test="degree != null and degree != ''">AND d.id = #{degree}</if>
         <if test="phoneNo != null and phoneNo != ''">AND m.phoneNo LIKE CONCAT('%', #{phoneNo}, '%')</if>
@@ -156,7 +156,7 @@
         JOIN level l ON m.levelFk = l.id
         JOIN degree d ON m.degreeFk = d.id
     WHERE
-        1 = 1
+        m.id != 'TCN0'
         AND a.id = #{id}
   </select>
 
@@ -186,7 +186,7 @@
     FROM
         member
     WHERE
-        1 = 1
+        id != 'TCN0'
         AND name = #{name}
         <if test="id != null and id != ''">AND id = #{id}</if>
         <if test="birthDt != null and birthDt != ''">AND birthDt = #{birthDt}</if>

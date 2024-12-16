@@ -10,7 +10,7 @@ import {
   usePostDataHook,
 } from 'modules/customHooks';
 import { DOMAIN } from 'modules/constants';
-import { decrypt } from 'modules/utils';
+import { decrypt, encrypt } from 'modules/utils';
 import PageTitle from 'components/pageTitle';
 import CommonInput from 'components/commonInput';
 import styles from './InsertMeeting.module.scss';
@@ -142,7 +142,7 @@ function InsertMeeting({ handleSetSelectedSidebar }: TypeInsertMeeting) {
 
   // 주최자 입력 후 엔터 콜백
   const useFindAdmin = useEnterKeyDownHook(form, () =>
-    usePostAdmins({ name: form.adminName }),
+    usePostAdmins({ name: encrypt(`${form.adminName}`) }),
   );
 
   // 암장 입력 후 엔터 콜백
@@ -263,7 +263,9 @@ function InsertMeeting({ handleSetSelectedSidebar }: TypeInsertMeeting) {
                   searchedName={`${form.searchedAdminName}`}
                   onChange={useChange}
                   onKeyDown={useFindAdmin}
-                  onSearch={() => usePostAdmins({ name: form.adminName })}
+                  onSearch={() =>
+                    usePostAdmins({ name: encrypt(`${form.adminName}`) })
+                  }
                 />
               </div>
             </div>
