@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
@@ -51,12 +52,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
 
         String requestURI = request.getRequestURI();
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+
         boolean shouldCheckRefreshToken = false; // Refresh Token 검증 플래그
         boolean shouldRegenerateToken = false; // Token 재생성 플래그
 
         // 화이트리스트 스킵
         for (String uri : Constants.AUTH_WHITELIST) {
-            if (requestURI.equals(uri)) {
+            // if(requestURI.equals(uri)) -> if(pathMatcher.match(uri, requestURI))
+            // AUTH_WHITELIST에서 /some/path/* 같이 와일드 카드 사용시 와일드 카드에 대응하는
+            // URI를 찾지 못하기 때문에 pathMatcher.match() 사용
+            if (pathMatcher.match(uri, requestURI)) {
                 try {
                     filterChain.doFilter(request, response);
                     return;

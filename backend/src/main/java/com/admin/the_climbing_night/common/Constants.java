@@ -27,5 +27,6 @@ public final class Constants {
     // 개발 환경마다 JWT 인가 확인 분기 필요 없을 때 사용
     public static final String[] AUTH_WHITELIST = new String[] { "/test", "/api/login", "/api/logout",
             "/api/test", "/api/join", "/api/get-member-info-by-join", "/api/get-levels",
-            "/api/get-degrees", "/api/get-degrees-for-member", "/api/get-members-for-member" };
+            "/api/get-degrees", "/api/get-degrees-for-member", "/api/get-members-for-member",
+            "/api/get-member-detail/*", "/api/get-meetings-of-member" };
 }
