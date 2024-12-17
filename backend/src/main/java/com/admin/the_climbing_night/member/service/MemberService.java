@@ -5,10 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.admin.the_climbing_night.member.domain.req.GetMeetingsOfMemberRequest;
 import com.admin.the_climbing_night.member.domain.req.GetMemberInfoByJoinRequest;
 import com.admin.the_climbing_night.member.domain.req.GetMembersForMemberRequest;
 import com.admin.the_climbing_night.member.mapper.MemberMapper;
 import com.admin.the_climbing_night.member.vo.GetDegreeForMemberVo;
+import com.admin.the_climbing_night.member.vo.GetMeetingOfMemberVo;
+import com.admin.the_climbing_night.member.vo.GetMemberDetailVo;
 import com.admin.the_climbing_night.member.vo.GetMemberForMemberVo;
 import com.admin.the_climbing_night.member.vo.GetMemberInfoByJoinVo;
 
@@ -30,5 +33,13 @@ public class MemberService {
 
     public List<GetMemberForMemberVo> getMembers(GetMembersForMemberRequest req) {
         return memberMapper.getMembers(req);
+    }
+
+    public GetMemberDetailVo getMemberDetail(String id) {
+        return memberMapper.getMemberDetail(id);
+    }
+
+    public List<GetMeetingOfMemberVo> getMeetingsOfMember(GetMeetingsOfMemberRequest req) {
+        return memberMapper.getMeetingsOfMember(req);
     }
 }

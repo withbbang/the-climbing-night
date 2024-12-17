@@ -44,17 +44,17 @@
       , l.color
       , COUNT(
           CASE
-            WHEN YEAR(me.hostDt) = YEAR(CURDATE()) AND ms.id = '10' THEN 1
+            WHEN YEAR(me.hostDt) = YEAR(CURDATE()) THEN 1
           END
       ) count_this_year
       , COUNT(
           CASE
-            WHEN me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR) AND ms.id = '10' THEN 1
+            WHEN me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR) THEN 1
           END
       ) count_last_1_year
       , COUNT(
           CASE
-            WHEN me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH) AND ms.id = '10' THEN 1
+            WHEN me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH) THEN 1
           END
       ) count_last_3_months
       , IFNULL(ad.grade, 70) unsignedGrade
@@ -65,9 +65,9 @@
       LEFT JOIN admin ad ON m.id = ad.memberFK
       LEFT JOIN attend at ON m.id = at.memberFK
       LEFT JOIN meeting me ON at.meetingFK = me.id AND me.hostDt >= DATE_SUB(CURDATE(), INTERVAL 2 YEAR)
-      LEFT JOIN meetingStatus ms ON me.meetingStatusFK = ms.id
     WHERE
       m.id != 'TCN0'
+      AND me.meetingStatusFK = '10'
       <if test="name != null and name != ''">AND m.name LIKE CONCAT('%', #{name}, '%')</if>
       <if test="degreeFk != null and degreeFk != ''">AND m.degreeFK = #{degreeFk}</if>
       <if test="startJoinDt != null and startJoinDt != ''">
@@ -91,17 +91,54 @@
       unsignedGrade, d.id;
   </select>
 
-  <select id="getDegrees" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.member.vo.GetDegreeForMemberVo">
+  <select id="getMemberDetail" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.member.vo.GetMemberDetailVo">
     SELECT
-      m.name
+      CONCAT(m.name, IFNULL(SUBSTRING(m.birthDt, 3, 2), '')) name
+      , l.level
+      , l.color
+      , d.degree
+      , CASE
+          WHEN a.grade = 60 THEN '회원'
+          WHEN a.grade = 50 THEN '회원'
+          WHEN a.grade = 40 THEN '매니저'
+          WHEN a.grade = 30 THEN '운영진'
+          WHEN a.grade = 20 THEN '부회장'
+          WHEN a.grade = 10 THEN '회장'
+          ELSE '회원'
+        END grade
     FROM
       member m
       JOIN level l ON m.levelFK = l.id
       JOIN degree d ON m.degreeFK = d.id
       LEFT JOIN admin a ON m.id = a.memberFK
-      LEFT JOIN attend at ON m.id = at.memberFK
-      LEFT JOIN meeting me ON at.meetingFK = me.id
     WHERE
-      m.id = #{id}
+      m.id != 'TCN0'
+      <if test="id != null and id != ''">AND m.id = #{id}</if>
+  </select>
+
+  <select id="getMeetingsOfMember" parameterType="com.admin.the_climbing_night.member.domain.req.GetMeetingsOfMemberRequest" resultType="com.admin.the_climbing_night.member.vo.GetMeetingOfMemberVo">
+    SELECT
+      me.id
+      , me.name meetingName
+      , me.hostDt
+      , me.time
+      , me.criticalMeetingYn
+      , m2.name hostName
+      , c.name climbingAreaName
+      , c.winwinYn
+    FROM
+      member m1
+      JOIN attend a ON m1.id = a.memberFK
+      JOIN meeting me ON a.meetingFK = me.id
+      JOIN climbingArea c ON me.climbingAreaFK = c.id
+      JOIN admin ad ON me.adminFK = ad.id
+      JOIN member m2 ON ad.memberFK = m2.id
+    WHERE
+      m1.id != 'TCN0'
+      AND me.meetingStatusFK = '10'
+      <if test="id != null and id != ''">AND m.id = #{id}</if>
+      <if test="hostDt != null and hostDt != ''">AND YEAR(me.hostDt) = #{hostDt}</if>
+    ORDER BY
+      MONTH(me.hostDt), me.hostDt
   </select>
 </mapper>
