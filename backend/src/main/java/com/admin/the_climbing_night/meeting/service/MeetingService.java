@@ -78,12 +78,19 @@ public class MeetingService {
 
     @Transactional
     public int updateMeeting(List<String> deleteAttends, List<InsertAttendVo> insertAttendsVo,
-            UpdateMeetingRequest req) {
+            UpdateMeetingRequest req) throws Exception {
+
+        int result = meetingMapper.updateMeeting(req);
+
+        if (result < 1) {
+            throw new Exception("Meeting Update Fail");
+        }
+
         if (deleteAttends.size() > 0)
             meetingMapper.deleteAttends(deleteAttends);
         if (insertAttendsVo.size() > 0)
             meetingMapper.insertAttends(insertAttendsVo);
 
-        return meetingMapper.updateMeeting(req);
+        return result;
     }
 }
