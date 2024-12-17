@@ -93,7 +93,8 @@
 
   <select id="getMemberDetail" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.member.vo.GetMemberDetailVo">
     SELECT
-      CONCAT(m.name, IFNULL(SUBSTRING(m.birthDt, 3, 2), '')) name
+      m.id
+      , CONCAT(m.name, IFNULL(SUBSTRING(m.birthDt, 3, 2), '')) name
       , l.level
       , l.color
       , d.degree
@@ -136,8 +137,8 @@
     WHERE
       m1.id != 'TCN0'
       AND me.meetingStatusFK = '10'
-      <if test="id != null and id != ''">AND m.id = #{id}</if>
-      <if test="hostDt != null and hostDt != ''">AND YEAR(me.hostDt) = #{hostDt}</if>
+      <if test="id != null and id != ''">AND m1.id = #{id}</if>
+      <if test="year != null and year != ''">AND YEAR(me.hostDt) = #{year}</if>
     ORDER BY
       MONTH(me.hostDt), me.hostDt
   </select>

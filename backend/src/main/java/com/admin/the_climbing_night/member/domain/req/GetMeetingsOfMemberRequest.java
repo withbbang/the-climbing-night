@@ -10,5 +10,5 @@ import lombok.ToString;
 public class GetMeetingsOfMemberRequest {
     private String id;
 
-    private String hostDt;
+    private String year;
 }

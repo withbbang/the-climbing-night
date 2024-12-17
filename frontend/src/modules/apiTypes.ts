@@ -84,3 +84,29 @@ export interface GetMemberType {
   count_last_1_year: string;
   count_last_3_months: string;
 }
+
+/**
+ * 회원 정보 조회 api 타입
+ */
+export interface GetMemberDetailType {
+  id: string;
+  name: string;
+  level: string;
+  color: string;
+  degree: string;
+  grade: string;
+}
+
+/**
+ * 참여한 벙 조회 api 타입
+ */
+export interface GetMeetingOfMemberType {
+  id: string;
+  meetingName: string;
+  hostDt: string;
+  time: string;
+  criticalMeetingYn: string;
+  hostName: string;
+  climbingAreaName: string;
+  winwinYn: string;
+}

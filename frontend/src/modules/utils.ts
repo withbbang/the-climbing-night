@@ -352,6 +352,8 @@ export function handleConvertDateFormat(date: Date, format: string): string {
       )}${handleSetPadZero(date.getMinutes())}${handleSetPadZero(
         date.getSeconds(),
       )}`;
+    case 'yyyy':
+      return `${date.getFullYear()}`;
     default:
       return '';
   }

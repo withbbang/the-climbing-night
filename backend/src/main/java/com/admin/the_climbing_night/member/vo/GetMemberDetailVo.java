@@ -9,7 +9,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class GetMemberDetailVo{
+public class GetMemberDetailVo {
+    private String id;
+
     @SectionEncryptFieldAnnotation
     private String name;
 

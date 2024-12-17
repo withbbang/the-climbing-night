@@ -12,7 +12,7 @@ function PageTitle({ title }: TypePageTitle) {
           <div className={styles.top}>&nbsp;&nbsp;</div>
           <div className={styles.bottom}>&nbsp;&nbsp;</div>
         </div>
-        <h2>{title}</h2>
+        <h2 dangerouslySetInnerHTML={{ __html: title || '' }} />
       </div>
     </div>
   );
