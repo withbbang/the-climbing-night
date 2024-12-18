@@ -54,6 +54,10 @@
             box-sizing: border-box;
             padding: 5px 0;
 
+            &.winwin {
+              color: #608090;
+            }
+
             &:first-child {
               min-width: 75px;
             }

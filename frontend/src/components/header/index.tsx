@@ -100,7 +100,8 @@ function Header({
           <div
             className={
               location.pathname === '/member' ||
-              matchPath('/member/:id', location.pathname)
+              matchPath('/member/:id', location.pathname) ||
+              matchPath('/meeting-detail/:id', location.pathname)
                 ? [styles.menu, styles.selectedMenu].join(' ')
                 : styles.menu
             }

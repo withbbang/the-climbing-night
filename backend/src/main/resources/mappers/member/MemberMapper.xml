@@ -142,4 +142,45 @@
     ORDER BY
       MONTH(me.hostDt), me.hostDt
   </select>
+  
+  <select id="getMeetingDetail" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.member.vo.GetMeetingDetailVo">
+    SELECT
+      mee.name meetingName
+      , mee.hostDt hostDt
+      , mee.time time
+      , mee.criticalMeetingYn criticalMeetingYn
+      , mt.status status
+      , c.winwinYn winwinYn
+      , c.name climbingAreaName
+      , CONCAT(mem.name, IFNULL(SUBSTRING(mem.birthDt, 3, 2), '')) hostName
+    FROM
+      meeting mee
+      JOIN climbingArea c ON mee.climbingAreaFK = c.id
+      JOIN meetingStatus mt ON mee.meetingStatusFK = mt.id
+      JOIN admin a ON mee.adminFK = a.id
+      JOIN member mem ON a.memberFK = mem.id
+    WHERE
+      mee.meetingStatusFK = '10'
+      <if test="id != null and id != ''">AND mee.id = #{id}</if>
+  </select>
+
+  <select id="getParticipants" parameterType="java.lang.String" resultType="com.admin.the_climbing_night.member.vo.GetParticipantVo">
+    SELECT
+      mem.id
+      , IF(ad.memberFK = mem.id, 'Y', 'N') host
+      , CONCAT(mem.name, IFNULL(SUBSTRING(mem.birthDt, 3, 2), '')) name
+      , d.degree
+      , l.level
+      , l.color
+    FROM
+      meeting mee
+      JOIN admin ad ON mee.adminFK = ad.id
+      JOIN attend at ON mee.id = at.meetingFK
+      JOIN member mem ON at.memberFK = mem.id
+      JOIN degree d ON mem.degreeFK = d.id
+      JOIN level l ON mem.levelFK = l.id
+    WHERE
+      mee.meetingStatusFK = '10'
+      <if test="id != null and id != ''">AND mee.id = #{id}</if>
+  </select>
 </mapper>

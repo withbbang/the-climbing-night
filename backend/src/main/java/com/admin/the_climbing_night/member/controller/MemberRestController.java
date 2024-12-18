@@ -18,10 +18,12 @@ import com.admin.the_climbing_night.member.domain.req.GetMemberInfoByJoinRequest
 import com.admin.the_climbing_night.member.domain.req.GetMembersForMemberRequest;
 import com.admin.the_climbing_night.member.service.MemberService;
 import com.admin.the_climbing_night.member.vo.GetDegreeForMemberVo;
+import com.admin.the_climbing_night.member.vo.GetMeetingDetailVo;
 import com.admin.the_climbing_night.member.vo.GetMeetingOfMemberVo;
 import com.admin.the_climbing_night.member.vo.GetMemberDetailVo;
 import com.admin.the_climbing_night.member.vo.GetMemberForMemberVo;
 import com.admin.the_climbing_night.member.vo.GetMemberInfoByJoinVo;
+import com.admin.the_climbing_night.member.vo.GetParticipantVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -158,6 +160,58 @@ public class MemberRestController {
         }
 
         response.setData(getMeetingsOfMember);
+
+        return response;
+    }
+
+    /**
+     * 벙 상세 조회
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "get-meeting-detail/{id}")
+    public SingleResponse<GetMeetingDetailVo> getMeetingDetail(@PathVariable String id) {
+        SingleResponse<GetMeetingDetailVo> response = new SingleResponse<GetMeetingDetailVo>();
+
+        GetMeetingDetailVo getMeetingDetail = null;
+
+        try {
+            getMeetingDetail = memberService.getMeetingDetail(id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        response.setData(getMeetingDetail);
+
+        return response;
+    }
+
+    /**
+     * 벙 참여자 리스트 조회
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "get-participants-for-meeting/{id}")
+    public SingleResponse<List<GetParticipantVo>> getParticipantsForMeeting(@PathVariable String id) {
+        SingleResponse<List<GetParticipantVo>> response = new SingleResponse<List<GetParticipantVo>>();
+
+        List<GetParticipantVo> getParticipants = null;
+
+        try {
+            getParticipants = memberService.getParticipants(id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        response.setData(getParticipants);
 
         return response;
     }

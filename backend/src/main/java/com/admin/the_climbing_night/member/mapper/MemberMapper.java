@@ -10,9 +10,11 @@ import com.admin.the_climbing_night.member.domain.req.GetMeetingsOfMemberRequest
 import com.admin.the_climbing_night.member.domain.req.GetMemberInfoByJoinRequest;
 import com.admin.the_climbing_night.member.domain.req.GetMembersForMemberRequest;
 import com.admin.the_climbing_night.member.vo.GetDegreeForMemberVo;
+import com.admin.the_climbing_night.member.vo.GetMeetingDetailVo;
 import com.admin.the_climbing_night.member.vo.GetMemberDetailVo;
 import com.admin.the_climbing_night.member.vo.GetMemberForMemberVo;
 import com.admin.the_climbing_night.member.vo.GetMemberInfoByJoinVo;
+import com.admin.the_climbing_night.member.vo.GetParticipantVo;
 import com.admin.the_climbing_night.member.vo.GetMeetingOfMemberVo;
 
 @Mapper
@@ -28,4 +30,8 @@ public interface MemberMapper {
     GetMemberDetailVo getMemberDetail(String id);
 
     List<GetMeetingOfMemberVo> getMeetingsOfMember(GetMeetingsOfMemberRequest req);
+
+    GetMeetingDetailVo getMeetingDetail(String id);
+
+    List<GetParticipantVo> getParticipants(String id);
 }

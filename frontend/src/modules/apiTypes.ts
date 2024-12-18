@@ -86,18 +86,6 @@ export interface GetMemberType {
 }
 
 /**
- * 회원 정보 조회 api 타입
- */
-export interface GetMemberDetailType {
-  id: string;
-  name: string;
-  level: string;
-  color: string;
-  degree: string;
-  grade: string;
-}
-
-/**
  * 참여한 벙 조회 api 타입
  */
 export interface GetMeetingOfMemberType {
@@ -109,4 +97,30 @@ export interface GetMeetingOfMemberType {
   hostName: string;
   climbingAreaName: string;
   winwinYn: string;
+}
+
+/**
+ * 벙 정보 조회 api 타입
+ */
+export interface GetMeetingDetailType {
+  meetingName: string;
+  hostDt: string;
+  time: string;
+  criticalMeetingYn: string;
+  status: string;
+  winwinYn: string;
+  climbingAreaName: string;
+  hostName: string;
+}
+
+/**
+ * 일반 회원이 조회할 때, 참가자 목록 조회 api 타입
+ */
+export interface GetParticipantForMeetingType {
+  id: string;
+  host: string;
+  name: string;
+  degree: string;
+  level: string;
+  color: string;
 }

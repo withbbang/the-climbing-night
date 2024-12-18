@@ -4,20 +4,14 @@ import { connect } from 'react-redux';
 import { Action } from 'redux';
 import { PropState } from 'middlewares/configureReducer';
 import {
-  useEnterKeyDownHook,
   useChangeHook,
   usePostDataHook,
   useGetDataHook,
 } from 'modules/customHooks';
 import Header from 'components/header';
 import { DOMAIN, FOUNDING_YEAR } from 'modules/constants';
-import {
-  decrypt,
-  encrypt,
-  handleCheckEmail,
-  handleConvertDateFormat,
-} from 'modules/utils';
-import { GetMeetingOfMemberType, GetMemberDetailType } from 'modules/apiTypes';
+import { decrypt } from 'modules/utils';
+import { GetMeetingOfMemberType } from 'modules/apiTypes';
 import PageTitle from 'components/pageTitle';
 import styles from './MemberDetail.module.scss';
 
@@ -30,9 +24,9 @@ function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
 }
 
 function MemberDetail({}: TypeMemberDetail): React.JSX.Element {
+  const navigate = useNavigate();
   const { id } = useParams();
   const THIS_YEAR = new Date().getFullYear();
-  const [memberDetail, setMemberDetail] = useState<GetMemberDetailType>();
   const [meetings, setMeetings] = useState<Array<GetMeetingOfMemberType[]>>([]);
   const { form, setForm, useChange } = useChangeHook({
     selectedYear: THIS_YEAR,
@@ -55,7 +49,6 @@ function MemberDetail({}: TypeMemberDetail): React.JSX.Element {
       const name = decrypt(response.name);
       const title = `${degree} ${grade} ${name}&nbsp<span style="background-color: ${color}; padding: 0 5px; border-radius: 8px;">${level}</span>`;
 
-      setMemberDetail({ ...response, name });
       setForm((prevState) => ({
         ...prevState,
         title,
@@ -137,8 +130,23 @@ function MemberDetail({}: TypeMemberDetail): React.JSX.Element {
                   className={styles.item}
                 >{`${+monthlyList[0].hostDt.substring(5, 7)}월`}</div>
                 {monthlyList.map(
-                  ({ id, climbingAreaName, hostDt, hostName, meetingName }) => (
-                    <div key={id} className={styles.item}>
+                  ({
+                    id,
+                    climbingAreaName,
+                    hostDt,
+                    hostName,
+                    meetingName,
+                    winwinYn,
+                  }) => (
+                    <div
+                      key={id}
+                      className={
+                        winwinYn === 'Y'
+                          ? [styles.item, styles.winwin].join(' ')
+                          : styles.item
+                      }
+                      onClick={() => navigate(`/meeting-detail/${id}`)}
+                    >
                       {`${+hostDt.substring(8, 10)}일`}
                       <br />
                       {climbingAreaName}
