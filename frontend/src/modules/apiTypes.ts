@@ -124,3 +124,19 @@ export interface GetParticipantForMeetingType {
   level: string;
   color: string;
 }
+
+/**
+ * 벙 스케쥴 조회 api 타입
+ */
+export interface GetScheduleType {
+  id: string;
+  meetingName: string;
+  hostDt: string;
+  time: string;
+  criticalMeetingYn: string;
+  meetingStatusFk: string;
+  hostName: string;
+  climbingAreaName: string;
+  winwinYn: string;
+  date?: string;
+}

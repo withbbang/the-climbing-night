@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.the_climbing_night.index.mapper.IndexMapper">
+  <select id="getSchedules" parameterType="com.admin.the_climbing_night.index.domain.req.GetSchedulesRequest" resultType="com.admin.the_climbing_night.index.vo.GetScheduleVo">
+    SELECT
+        mee.id
+        , mee.name meetingName
+        , SUBSTRING(mee.hostDt, 9, 2) hostDt
+        , SUBSTRING(mee.time, 1, 5) time
+        , mee.criticalMeetingYn criticalMeetingYn
+        , mee.meetingStatusFk meetingStatusFk
+        , cl.winwinYn winwinYn
+        , cl.name climbingAreaName
+        , mem.name hostName
+    FROM
+        meeting mee
+        JOIN admin ad ON mee.adminFK = ad.id
+        JOIN member mem ON ad.memberFK = mem.id
+        JOIN climbingArea cl ON mee.climbingAreaFK = cl.id
+    WHERE
+        1 = 1
+        <if test="year != null and year != ''">AND YEAR(mee.hostDt) = #{year}</if>
+        <if test="month != null and month != ''">AND MONTH(mee.hostDt) = #{month}</if>
+  </select>
+
+  <select id="getAdminCount" resultType="long">
+    SELECT
+        count(id)
+    FROM
+        admin
+  </select>
+</mapper>
