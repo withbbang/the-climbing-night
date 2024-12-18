@@ -1,5 +1,6 @@
 export const DOMAIN = process.env.REACT_APP_DOMAIN;
 export const SECTION_KEY = process.env.REACT_APP_SECTION_KEY;
+export const FOUNDING_YEAR = 2018;
 export const GRADE = [
   {
     value: '60',

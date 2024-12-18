@@ -7,7 +7,7 @@ import {
 import { useSetSelectedSidebarToken } from 'middlewares/reduxToolkits/sidebar';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, matchPath } from 'react-router-dom';
 import {
   useGetDataHook,
   usePostDataHook,
@@ -99,7 +99,8 @@ function Header({
         <div className={styles.menus}>
           <div
             className={
-              location.pathname === '/member'
+              location.pathname === '/member' ||
+              matchPath('/member/:id', location.pathname)
                 ? [styles.menu, styles.selectedMenu].join(' ')
                 : styles.menu
             }
@@ -119,7 +120,8 @@ function Header({
           </div>
           <div
             className={
-              location.pathname === '/meeting'
+              location.pathname === '/meeting' ||
+              matchPath('/meeting/:id', location.pathname)
                 ? [styles.menu, styles.selectedMenu].join(' ')
                 : styles.menu
             }

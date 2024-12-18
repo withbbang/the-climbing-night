@@ -1,12 +1,12 @@
 .wrap {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   position: relative;
   display: flex;
+  overflow-x: auto;
   @include background($more-light);
 
   .innerWrap {
-    width: 100%;
     display: flex;
     flex-flow: column nowrap;
     margin-top: 80px;
@@ -17,56 +17,58 @@
       flex-flow: column;
       flex: 1;
 
-      > span {
-        margin-bottom: 10px;
-      }
-
-      .inputBox {
+      .categories {
         width: 100%;
-        border-top: solid 1px $less-dark;
-        border-bottom: none;
-        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
 
-        .inputs {
-          width: 100%;
-          display: flex;
-          align-items: center;
+        .category {
+          font-size: 1rem;
+          margin-right: 10px;
+          padding: 8px;
+          cursor: pointer;
 
-          .input {
-            width: 50%;
-            border-left: solid 1px $less-dark;
-            border-right: solid 1px $less-dark;
-            box-sizing: border-box;
-
-            &:nth-child(2) {
-              border-left: none;
-            }
+          &.selected {
+            background-color: $light;
           }
         }
       }
 
-      .btnBox {
+      .grid {
         width: 100%;
         display: flex;
-        align-items: center;
-        justify-content: end;
-        margin-top: 20px;
+        flex-direction: column;
 
-        > button {
-          width: 10%;
-          height: 30px;
-          background-color: $less-light;
-          border: none;
-          box-sizing: border-box;
-          cursor: pointer;
+        .row {
+          display: flex;
+          margin-bottom: 5px;
+
+          .item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            text-align: center;
+            border: solid 1px $less-dark;
+            box-sizing: border-box;
+            padding: 5px 0;
+
+            &:first-child {
+              min-width: 75px;
+            }
+
+            &:not(:first-child) {
+              min-width: 125px;
+              border-left: none;
+              cursor: pointer;
+
+              &:hover {
+                background-color: $light;
+              }
+            }
+          }
         }
-      }
-
-      .listBox {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        margin-top: 20px;
       }
     }
   }
