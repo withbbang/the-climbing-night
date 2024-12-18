@@ -31,6 +31,11 @@ function Sidebar({
 
   useEffect(() => {
     if (selectedSidebar === '') {
+      if (location.pathname === '/') {
+        handleSetSelectedSidebar('dashboard');
+        return;
+      }
+
       if (location.pathname === '/admin') {
         handleSetSelectedSidebar('authority');
         return;

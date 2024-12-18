@@ -4,7 +4,10 @@ import {
   AuthState,
   useSetAccessToken,
 } from 'middlewares/reduxToolkits/authSlice';
-import { useSetSelectedSidebarToken } from 'middlewares/reduxToolkits/sidebar';
+import {
+  SidebarState,
+  useSetSelectedSidebarToken,
+} from 'middlewares/reduxToolkits/sidebar';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
 import { useLocation, useNavigate, matchPath } from 'react-router-dom';
@@ -17,9 +20,10 @@ import TCN_LOGO from 'assets/images/TCN_LOGO.svg';
 import { DOMAIN } from 'modules/constants';
 import styles from './Header.module.scss';
 
-function mapStateToProps(state: PropState): AuthState {
+function mapStateToProps(state: PropState): AuthState & SidebarState {
   return {
     ...state.auth,
+    ...state.sidebar,
   };
 }
 
@@ -36,6 +40,7 @@ function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
 
 function Header({
   accessToken,
+  selectedSidebar,
   handleLogout,
   handleSetSelectedSidebar,
 }: TypeHeader) {
@@ -48,8 +53,12 @@ function Header({
     url: `${DOMAIN}/api/admin-page-redirect`,
     successCb: (response) => {
       if (response) navigate(response.path);
-      else useSetInfoPopup('권한이 없습니다.');
+      else {
+        handleSetSelectedSidebar(selectedSidebar);
+        useSetInfoPopup('권한이 없습니다.');
+      }
     },
+    failCb: () => handleSetSelectedSidebar(selectedSidebar),
   });
 
   // 벙관리 페이지 권한 검증
@@ -57,8 +66,12 @@ function Header({
     url: `${DOMAIN}/api/meeting-page-redirect`,
     successCb: (response) => {
       if (response) navigate(response.path);
-      else useSetInfoPopup('권한이 없습니다.');
+      else {
+        handleSetSelectedSidebar(selectedSidebar);
+        useSetInfoPopup('권한이 없습니다.');
+      }
     },
+    failCb: () => handleSetSelectedSidebar(selectedSidebar),
   });
 
   // 로그아웃
@@ -145,7 +158,7 @@ function Header({
   );
 }
 
-interface TypeHeader extends AuthState {
+interface TypeHeader extends AuthState, SidebarState {
   handleLogout: () => void;
   handleSetSelectedSidebar: (selectedSidebar: string) => void;
 }

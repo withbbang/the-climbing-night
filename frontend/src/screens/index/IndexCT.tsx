@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
-import { CustomWindow } from 'modules/types';
+import { CustomWindow, TypeSidebarItem } from 'modules/types';
 import {
   useGetDataHook,
   usePostDataByConfirmPopupHook,
@@ -11,72 +11,21 @@ import { ToastError } from 'modules/customErrorClasses';
 import { DOMAIN } from 'modules/constants';
 import IndexPT from './IndexPT';
 
-function IndexCT({}: IndexCTProps): React.JSX.Element {
-  const { useSetActivePostDataByConfirmPopup } = usePostDataByConfirmPopupHook({
-    message: 'hello',
-    url: '/wlekfj',
-    confirmBtnText: 'There',
-    cancelBtnText: 'Hello',
-    beforeCb: () => console.warn('called beforeCb'),
-    successCb: () => console.warn('called successCb'),
-    cancelBtnCb: () => console.warn('called cancelBtnCb'),
-    failCb: (code?: string, message?: string) => {
-      throw new ToastError('toast err');
-    },
-    errorPopupBtnCb: (code?: string) => console.warn('called errorPopupBtnCb'),
-  });
+function IndexCT({ selectedSidebar }: IndexCTProps): React.JSX.Element {
+  const sidebarItems: TypeSidebarItem[] = [
+    { title: 'Dashboard', nick: 'dashboard' },
+    { title: 'Schedule', nick: 'schedule' },
+  ];
 
-  const { usePostData } = usePostDataHook({
-    url: `${DOMAIN}/test`,
-  });
+  useEffect(() => {}, []);
 
-  const { useGetData } = useGetDataHook({
-    url: `${DOMAIN}/api/get-member-info/0`,
-  });
-
-  useEffect(() => {
-    const customWindow = window as CustomWindow;
-    customWindow.goBack = handleGoBack;
-    customWindow.onResult = handleOnResult;
-
-    usePostData({
-      name: '김영선',
-      birthDt: '1234',
-      phoneNo: '01077453381',
-    });
-
-    return () => {
-      delete customWindow.goBack;
-      delete customWindow.onResult;
-    };
-  }, []);
-
-  const test = (p: string): Promise<string> =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(p);
-      }, 500);
-    });
-
-  const onClick = () => {
-    useSetActivePostDataByConfirmPopup({
-      a: 'a',
-      b: test('b'),
-      c: test('c'),
-    });
-  };
-
-  const handleGoBack = (data?: any) => {
-    console.warn('goBack visit? ', data);
-  };
-
-  const handleOnResult = (data?: any) => {
-    console.warn('onResult visit?', data);
-  };
-
-  return <IndexPT onClick={onClick} />;
+  return (
+    <IndexPT selectedSidebar={selectedSidebar} sidebarItems={sidebarItems} />
+  );
 }
 
-interface IndexCTProps extends CommonState {}
+interface IndexCTProps {
+  selectedSidebar: string;
+}
 
 export default IndexCT;
