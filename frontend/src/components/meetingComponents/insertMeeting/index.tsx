@@ -40,7 +40,8 @@ function InsertMeeting({ handleSetSelectedSidebar }: TypeInsertMeeting) {
     searchedClimbingAreaName: '',
     climbingAreaFk: '',
     hostDt: '',
-    time: '',
+    startTime: '',
+    endTime: '',
     criticalMeetingYn: 'N',
     meetingStatusFk: '',
     isAdminModalActive: 'N',
@@ -112,7 +113,8 @@ function InsertMeeting({ handleSetSelectedSidebar }: TypeInsertMeeting) {
       if (!form.adminFk) throw new Error('주최자를<br/>입력해주세요.');
       if (!form.climbingAreaFk) throw new Error('암장을<br/>입력해주세요.');
       if (!form.hostDt) throw new Error('주최 날짜를<br/>입력해주세요.');
-      if (!form.time) throw new Error('주최 시간을<br/>입력해주세요.');
+      if (!form.startTime) throw new Error('시작 시간을<br/>입력해주세요.');
+      if (!form.endTime) throw new Error('종료 시간을<br/>입력해주세요.');
     },
     successCb: () => handleSetSelectedSidebar('update-meeting'),
   });
@@ -198,7 +200,8 @@ function InsertMeeting({ handleSetSelectedSidebar }: TypeInsertMeeting) {
       memberFk: form.memberFk,
       climbingAreaFk: form.climbingAreaFk,
       hostDt: form.hostDt,
-      time: form.time,
+      startTime: form.startTime,
+      endTime: form.endTime,
       criticalMeetingYn: form.criticalMeetingYn,
       meetingStatusFk: form.meetingStatusFk,
     });
@@ -304,9 +307,11 @@ function InsertMeeting({ handleSetSelectedSidebar }: TypeInsertMeeting) {
                 <CommonInput
                   title="주최 시간"
                   tagType="input"
-                  name="time"
+                  name="startTime"
+                  subName="endTime"
                   type="time"
-                  value={`${form.time}`}
+                  value={`${form.startTime}`}
+                  subValue={`${form.endTime}`}
                   required
                   onChange={useChange}
                 />

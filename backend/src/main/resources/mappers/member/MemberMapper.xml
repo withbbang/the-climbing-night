@@ -122,7 +122,8 @@
       me.id
       , me.name meetingName
       , me.hostDt
-      , me.time
+      , me.startTime
+      , me.endTime
       , me.criticalMeetingYn
       , m2.name hostName
       , c.name climbingAreaName
@@ -147,13 +148,14 @@
     SELECT
       mee.name meetingName
       , mee.hostDt hostDt
-      , mee.time time
+      , mee.startTime startTime
+      , mee.endTime endTime
       , mee.criticalMeetingYn criticalMeetingYn
       , mt.status status
       , c.winwinYn winwinYn
       , c.name climbingAreaName
       , CONCAT(mem.name, IFNULL(SUBSTRING(mem.birthDt, 3, 2), '')) hostName
-    FROM
+    FROM 
       meeting mee
       JOIN climbingArea c ON mee.climbingAreaFK = c.id
       JOIN meetingStatus mt ON mee.meetingStatusFK = mt.id

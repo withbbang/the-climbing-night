@@ -218,7 +218,8 @@ function Schedule({}: TypeSchedule) {
                     ({
                       id,
                       meetingName,
-                      time,
+                      startTime,
+                      endTime,
                       criticalMeetingYn,
                       meetingStatusFk,
                       winwinYn,
@@ -245,7 +246,7 @@ function Schedule({}: TypeSchedule) {
                         >
                           {meetingName}
                           <br />
-                          {hostName}({time})
+                          {hostName}({startTime} ~ {endTime})
                         </span>
                       </div>
                     ),

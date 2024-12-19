@@ -78,8 +78,9 @@ function MeetingDetailForMember({}: TypeMeetingDetailForMember): React.JSX.Eleme
             <p>주최: {meetingDetail?.hostName}</p>
             <p>암장: {meetingDetail?.climbingAreaName}</p>
             <p>
-              일시: {meetingDetail?.hostDt}{' '}
-              {meetingDetail?.time.substring(0, 5)}
+              일시: {meetingDetail?.hostDt} (
+              {meetingDetail?.startTime.substring(0, 5)} ~{' '}
+              {meetingDetail?.endTime.substring(0, 5)})
             </p>
             <p>상생: {meetingDetail?.winwinYn === 'Y' ? '🙆🏻‍♀️' : '🙅🏻‍♀️'}</p>
             <p>

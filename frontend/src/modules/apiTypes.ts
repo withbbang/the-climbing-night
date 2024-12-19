@@ -54,7 +54,8 @@ export interface GetMeetingType {
   price: string;
   winPrice: string;
   hostDt: string;
-  time: string;
+  startTime: string;
+  endTime: string;
   criticalMeetingYn: string;
   status: string;
   updater: string;
@@ -92,7 +93,8 @@ export interface GetMeetingOfMemberType {
   id: string;
   meetingName: string;
   hostDt: string;
-  time: string;
+  startTime: string;
+  endTime: string;
   criticalMeetingYn: string;
   hostName: string;
   climbingAreaName: string;
@@ -105,7 +107,8 @@ export interface GetMeetingOfMemberType {
 export interface GetMeetingDetailType {
   meetingName: string;
   hostDt: string;
-  time: string;
+  startTime: string;
+  endTime: string;
   criticalMeetingYn: string;
   status: string;
   winwinYn: string;
@@ -132,7 +135,8 @@ export interface GetScheduleType {
   id: string;
   meetingName: string;
   hostDt: string;
-  time: string;
+  startTime: string;
+  endTime: string;
   criticalMeetingYn: string;
   meetingStatusFk: string;
   hostName: string;

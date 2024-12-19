@@ -16,7 +16,9 @@ public class GetScheduleVo {
 
     private String hostDt;
 
-    private String time;
+    private String startTime;
+
+    private String endTime;
 
     private String criticalMeetingYn;
 

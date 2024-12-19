@@ -23,7 +23,9 @@ public class UpdateMeetingRequest {
 
     private String hostDt;
 
-    private String time;
+    private String startTime;
+
+    private String endTime;
 
     private String updateDt;
 

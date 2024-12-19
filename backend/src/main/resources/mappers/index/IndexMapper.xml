@@ -7,7 +7,8 @@
         mee.id
         , mee.name meetingName
         , SUBSTRING(mee.hostDt, 9, 2) hostDt
-        , SUBSTRING(mee.time, 1, 5) time
+        , SUBSTRING(mee.startTime, 1, 5) startTime
+        , SUBSTRING(mee.endTime, 1, 5) endTime
         , mee.criticalMeetingYn criticalMeetingYn
         , mee.meetingStatusFk meetingStatusFk
         , cl.winwinYn winwinYn

@@ -30,7 +30,10 @@ public class InsertMeetingRequest {
     private String hostDt;
 
     @RequiredAnnotation
-    private String time;
+    private String startTime;
+
+    @RequiredAnnotation
+    private String endTime;
 
     @RequiredAnnotation
     private String criticalMeetingYn;

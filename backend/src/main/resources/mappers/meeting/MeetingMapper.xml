@@ -68,7 +68,8 @@
         , climbingAreaFk
         , createDt
         , hostDt
-        , time
+        , startTime
+        , endTime
         , criticalMeetingYn
         , meetingStatusFk
     ) VALUES (
@@ -78,7 +79,8 @@
         , #{climbingAreaFk}
         , #{createDt}
         , #{hostDt}
-        , #{time}
+        , #{startTime}
+        , #{endTime}
         , #{criticalMeetingYn}
         , #{meetingStatusFk}
     )
@@ -95,7 +97,8 @@
         , ca.winPrice winPrice
         , IF(ca.winwinYn = 'Y', 'O', 'X') winwinYn
         , mee.hostDt hostDt
-        , LEFT(mee.time, 5) time
+        , LEFT(mee.startTime, 5) startTime
+        , LEFT(mee.endTime, 5) endTime
         , IF(mee.criticalMeetingYn = 'Y', 'O', 'X') criticalMeetingYn
         , ms.status status
         , IFNULL(mem2.name, '-') updater
@@ -133,7 +136,8 @@
         , mee.name meetingName
         , CONCAT(d.degree, ' ', mem.name, ' ', IFNULL(SUBSTRING(mem.birthDt, 3, 2), '')) hostName
         , mee.hostDt hostDt
-        , mee.time time
+        , mee.startTime startTime
+        , mee.endTime endTime
         , mee.criticalMeetingYn criticalMeetingYn
         , mee.meetingStatusFk meetingStatusFk
         , ca.id climbingAreaFk
@@ -239,7 +243,8 @@
         <if test="adminFk != null and adminFk != ''">, adminFk = #{adminFk}</if>
         <if test="climbingAreaFk != null and climbingAreaFk != ''">, climbingAreaFk = #{climbingAreaFk}</if>
         <if test="hostDt != null and hostDt != ''">, hostDt = #{hostDt}</if>
-        <if test="time != null and time != ''">, time = #{time}</if>
+        <if test="startTime != null and startTime != ''">, startTime = #{startTime}</if>
+        <if test="endTime != null and endTime != ''">, endTime = #{endTime}</if>
         <if test="updateDt != null and updateDt != ''">, updateDt = #{updateDt}</if>
         <if test="criticalMeetingYn != null and criticalMeetingYn != ''">, criticalMeetingYn = #{criticalMeetingYn}</if>
         <if test="meetingStatusFk != null and meetingStatusFk != ''">, meetingStatusFk = #{meetingStatusFk}</if>
