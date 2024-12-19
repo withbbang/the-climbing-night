@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { replace, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   useChangeHook,
   useEnterKeyDownHook,
@@ -32,6 +32,7 @@ function MeetingDetailCT({
     [],
   );
   const { form, setForm, useChange } = useChangeHook({
+    isManager: 'N',
     meetingId: '',
     meetingName: '',
     hostName: '',
@@ -64,13 +65,24 @@ function MeetingDetailCT({
   ];
 
   useEffect(() => {
-    if (id) {
+    if (form.isManager !== 'Y') useGetCheckAuth();
+    else if (id) {
       useGetStatuses();
       useGetDegrees();
       useGetMeetingInfo();
       useGetParticipants();
     }
-  }, []);
+  }, [form.isManager]);
+
+  // 인가 확인
+  const { useGetData: useGetCheckAuth } = useGetDataHook({
+    url: `${DOMAIN}/api/meeting-detail-page-check-auth`,
+    successCb: ({ isAuth }) =>
+      setForm((prevState) => ({
+        ...prevState,
+        isManager: isAuth,
+      })),
+  });
 
   // 벙 상태 가져오기
   const { useGetData: useGetStatuses } = useGetDataHook({

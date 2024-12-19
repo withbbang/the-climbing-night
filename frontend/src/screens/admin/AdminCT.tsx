@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { TypeSidebarItem } from 'modules/types';
+import { useGetDataHook } from 'modules/customHooks';
+import { DOMAIN } from 'modules/constants';
 import AdminPT from './AdminPT';
 
 function AdminCT({ selectedSidebar }: AdminCTProps): React.JSX.Element {
-  const [isAdmin, setIsAdmin] = React.useState(true);
+  const [isAdmin, setIsAdmin] = React.useState('N');
   const sidebarItems: TypeSidebarItem[] = [
     { title: '권한 관리', nick: 'authority' },
     { title: '회원 추가', nick: 'insert-member' },
@@ -14,8 +16,14 @@ function AdminCT({ selectedSidebar }: AdminCTProps): React.JSX.Element {
   ];
 
   useEffect(() => {
-    // TODO: 권한 조회
+    useGetCheckAuth();
   }, []);
+
+  // 인가 확인
+  const { useGetData: useGetCheckAuth } = useGetDataHook({
+    url: `${DOMAIN}/api/admin-page-check-auth`,
+    successCb: ({ isAuth }) => setIsAdmin(isAuth),
+  });
 
   return (
     <AdminPT

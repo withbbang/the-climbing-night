@@ -21,19 +21,23 @@ function AdminPT({
     <div className={styles.wrap}>
       <Header />
       <div className={styles.innerWrap}>
-        <Sidebar sidebarItems={sidebarItems} />
-        {!isAdmin ? null : selectedSidebar === 'authority' ? (
-          <Authority />
-        ) : selectedSidebar === 'insert-member' ? (
-          <InsertMember />
-        ) : selectedSidebar === 'update-memeber' ? (
-          <UpdateMember />
-        ) : selectedSidebar === 'insert-climbing-area' ? (
-          <InsertClimbingArea />
-        ) : selectedSidebar === 'update-climbing-area' ? (
-          <UpdateClimbingArea />
-        ) : selectedSidebar === 'degree' ? (
-          <Degree />
+        {isAdmin === 'Y' ? (
+          <>
+            <Sidebar sidebarItems={sidebarItems} />
+            {selectedSidebar === 'authority' ? (
+              <Authority />
+            ) : selectedSidebar === 'insert-member' ? (
+              <InsertMember />
+            ) : selectedSidebar === 'update-memeber' ? (
+              <UpdateMember />
+            ) : selectedSidebar === 'insert-climbing-area' ? (
+              <InsertClimbingArea />
+            ) : selectedSidebar === 'update-climbing-area' ? (
+              <UpdateClimbingArea />
+            ) : selectedSidebar === 'degree' ? (
+              <Degree />
+            ) : null}
+          </>
         ) : null}
       </div>
     </div>
@@ -42,7 +46,7 @@ function AdminPT({
 
 interface AdminPTProps {
   selectedSidebar: string;
-  isAdmin: boolean;
+  isAdmin: string;
   sidebarItems: TypeSidebarItem[];
 }
 

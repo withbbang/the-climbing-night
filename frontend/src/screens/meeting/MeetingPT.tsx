@@ -17,11 +17,15 @@ function MeetingPT({
     <div className={styles.wrap}>
       <Header />
       <div className={styles.innerWrap}>
-        <Sidebar sidebarItems={sidebarItems} />
-        {!isManager ? null : selectedSidebar === 'insert-meeting' ? (
-          <InsertMeeting />
-        ) : selectedSidebar === 'update-meeting' ? (
-          <UpdateMeeting />
+        {isManager === 'Y' ? (
+          <>
+            <Sidebar sidebarItems={sidebarItems} />
+            {selectedSidebar === 'insert-meeting' ? (
+              <InsertMeeting />
+            ) : selectedSidebar === 'update-meeting' ? (
+              <UpdateMeeting />
+            ) : null}
+          </>
         ) : null}
       </div>
     </div>
@@ -30,7 +34,7 @@ function MeetingPT({
 
 interface MeetingPTProps {
   selectedSidebar: string;
-  isManager: boolean;
+  isManager: string;
   sidebarItems: TypeSidebarItem[];
 }
 

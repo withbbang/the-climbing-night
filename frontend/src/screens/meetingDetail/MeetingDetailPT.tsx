@@ -85,136 +85,142 @@ function MeetingDetailPT({
       <div className={styles.wrap}>
         <Header />
         <div className={styles.innerWrap}>
-          <PageTitle title="벙 상세 수정" />
-          <div className={styles.contents}>
-            <div className={styles.inputBox}>
-              <div className={styles.inputs}>
-                <div className={styles.input}>
-                  <CommonInput
-                    title="이름"
-                    tagType="input"
-                    name="meetingName"
-                    type="text"
-                    value={`${form.meetingName}`}
-                    onChange={onChange}
+          {form.isManager === 'Y' ? (
+            <>
+              <PageTitle title="벙 상세 수정" />
+              <div className={styles.contents}>
+                <div className={styles.inputBox}>
+                  <div className={styles.inputs}>
+                    <div className={styles.input}>
+                      <CommonInput
+                        title="이름"
+                        tagType="input"
+                        name="meetingName"
+                        type="text"
+                        value={`${form.meetingName}`}
+                        onChange={onChange}
+                      />
+                    </div>
+                    <div className={styles.input}>
+                      <CommonInput
+                        title="주최자"
+                        tagType="input"
+                        name="hostName"
+                        type="text"
+                        value={`${form.hostName}`}
+                        isSearch
+                        searchedName={`${form.searchedAdminName}`}
+                        onChange={onChange}
+                        onKeyDown={onFindAdmins}
+                        onSearch={onSearchAdmins}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.inputs}>
+                    <div className={styles.input}>
+                      <CommonInput
+                        title="암장"
+                        tagType="input"
+                        name="climbingAreaName"
+                        type="text"
+                        value={`${form.climbingAreaName}`}
+                        isSearch
+                        searchedName={`${form.searchedClimbingAreaName}`}
+                        onChange={onChange}
+                        onKeyDown={onFindClimbingAreas}
+                        onSearch={onSearchClimbingAreas}
+                      />
+                    </div>
+                    <div className={styles.input}>
+                      <CommonInput
+                        title="상태"
+                        tagType="select"
+                        name="meetingStatusFk"
+                        value={`${form.meetingStatusFk}`}
+                        options={statuses}
+                        onChange={onChange}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.inputs}>
+                    <div className={styles.input}>
+                      <CommonInput
+                        title="주최 날짜"
+                        tagType="input"
+                        name="hostDt"
+                        type="date"
+                        value={`${form.hostDt}`}
+                        onChange={onChange}
+                      />
+                    </div>
+                    <div className={styles.input}>
+                      <CommonInput
+                        title="정모 여부"
+                        tagType="select"
+                        name="criticalMeetingYn"
+                        value={`${form.criticalMeetingYn}`}
+                        options={[
+                          { id: 'criticalMeetingYnN', value: 'N', label: 'X' },
+                          { id: 'criticalMeetingYnY', value: 'Y', label: 'O' },
+                        ]}
+                        onChange={onChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <span>참가자 수정</span>
+                <div className={styles.inputBox}>
+                  <div className={styles.inputs}>
+                    <div className={styles.input}>
+                      <CommonInput
+                        title="이름"
+                        tagType="input"
+                        name="memberName"
+                        type="text"
+                        value={`${form.memberName}`}
+                        isSearch
+                        onChange={onChange}
+                        onKeyDown={onFindMembers}
+                        onSearch={onSearchMembers}
+                      />
+                    </div>
+                    <div className={styles.input}>
+                      <CommonInput
+                        title="기수"
+                        tagType="select"
+                        name="degreeFk"
+                        value={`${form.degreeFk}`}
+                        options={degreeOptions}
+                        onChange={onChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.btnBox}>
+                  <button onClick={onSearchMembers}>찾기</button>
+                </div>
+                <div className={styles.listBox}>
+                  <GridTable
+                    columns={columns}
+                    list={participants.map((participant) => ({
+                      ...participant,
+                      주최자:
+                        form.searchedAdminName === participant.name
+                          ? '👑'
+                          : '-',
+                      이름: participant.name,
+                      레벨: `${participant.level}&nbsp<span style="background-color: ${participant.color}; padding: 0 10px;"/>`,
+                      취소: '취소',
+                    }))}
+                    activeDefaultColDef
                   />
                 </div>
-                <div className={styles.input}>
-                  <CommonInput
-                    title="주최자"
-                    tagType="input"
-                    name="hostName"
-                    type="text"
-                    value={`${form.hostName}`}
-                    isSearch
-                    searchedName={`${form.searchedAdminName}`}
-                    onChange={onChange}
-                    onKeyDown={onFindAdmins}
-                    onSearch={onSearchAdmins}
-                  />
+                <div className={styles.btnBox}>
+                  <button onClick={onUpdate}>수정</button>
                 </div>
               </div>
-              <div className={styles.inputs}>
-                <div className={styles.input}>
-                  <CommonInput
-                    title="암장"
-                    tagType="input"
-                    name="climbingAreaName"
-                    type="text"
-                    value={`${form.climbingAreaName}`}
-                    isSearch
-                    searchedName={`${form.searchedClimbingAreaName}`}
-                    onChange={onChange}
-                    onKeyDown={onFindClimbingAreas}
-                    onSearch={onSearchClimbingAreas}
-                  />
-                </div>
-                <div className={styles.input}>
-                  <CommonInput
-                    title="상태"
-                    tagType="select"
-                    name="meetingStatusFk"
-                    value={`${form.meetingStatusFk}`}
-                    options={statuses}
-                    onChange={onChange}
-                  />
-                </div>
-              </div>
-              <div className={styles.inputs}>
-                <div className={styles.input}>
-                  <CommonInput
-                    title="주최 날짜"
-                    tagType="input"
-                    name="hostDt"
-                    type="date"
-                    value={`${form.hostDt}`}
-                    onChange={onChange}
-                  />
-                </div>
-                <div className={styles.input}>
-                  <CommonInput
-                    title="정모 여부"
-                    tagType="select"
-                    name="criticalMeetingYn"
-                    value={`${form.criticalMeetingYn}`}
-                    options={[
-                      { id: 'criticalMeetingYnN', value: 'N', label: 'X' },
-                      { id: 'criticalMeetingYnY', value: 'Y', label: 'O' },
-                    ]}
-                    onChange={onChange}
-                  />
-                </div>
-              </div>
-            </div>
-            <span>참가자 수정</span>
-            <div className={styles.inputBox}>
-              <div className={styles.inputs}>
-                <div className={styles.input}>
-                  <CommonInput
-                    title="이름"
-                    tagType="input"
-                    name="memberName"
-                    type="text"
-                    value={`${form.memberName}`}
-                    isSearch
-                    onChange={onChange}
-                    onKeyDown={onFindMembers}
-                    onSearch={onSearchMembers}
-                  />
-                </div>
-                <div className={styles.input}>
-                  <CommonInput
-                    title="기수"
-                    tagType="select"
-                    name="degreeFk"
-                    value={`${form.degreeFk}`}
-                    options={degreeOptions}
-                    onChange={onChange}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className={styles.btnBox}>
-              <button onClick={onSearchMembers}>찾기</button>
-            </div>
-            <div className={styles.listBox}>
-              <GridTable
-                columns={columns}
-                list={participants.map((participant) => ({
-                  ...participant,
-                  주최자:
-                    form.searchedAdminName === participant.name ? '👑' : '-',
-                  이름: participant.name,
-                  레벨: `${participant.level}&nbsp<span style="background-color: ${participant.color}; padding: 0 10px;"/>`,
-                  취소: '취소',
-                }))}
-                activeDefaultColDef
-              />
-            </div>
-            <div className={styles.btnBox}>
-              <button onClick={onUpdate}>수정</button>
-            </div>
-          </div>
+            </>
+          ) : null}
         </div>
       </div>
     </>
