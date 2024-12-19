@@ -43,10 +43,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api")
 public class MeetingRestController {
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private MeetingService meetingService;
 
     @Autowired
-    private MeetingService meetingService;
+    private JwtTokenProvider jwtTokenProvider;
 
     /**
      * 벙 상태 조회
@@ -54,8 +54,16 @@ public class MeetingRestController {
      * @return
      */
     @GetMapping(value = "get-meeting-statuses")
-    public SingleResponse<List<GetMeetingStatus>> getMeetingStatus() {
+    public SingleResponse<List<GetMeetingStatus>> getMeetingStatus(HttpServletRequest request) {
         SingleResponse<List<GetMeetingStatus>> response = new SingleResponse<List<GetMeetingStatus>>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 40) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         List<GetMeetingStatus> getMeetingStatuses = null;
 
@@ -88,8 +96,16 @@ public class MeetingRestController {
      */
     @PostMapping(value = "get-admins-for-meeting")
     public SingleResponse<List<GetAdminForInsertMeeting>> getAdminsForInsertMeeting(
-            @RequestBody GetAdminsForInsertMeetingRequest req) {
+            @RequestBody GetAdminsForInsertMeetingRequest req, HttpServletRequest request) {
         SingleResponse<List<GetAdminForInsertMeeting>> response = new SingleResponse<List<GetAdminForInsertMeeting>>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 40) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         List<GetAdminForInsertMeeting> getAdminsForInsertMeeting = null;
 
@@ -115,8 +131,16 @@ public class MeetingRestController {
      */
     @PostMapping(value = "get-climbing-areas-for-meeting")
     public SingleResponse<List<GetClimbingAreaForInsertMeeting>> getClimbingAreasForInsertMeeting(
-            @RequestBody Map<String, String> req) {
+            @RequestBody Map<String, String> req, HttpServletRequest request) {
         SingleResponse<List<GetClimbingAreaForInsertMeeting>> response = new SingleResponse<List<GetClimbingAreaForInsertMeeting>>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 40) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         List<GetClimbingAreaForInsertMeeting> getClimbingAreasForInsertMeeting = null;
 
@@ -141,8 +165,16 @@ public class MeetingRestController {
      * @return
      */
     @PostMapping(value = "insert-meeting")
-    public SingleResponse insertMeeting(@RequestBody InsertMeetingRequest req) {
+    public SingleResponse insertMeeting(@RequestBody InsertMeetingRequest req, HttpServletRequest request) {
         SingleResponse response = new SingleResponse();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 40) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         String hasMeeting = null;
 
@@ -210,8 +242,17 @@ public class MeetingRestController {
      * @return
      */
     @PostMapping(value = "get-meetings")
-    public SingleResponse<List<GetMeetingVo>> getMeetings(@RequestBody GetMeetingsRequest req) {
+    public SingleResponse<List<GetMeetingVo>> getMeetings(@RequestBody GetMeetingsRequest req,
+            HttpServletRequest request) {
         SingleResponse<List<GetMeetingVo>> response = new SingleResponse<List<GetMeetingVo>>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 40) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         List<GetMeetingVo> getMeetings = null;
 
@@ -236,8 +277,16 @@ public class MeetingRestController {
      * @return
      */
     @GetMapping(value = "get-meeting-info/{id}")
-    public SingleResponse<GetMeetingInfoVo> getMeetingInfo(@PathVariable String id) {
+    public SingleResponse<GetMeetingInfoVo> getMeetingInfo(@PathVariable String id, HttpServletRequest request) {
         SingleResponse<GetMeetingInfoVo> response = new SingleResponse<GetMeetingInfoVo>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 40) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         GetMeetingInfoVo getMeetingInfo = null;
 
@@ -269,8 +318,17 @@ public class MeetingRestController {
      * @return
      */
     @GetMapping(value = "get-participants/{id}")
-    public SingleResponse<List<GetParticipantsVo>> getParticipants(@PathVariable String id) {
+    public SingleResponse<List<GetParticipantsVo>> getParticipants(@PathVariable String id,
+            HttpServletRequest request) {
         SingleResponse<List<GetParticipantsVo>> response = new SingleResponse<List<GetParticipantsVo>>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 40) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         List<GetParticipantsVo> getParticipants = null;
 
@@ -296,8 +354,16 @@ public class MeetingRestController {
      */
     @PostMapping(value = "get-members-for-update-meeting")
     public SingleResponse<List<GetMemberForUpdateMeetingVo>> getMembersForUpdateMeeting(
-            @RequestBody GetMembersForUpdateMettingRequest req) {
+            @RequestBody GetMembersForUpdateMettingRequest req, HttpServletRequest request) {
         SingleResponse<List<GetMemberForUpdateMeetingVo>> response = new SingleResponse<List<GetMemberForUpdateMeetingVo>>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 40) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         List<GetMemberForUpdateMeetingVo> getMembersForUpdateMeeting = null;
 
@@ -324,6 +390,14 @@ public class MeetingRestController {
     @PostMapping(value = "update-meeting")
     public SingleResponse updateMeeting(@RequestBody UpdateMeetingRequest req, HttpServletRequest request) {
         SingleResponse response = new SingleResponse();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 40) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         List<GetAttendVo> getAttends = null;
 
@@ -372,9 +446,6 @@ public class MeetingRestController {
         }
 
         int updateMeeting = 0;
-
-        GetIsLoggedInVo adminVo = jwtTokenProvider
-                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
 
         req.setUpdateDt(CommonUtil.getCurrentTimestamp("yyyy-MM-dd HH:mm:ss"));
         req.setUpdaterId(adminVo.getMemberId());

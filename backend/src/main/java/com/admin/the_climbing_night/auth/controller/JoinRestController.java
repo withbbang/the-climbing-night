@@ -26,6 +26,12 @@ public class JoinRestController {
     @Autowired
     private JoinService joinService;
 
+    /**
+     * 회원가입
+     * 
+     * @param req
+     * @return
+     */
     @PostMapping(value = "join")
     public SingleResponse join(@RequestBody JoinRequest req) {
         SingleResponse response = new SingleResponse();

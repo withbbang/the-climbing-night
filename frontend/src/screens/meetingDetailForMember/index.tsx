@@ -6,8 +6,7 @@ import { PropState } from 'middlewares/configureReducer';
 import { useGetDataHook } from 'modules/customHooks';
 import Header from 'components/header';
 import { DOMAIN } from 'modules/constants';
-import { AuthState } from 'middlewares/reduxToolkits/authSlice';
-import { decrypt, encrypt, handleCheckEmail } from 'modules/utils';
+import { decrypt } from 'modules/utils';
 import PageTitle from 'components/pageTitle';
 import {
   GetMeetingDetailType,

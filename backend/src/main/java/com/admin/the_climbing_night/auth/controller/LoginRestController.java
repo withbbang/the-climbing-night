@@ -1,6 +1,5 @@
 package com.admin.the_climbing_night.auth.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +69,21 @@ public class LoginRestController {
         // 비밀번호 일치 여부
         if (!Crypto.match(req.getPassword(), loginVo.getPassword())) {
             log.error("비밀번호 불일치");
+            responseBody.setResult(new Result(CodeMessage.ER0001));
+
+            return responseBody;
+        }
+
+        // 권한 확인
+        if (loginVo.getGrade() == "50") {
+            log.info("등록 요청 중");
+            responseBody.setResult(new Result(CodeMessage.ER0001));
+
+            return responseBody;
+        }
+
+        if (loginVo.getGrade() == "60") {
+            log.info("권한 만료");
             responseBody.setResult(new Result(CodeMessage.ER0001));
 
             return responseBody;

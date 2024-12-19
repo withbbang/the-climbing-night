@@ -28,11 +28,14 @@ import com.admin.the_climbing_night.admin.vo.GetDegreeForAdminVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberInfoVo;
 import com.admin.the_climbing_night.admin.vo.GetMemberVo;
 import com.admin.the_climbing_night.admin.vo.IsMemberForAdminVo;
+import com.admin.the_climbing_night.auth.vo.GetIsLoggedInVo;
 import com.admin.the_climbing_night.common.CodeMessage;
 import com.admin.the_climbing_night.common.Result;
 import com.admin.the_climbing_night.common.SingleResponse;
+import com.admin.the_climbing_night.jwt.JwtTokenProvider;
 import com.admin.the_climbing_night.utils.CommonUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -42,6 +45,9 @@ public class AdminRestController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     /**
      * 회원 리스트 가져오기
      * 
@@ -49,8 +55,17 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "get-members")
-    public SingleResponse<List<GetMemberVo>> getMembers(@RequestBody GetMembersRequest req) {
+    public SingleResponse<List<GetMemberVo>> getMembers(@RequestBody GetMembersRequest req,
+            HttpServletRequest request) {
         SingleResponse<List<GetMemberVo>> response = new SingleResponse<List<GetMemberVo>>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         List<GetMemberVo> getMembers = null;
 
@@ -75,8 +90,17 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "get-member-info")
-    public SingleResponse<GetMemberInfoVo> getMemberInfo(@RequestBody Map<String, String> req) {
+    public SingleResponse<GetMemberInfoVo> getMemberInfo(@RequestBody Map<String, String> req,
+            HttpServletRequest request) {
         SingleResponse<GetMemberInfoVo> response = new SingleResponse<GetMemberInfoVo>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         GetMemberInfoVo getMemberInfo = null;
 
@@ -108,8 +132,16 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "get-admins")
-    public SingleResponse<List<GetAdminVo>> getAdmins(@RequestBody GetAdminsRequest req) {
+    public SingleResponse<List<GetAdminVo>> getAdmins(@RequestBody GetAdminsRequest req, HttpServletRequest request) {
         SingleResponse<List<GetAdminVo>> response = new SingleResponse<List<GetAdminVo>>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         List<GetAdminVo> getAdmins = null;
 
@@ -134,8 +166,16 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "update-authority")
-    public SingleResponse updateAuthority(@RequestBody UpdateAdminRequest req) {
+    public SingleResponse updateAuthority(@RequestBody UpdateAdminRequest req, HttpServletRequest request) {
         SingleResponse response = new SingleResponse();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         String isAdminMember = null;
 
@@ -181,8 +221,16 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "insert-member")
-    public SingleResponse insertMember(@RequestBody InsertMemberRequest req) {
+    public SingleResponse insertMember(@RequestBody InsertMemberRequest req, HttpServletRequest request) {
         SingleResponse response = new SingleResponse();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         String isMember = null;
 
@@ -250,8 +298,16 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "update-member")
-    public SingleResponse updateMember(@RequestBody UpdateMemberRequest req) {
+    public SingleResponse updateMember(@RequestBody UpdateMemberRequest req, HttpServletRequest request) {
         SingleResponse response = new SingleResponse();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         String isMember = null;
 
@@ -305,8 +361,17 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "get-climbing-areas")
-    public SingleResponse<List<GetClimbingAreaVo>> getClimbingAreas(@RequestBody GetClimbingAreasRequest req) {
+    public SingleResponse<List<GetClimbingAreaVo>> getClimbingAreas(@RequestBody GetClimbingAreasRequest req,
+            HttpServletRequest request) {
         SingleResponse<List<GetClimbingAreaVo>> response = new SingleResponse<List<GetClimbingAreaVo>>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         List<GetClimbingAreaVo> getClimbingAreas = null;
 
@@ -331,8 +396,17 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "get-climbing-area-info")
-    public SingleResponse<GetClimbingAreaInfoVo> getClimbingAreaInfo(@RequestBody Map<String, String> req) {
+    public SingleResponse<GetClimbingAreaInfoVo> getClimbingAreaInfo(@RequestBody Map<String, String> req,
+            HttpServletRequest request) {
         SingleResponse<GetClimbingAreaInfoVo> response = new SingleResponse<GetClimbingAreaInfoVo>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         GetClimbingAreaInfoVo getClimbingAreaInfo = null;
 
@@ -364,8 +438,16 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "insert-climbing-area")
-    public SingleResponse insertClimbingArea(@RequestBody InsertClimbingAreaRequest req) {
+    public SingleResponse insertClimbingArea(@RequestBody InsertClimbingAreaRequest req, HttpServletRequest request) {
         SingleResponse response = new SingleResponse();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         int getClimbingAreaCount = 0;
 
@@ -407,8 +489,16 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "update-climbing-area")
-    public SingleResponse updateClimbingArea(@RequestBody UpdateClimbingAreaRequest req) {
+    public SingleResponse updateClimbingArea(@RequestBody UpdateClimbingAreaRequest req, HttpServletRequest request) {
         SingleResponse response = new SingleResponse();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         int updateClimbingArea = 0;
 
@@ -437,8 +527,16 @@ public class AdminRestController {
      * @return
      */
     @GetMapping(value = "get-degrees-for-admin")
-    public SingleResponse<List<GetDegreeForAdminVo>> getDegrees() {
+    public SingleResponse<List<GetDegreeForAdminVo>> getDegrees(HttpServletRequest request) {
         SingleResponse<List<GetDegreeForAdminVo>> response = new SingleResponse<>();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         List<GetDegreeForAdminVo> getDegrees = null;
 
@@ -463,8 +561,16 @@ public class AdminRestController {
      * @return
      */
     @PostMapping(value = "insert-degree")
-    public SingleResponse insertDegree(@RequestBody InsertDegreeRequest req) {
+    public SingleResponse insertDegree(@RequestBody InsertDegreeRequest req, HttpServletRequest request) {
         SingleResponse response = new SingleResponse();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         int insertDegree = 0;
 
@@ -485,9 +591,23 @@ public class AdminRestController {
         return response;
     }
 
+    /**
+     * 기수 갱신
+     * 
+     * @param req
+     * @return
+     */
     @PostMapping(value = "update-degree")
-    public SingleResponse updateDegree(@RequestBody UpdateDegreeRequest req) {
+    public SingleResponse updateDegree(@RequestBody UpdateDegreeRequest req, HttpServletRequest request) {
         SingleResponse response = new SingleResponse();
+
+        GetIsLoggedInVo adminVo = jwtTokenProvider
+                .getAdminInfo(request.getHeader("Authorization").replace("Bearer ", ""));
+
+        if (Integer.parseInt(adminVo.getGrade()) > 30) {
+            log.info("권한이 없습니다.");
+            return response;
+        }
 
         int updateDegree = 0;
 

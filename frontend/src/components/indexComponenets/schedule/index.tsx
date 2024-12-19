@@ -33,7 +33,6 @@ function Schedule({}: TypeSchedule) {
       0,
     ).getDate(),
     frontEmptyCnt: 0,
-    backEmptyCnt: 0,
   });
 
   useEffect(() => {
@@ -58,10 +57,11 @@ function Schedule({}: TypeSchedule) {
         const newSchedule: GetScheduleType[] = [];
 
         response.forEach((schedule) => {
-          const decryptedName = decrypt(schedule.hostName) || '';
-
           if (+schedule.hostDt === idx + 1)
-            newSchedule.push({ ...schedule, hostName: decryptedName });
+            newSchedule.push({
+              ...schedule,
+              hostName: decrypt(schedule.hostName) || '',
+            });
         });
 
         newScheduleList[idx] = newSchedule;
@@ -88,7 +88,6 @@ function Schedule({}: TypeSchedule) {
       setForm((prevState) => ({
         ...prevState,
         frontEmptyCnt: f,
-        backEmptyCnt: b,
       }));
     },
   });

@@ -28,6 +28,7 @@ public final class Constants {
     public static final String[] AUTH_WHITELIST = new String[] { "/test", "/api/login", "/api/logout",
             "/api/test", "/api/join", "/api/get-member-info-by-join", "/api/get-levels",
             "/api/get-degrees", "/api/get-degrees-for-member", "/api/get-members-for-member",
-            "/api/get-member-detail/*", "/api/get-meetings-of-member", "/api/get-meeting-detail/*",
+            "/api/get-member-detail/*", "/api/get-meetings-of-member", "/api/get-participants-for-meeting/*",
+            "/api/get-meeting-detail/*",
             "/api/get-schedules" };
 }
