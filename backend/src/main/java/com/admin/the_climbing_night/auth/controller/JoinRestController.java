@@ -54,10 +54,28 @@ public class JoinRestController {
             return response;
         }
 
+        IsAdminVo hasId = null;
+
+        try {
+            hasId = joinService.hasId(req.getMemberId()); // 동일 아이디 확인
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
+        if (!CommonUtil.isEmpty(hasId)) {
+            log.error("Already has ID");
+            response.setResult(new Result(CodeMessage.ER0001));
+
+            return response;
+        }
+
         IsAdminVo isAdminVo = null;
 
         try {
-            isAdminVo = joinService.isAdmin(req.getMemberId()); // 기가입 확인
+            isAdminVo = joinService.isAdmin(req.getId()); // 기가입 확인
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setResult(new Result(CodeMessage.ER0001));

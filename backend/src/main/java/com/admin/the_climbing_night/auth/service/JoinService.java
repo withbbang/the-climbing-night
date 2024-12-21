@@ -22,8 +22,12 @@ public class JoinService {
         return joinMapper.isMember(req);
     }
 
-    public IsAdminVo isAdmin(String memberId) {
+    public IsAdminVo hasId(String memberId) {
         return joinMapper.isAdmin(memberId);
+    }
+
+    public IsAdminVo isAdmin(String id) {
+        return joinMapper.isAdmin(id);
     }
 
     public long getAdminCount() {

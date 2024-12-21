@@ -15,7 +15,9 @@ public interface JoinMapper {
     @DatabaseCryptoAdviceAnnotation
     IsMemberForAuthVo isMember(JoinRequest req);
 
-    IsAdminVo isAdmin(String memberId);
+    IsAdminVo hasId(String memberId);
+
+    IsAdminVo isAdmin(String id);
 
     long getAdminCount();
 
