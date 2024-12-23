@@ -151,7 +151,7 @@ function Join({ accessToken }: TypeJoin): React.JSX.Element {
         </div>
       )}
       <div className={styles.innerWrap}>
-        <h2>Amdin 등록</h2>
+        <h2>관리자 등록</h2>
         <AuthInput
           title={'이메일'}
           label={'memberId'}
